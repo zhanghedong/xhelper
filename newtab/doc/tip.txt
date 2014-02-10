@@ -2,3 +2,8 @@ http://spotsmagic.com/
 
 广告联盟： http://yiqifa.com/
 视觉查考： http://themeforest.net/theme_previews/6185546-adelfox-multipurpose-psd-template?index=2&url_name=adelfox-multipurpose-psd-template
+
+
+文本在线编辑器参考插件：https://chrome.google.com/webstore/detail/sync-filesystem-sample/ccphiekjjhfnhbmpcbmkmjjhbfhlijkc/related
+apps文档：https://crxdoc-zh.appspot.com/apps/app_storage.html  如，一个云端支持的文本编辑器应用可以
+google谷歌应用api: https://cloud.google.com/console/project/apps~zhd1625/apiui/api
