@@ -7,3 +7,4 @@ http://spotsmagic.com/
 文本在线编辑器参考插件：https://chrome.google.com/webstore/detail/sync-filesystem-sample/ccphiekjjhfnhbmpcbmkmjjhbfhlijkc/related
 apps文档：https://crxdoc-zh.appspot.com/apps/app_storage.html  如，一个云端支持的文本编辑器应用可以
 google谷歌应用api: https://cloud.google.com/console/project/apps~zhd1625/apiui/api
+京东开放平台：http://appengine.jd.com/help/create_app.html

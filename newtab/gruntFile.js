@@ -8,14 +8,14 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-ng-constant');
     grunt.loadNpmTasks('grunt-recess');
-    grunt.loadNpmTasks('grunt-karma');
+//    grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-html2js');
 
     // Default task.
     grunt.registerTask('default', ['ngconstant:development','jshint', 'build']);//,'karma:unit'
     grunt.registerTask('build', ['clean', 'html2js', 'concat', 'recess:build', 'copy:assets']);
     grunt.registerTask('release', ['clean', 'html2js', 'uglify', 'jshint', 'concat:index', 'recess:min', 'copy:assets']);//'karma:unit',
-    grunt.registerTask('test-watch', ['karma:watch']);
+//    grunt.registerTask('test-watch', ['karma:watch']);
     grunt.registerTask('release', ['ngconstant:production','jshint', 'build','copy:release']);
 
     // Print a timestamp (useful for when watching)
@@ -81,6 +81,7 @@ module.exports = function (grunt) {
             assets: {
                 files: [
                     { dest: '<%= distdir %>', src: '**', expand: true, cwd: 'src/assets/' }
+
                 ]
             },
             release:{
@@ -118,6 +119,20 @@ module.exports = function (grunt) {
                 },
                 src: ['<%= src.js %>'],
                 dest: '<%= distdir %>/<%= pkg.name %>.js'
+            },
+            background: {
+                src: ['src/background.js'],
+                dest: '<%= distdir %>/background.js',
+                options: {
+                    process: true
+                }
+            },
+            manifest: {
+                src: ['src/manifest.json'],
+                dest: '<%= distdir %>/manifest.json',
+                options: {
+                    process: true
+                }
             },
             index: {
                 src: ['src/index.html'],
