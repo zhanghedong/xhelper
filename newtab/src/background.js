@@ -1,2 +1,2 @@
-chrome.app.runtime.onLaunched.addListener(function (launchData) {
-});
+//chrome.app.runtime.onLaunched.addListener(function (launchData) {
+//});

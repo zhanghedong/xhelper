@@ -1,5 +1,4 @@
 {
-	"background_page": "background.html",
 	"background": {
 		"scripts": ["js/background.js"]
 	},
