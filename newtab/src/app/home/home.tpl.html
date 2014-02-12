@@ -1,6 +1,60 @@
-<div class="left-container">
+<div class="plugin-view">
+    <div id="plugin_button" class="plugin-button">
 
-</div>
-<div class="main-container">
+    </div>
+    <div id="plugin_content" class="plugin-content">
 
+    </div>
 </div>
+<section class="favorites-view">
+    <div class="favorites">
+        <ul class="categories" ng-repeat="cateory in sites track by category.id">
+            <li class="category">
+                <h2><span class="title">{{category.title}}</span>
+                    <a class="btn edit" ng-click="editCategory(category)">edit</a>
+                    <a class="btn edit" ng-click="editCategory(category)">delete</a></h2>
+                <ul class="sites">
+                    <li class="item ng-scope" ng-repeat="item in category.sites">
+                        <div class="item-cnt">
+                            <a class="info" ng-link="">
+                                <div class="icon">
+                                    <span class="letters"
+                                          ng-if="!favorites[item].icon">深入</span>
+                                </div>
+                                <div class="details">
+                                    <span ng-if="favorites[item].title" class="title">深入了解 CSS3 新特性<br></span>
+                                    <span ng-if="favorites[item].url" class="url">ibm.com</span>
+                                </div>
+                            </a>
+                            <div class="hover-mode">
+                                <a class="screenshot">
+                                    <div ng-if="!favorites[item].picker.s" class="preview">
+                                        无背景提示
+                                    </div>
+                                </a>
+                                <div class="actions">
+                                    <div class="btn edit"
+                                         ng-click="editFavorite(favorites[item],$parent.category)"></div>
+                                    <div class="btn delete" ng-click="removeFavorite(favorites[item])"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div class="favorites-bar">
+        <div class="categories">
+            <a href="#1" class="item">推荐</a>
+            <a href="#2" class="item">推荐</a>
+            <a href="#3" class="item">推荐</a>
+            <a href="#4" class="item">推荐</a>
+            <a class="insert-category" href="#">+</a>
+        </div>
+        <div class="sys-menu">
+            <a href="#">Apps</a>
+            <a href="#">最近关闭</a>
+        </div>
+    </div>
+</section>

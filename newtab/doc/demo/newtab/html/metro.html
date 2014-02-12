@@ -1,0 +1,782 @@
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>iStart - Metro-Style Startpage</title>
+        <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" type="text/css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="metro-killer-startpage for chrome fully customable without registration in metro-style">
+        <meta name="author" content="kay schneider | hirschneider | 2013 | javascript ninja">
+        <!-- Le styles -->
+        <!--<link href="../css/bootstrap.min.css" rel="stylesheet">-->
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="../css/bootmetro.css" rel="stylesheet">
+        <link href="../css/metro-tiles.css" rel="stylesheet">  
+        <link href="../css/metro-ui-light.css" rel="stylesheet">   
+        <link href="../css/metro.css" rel="stylesheet">
+        <link href="../css/widgets.css" rel="stylesheet">
+
+        <link href="../css/icomoon.css" rel="stylesheet">
+        <script src="../js/jquery.js"></script>
+
+
+        <link rel="stylesheet" type="text/css" href="../src/jquery.gridster.css" >
+        <style type="text/css">
+            body {
+                padding-top: 10px;
+                padding-bottom: 40px;
+                background-color  : whiteSmoke;
+            }
+
+            .navbar-inner *  li {
+                line-height: 50px;
+            }
+            /* Custom container */
+            .container-narrow {
+                margin: 0 auto;
+                max-width: 700px;
+                background-color: white;
+            }
+            #searchInput {
+                opacity: 0.8;
+            }
+            .container-narrow > hr {
+
+                margin: 30px 0;
+            }
+
+            /* Main marketing message and sign up button */
+            .jumbotron {
+                margin: 60px 0;
+                text-align: center;
+            }
+            .jumbotron h1 {
+                font-size: 72px;
+                line-height: 1;
+            }
+            .jumbotron .btn {
+                font-size: 21px;
+                padding: 14px 24px;
+            }
+
+            /* Supporting marketing content */
+            .marketing {
+                margin: 60px 0;
+            }
+            .marketing p + h4 {
+                margin-top: 28px;
+            }
+
+
+
+            /* Sticky footer styles
+            -------------------------------------------------- */
+
+            html,
+            body {
+                height: 100%;
+
+                /* The html and body elements cannot have any padding or margin. */
+            }
+
+            /* Wrapper for page content to push down footer */
+            #wrap {
+                min-height: 100%;
+                height: auto !important;
+                height: 100%;
+                /* Negative indent footer by it's height */
+                margin: 0 auto 60px;
+            }
+
+            /* Set the fixed height of the footer here */
+            #push,
+            #footer {
+                height: 60px;
+            }
+            #footer {
+                background-color: #f5f5f5;
+            }
+
+            /* Lastly, apply responsive CSS fixes as necessary */
+            @media (max-width: 767px) {
+                #footer {
+                    margin-left: -20px;
+                    margin-right: -20px;
+                    padding-left: 20px;
+                    padding-right: 20px;
+                }
+            }
+
+
+            .form-signin {
+                max-width: 300px;
+                padding: 19px 29px 29px;
+                margin: 0 auto 20px;
+                background-color: white;
+                border: 1px solid #E5E5E5;
+                -webkit-border-radius: 5px;
+                -moz-border-radius: 5px;
+                border-radius: 5px;
+                -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
+                -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+                box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
+            }
+
+            .navbar .nav .dropdown-toggle .caret {
+                margin-top: 30px;
+            }
+
+            .tag ul {
+                position:absolute;
+                width:200px;
+                left:50%;
+                top:50%;
+                margin:-60px 0 0 -120px;
+                list-style:none}
+            .tag a {
+                float:left;
+                margin-right:8px;
+                padding:2px 7px 3px 19px;
+                font:700 .7em "lucida grande", helvetica, arial, sans-serif;
+                color:#3d5295;
+                text-decoration:none;
+                text-shadow:0 1px 0 rgba(255,255,255,.5);
+                border-radius:0 .4em .4em 0;
+                background:
+                    -moz-linear-gradient(
+                    -45deg,
+                    transparent 50%,
+                    #d0daf7 50%
+                    ),
+                    -moz-linear-gradient(
+                    45deg,
+                    transparent 50%,
+                    #d0daf7 50%
+                    ),
+                    -moz-linear-gradient(
+                    #d0daf7,
+                    #d0daf7
+                    );
+                background:
+                    -webkit-gradient(
+                    linear,
+                    0 0, 100% 100%,
+                    color-stop(.5,transparent),
+                    color-stop(.5,#d0daf7)
+                    ),
+                    -webkit-gradient(
+                    linear,
+                    0 100%, 100% 0,
+                    color-stop(.5,transparent),
+                    color-stop(.5,#d0daf7)
+                    ),
+                    -webkit-gradient(
+                    linear,
+                    0 0, 100% 0,
+                    from(#d0daf7),
+                    to(#d0daf7)
+                    );
+                background-repeat:no-repeat;
+                background-position:0 0, 0 100%, 10px 0;
+                background-size:10px 53%, 10px 50%, 100% 100%;
+                -moz-padding-start:14px;
+                -webkit-mask-image:-webkit-gradient(
+                    radial,
+                    11 50%, 2.9, 11 50%, 3,
+                    from(transparent),
+                    to(rgba(0,0,0,1))
+                    )}
+            .tag a:hover {
+                opacity:.8}
+
+
+            .ribbon {
+                width: 744px;
+                position: absolute;
+                text-align: center;
+                font-size: 22px!important;
+                background: #F56C11;
+                background: -webkit-gradient(linear, left top, left bottom, from(#F56C11), to(#B34D0E));
+                background: -webkit-linear-gradient(top, #F56C11, #B34D0E);
+                background: -moz-linear-gradient(top, #F56C11, #B34D0E);
+                background: -ms-linear-gradient(top, #F56C11, #B34D0E);
+                background: -o-linear-gradient(top, #F56C11, #B34D0E);
+                background-image: -ms-linear-gradient(top, #F56C11 0%, #B34D0E 100%);
+                -webkit-box-shadow: rgba(000, 000, 000, 0.3) 0 1px 1px;
+                -moz-box-shadow: rgba(000,000,000,0.3) 0 1px 1px;
+                box-shadow: rgba(000, 000, 000, 0.3) 0 1px 1px;
+                font-family: 'Helvetica Neue',Helvetica, sans-serif;
+                margin-left: -22px;
+            }
+            .ribbon h1 {
+                font-size: 25px!important;
+                color: #faebeb;
+                text-shadow: #e65715 0 1px 0;
+                margin:0px;
+                padding: 15px 10px;
+            }
+            .ribbon:before, .ribbon:after {
+                content: '';
+                position: absolute;
+                display: block;
+                bottom: -1em;
+                border: 1.5em solid #a35c2f;
+                z-index: -1;
+            }
+            .ribbon:before {
+                left: -2em;
+                border-right-width: 1.5em;
+                border-left-color: transparent;
+                -webkit-box-shadow: rgba(000,000,000,0.4) 1px 1px 1px;
+                -moz-box-shadow: rgba(000,000,000,0.4) 1px 1px 1px;
+                box-shadow: rgba(000,000,000,0.4) 1px 1px 1px;
+            }
+            .ribbon:after {
+                right: -2em;
+                border-left-width: 1.5em;
+                border-right-color: transparent;
+                -webkit-box-shadow: rgba(000,000,000,0.4) -1px 1px 1px;
+                -moz-box-shadow: rgba(000,000,000,0.4) -1px 1px 1px;
+                box-shadow: rgba(000,000,000,0.4) -1px 1px 1px;
+            }
+            .ribbon .ribbon-content:before, .ribbon .ribbon-content:after {
+                border-color: #783409 transparent transparent transparent;
+                position: absolute;
+                display: block;
+                border-style: solid;
+                bottom: -1em;
+                content: '';
+            }
+            .ribbon .ribbon-content:before {
+                left: 0;
+                border-width: 1em 0 0 1em;
+            }
+            .ribbon .ribbon-content:after {
+                right: 0;
+                border-width: 1em 1em 0 0;
+            }
+            .ribbon-stitches-top {
+                margin-top:2px;
+                border-top: 1px dashed rgba(0, 0, 0, 0.2);
+                -moz-box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
+                -webkit-box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
+                box-shadow: 0px 0px 2px rgba(255, 255, 255, 0.5);
+            }
+            .ribbon-stitches-bottom {
+                margin-bottom:2px;
+                border-top: 1px dashed rgba(0, 0, 0, 0.2);
+                -moz-box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.3);
+                -webkit-box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.3);
+                box-shadow: 0px 0px 2px rgba(255, 255, 255, 0.3);
+            }
+        </style>
+
+
+        <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+          <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+        <!-- Fav and touch icons -->
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">
+        <link rel="shortcut icon" href="ico/favicon.png">
+    </head>
+
+    <body id="mbg">
+        <div class="backgroundimage" ><div class="imagebg"></div></div>
+
+
+
+        <div class="container" id="wrap">
+            <input type="hidden" id="hdn" />
+            <div class="pagerContainer" >
+                <h2 class="pheader" >iStart</h2>
+                <ul class="pagerTest" id="p1">
+
+
+
+                </ul>
+                <ul class="pagerTest" id="p2">
+
+
+
+                </ul>
+                <ul class="pagerTest" id="p3">
+
+
+
+                </ul>
+                <ul class="pagerTest" id="p4">
+
+
+
+                </ul>
+
+
+            </div>
+
+
+
+            <div class="hidden" id="templates">
+                <!-- we build only one template for all the things -->
+            </div>
+
+        </div> <!-- /container -->
+
+
+
+
+        <div class="editPanel hidden" id="editPanel">
+            <form class="form-inline" style="padding:10px">
+                <span id="editLink" class="hidden">
+                    Color:<input type="color" name="favcolor" value="" id="editPanelcolor" style="padding: 0px 0px;width: 25px">
+                    Label <input type="text" name="label" id="editPanellabel"/>
+                    Link <input type="text" name="label" id="editPanellink"/>
+
+                    <div class="btn btn-large btn-success" id="editpanelsave" >save</div>
+                    <div class="btn btn-large" id="editpanelchangeicon" >change icon</div>
+                    <div class="btn btn-inverse" id="editpanelchancel" >cancel</div>
+                    <div class="btn btn-danger" id="editpaneltiledelete" >delete</div>
+                </span>
+                <span id="editApp" class="hidden">
+                    <div class="btn btn-success" id="editpanelappdelete" >delete app from chrome</div>
+                    <div class="btn btn-inverse" id="editpanelchancel" >cancel</div>
+                </span>
+                <span id="editWidget" class="hidden">
+                    <div class="btn btn-success" id="editpanelwidgetdelete" >remove widget from grid</div>
+                    <div class="btn btn-inverse" id="editpanelwidgetchancel" >cancel</div>
+                </span>
+                <span id="editSearchWidget" class="hidden">
+
+                </span>
+
+            </form>
+            <div style="width:900px;clear:both">
+                <div style="width:400px;float:left"> 
+
+                    <div id="listview-grid-icons" class="listview-container grid-layout">
+
+
+
+
+                    </div>
+                </div>
+                <div class="btn btn-large btn-success" id="editpaneliconsave" style="float:left">use selected icon and save</div>
+            </div>
+        </div>
+
+
+
+
+
+
+        <!-- please wait modal -->
+        <div class="modal hidden fade">
+            <div class="modal-header" id="waitModal">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3>Bitte warten...</h3>
+            </div>
+            <div class="modal-body" id="waitModalBody">
+
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn">Schließen</a>
+                <a href="#" class="btn btn-primary">Änderungen Speichern</a>
+            </div>
+        </div>
+
+        <div class="hidden" id="iconManagerTemplate">
+            <div class="mediumListIconTextItem iconitem" id="{{id}}">
+                <div class="mediumListIconTextItem-Image" style="float: left;background-color: orange"><img src="../img/editedIcon/png/{{filename}}" width="60" /></div>
+                <div class="mediumListIconTextItem-Detail">
+                    <h4>{{title}}</h4>
+                </div>
+            </div>
+        </div>
+        <div class="hidden" id="widgetControllerTemplateMenue">
+            <div class="mediumListIconTextItem iconitem" id="{{id}}">
+                <div class="mediumListIconTextItem-Image" style="float: left;background-color: orange"><img src="{{image}}" width="60" /></div>
+                <div class="mediumListIconTextItem-Detail">
+                    <h4>{{title}}</h4>
+                    <h5>{{description}}</h5>
+                </div>
+            </div>
+        </div>
+        <div id="activeCorner">
+
+        </div>
+
+        <div id="top-info" class="fixed-right-top">
+            <div class="dropdown pull-left">
+                <a tabindex="-1" href="#" class="hidden dropdown-toggle" data-toggle="dropdown" id="recentlyclosed" ><img src="../img/systemrestore.png" width="60" /></a>
+                <!-- Link or button to toggle dropdown -->
+                <ul class="dropdown-menu systemwidget" role="menu" aria-labelledby="dLabel">
+                    <li id="recentlyclosedWrapper"></li>
+                </ul>
+            </div>
+
+
+            <a href="#" class="pull-left">
+                <div class="top-info-block" id="edittoggler">
+                    <h3>activate edit mode</h3>
+                    <h4>status:edit mode off</h4>
+                </div>
+                <div class="top-info-block">
+                    <b class="icon-user"></b>
+                </div>
+            </a>
+            <hr class="separator pull-left">
+            <a id="settings" class="pull-left" href="#">
+                <b class="icon-settings"></b>
+            </a>
+        </div>  
+
+        <div id="sideBarWrap" class="sideBarWrap win-ui-light in">
+            <div id="theme-charms-section" class="charms-section" >
+                <div class="charms-header">
+                    <a href="#" class="close-charms win-command">
+
+                        <span class="win-commandimage win-commandring"></span>
+                    </a>
+                    <h2>Settings</h2>
+                </div>
+
+
+                <div id="sideBarContentSection" >
+
+                </div>
+            </div>
+        </div>
+
+        <div id="sideBarInnerSettingsMenue" class="hidden">
+            <div style="width:250px">
+                <a class="btn btn-large btn-block settingmenuelink" href="sideBarNewItemForm" type="button">Add new link/favorite</a>
+                <a class="btn btn-large btn-block settingmenuelink" href="sideBarWidgetControllerMenue" method="" obj="" type="button">Add active widget [ NEW ]</a>
+                <a class="btn btn-large btn-block settingmenuelink" href="sideBarChangeBackgroundColor" type="button">change background</a>
+                <a class="btn btn-large btn-block settingmenuelink" href="sideBarGlobalSettings" type="button">settings</a>
+                <a class="btn btn-large btn-block settingmenuelink" href="sideBarInner" type="button">About</a>
+                <a class="btn btn-large btn-block settingmenuelink" href="sideBarHelp" type="button">Help ?</a>
+                <a class="btn btn-large btn-block settingmenuelink" href="supportbanner" type="button">show support banner</a>
+
+                <a class="btn btn-large btn-block btn-warning settingmenuelink" href="premiumbanner" id="pprpds" type="button">activate premium :)</a>
+                
+                <a class="btn btn-large btn-block btn-warning settingmenuelink" href="deltethisappbanner" id="" type="button">delete iStart from chrome</a>
+            </div>
+        </div>
+
+        <div id="sideBarChangeBackgroundColor" class="hidden">
+
+            <form class="form" id="backgroundcolor" style="padding:10px;border:0px solid red">
+                <fieldset>
+                    <legend style="color:white">Dont use white as background color! If you use white, some icons are not visible</legend>
+                    <label>start color</label>
+                    <input type="color" name="afavcolor" value="" id="backgroundcolorstart" style="padding: 0px 0px;width: 25px">
+                    <label>end color</label>
+                    <input type="color" name="bfavcolor" value="" id="backgroundcolorend" style="padding: 0px 0px;width: 25px">
+                    <label></label>
+                    <div class="btn btn-large btn-success" id="sideBarChangeBackgroundColorSave" >save</div>
+                    <div class="btn btn-primary" id="sideBarChangeBackgroundColorCancle" >cancel</div>
+                    <div class="btn btn-warning" id="sideBarChangeBackgroundColorrestore" >restore original background</div>
+            </form>
+            <div style="height:25px"></div>
+            <form>
+                <!-- lets the user upload an image to the background -->
+                <fieldset>
+                    <legend style="color:white">Add your own background-picture</legend>
+                    <input style="background-color: #49afcd;color:white" type="file" class="btn btn-large btn-info" name="backgroundpicture" id="backgroundpicture" />
+                    <div class="btn btn-success" id="uploadbackgroundpic">
+                        add background picture and save
+                    </div>
+
+                    <label>Background image options:</label>
+                    <div class="pull-left">
+                        <label>image repeat:</label>
+                        <select name="imgbgrepeat" id="imgbgrepeat">
+                            <option >no-repeat</option>
+                            <option selected="">repeat</option>
+                            <option>repeat-x</option>
+                            <option>repeat-y</option>
+                        </select>
+                        <label >fit to screensize:</label>
+                        <select name="imgstretch" id="imgstretch">    
+                            <option selected="">yes</option>
+                            <option >no</option>
+                        </select>
+                    </div>
+                    <div class="pull-left">
+                        <label>image attachment:</label>
+                        <select name="imgattachment" id="imgattachment">    
+                            <option selected="">fixed</option>
+                            <option>scroll</option>
+                        </select>
+
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+
+
+        <div id="sideBarNewItemForm" class="hidden">
+            <div class="twoformw pull-left">
+                <form class="form" id="sideBarNewItemFormDrop" style="padding:10px;border:1px solid red">
+                    <fieldset>
+                        <legend style="color:white">drag n drop an bookmark item into the red area </legend>
+                        <label>color</label>
+                        <input type="color" name="favcolor" value="" id="sideBarNewItemFormcolor" style="padding: 0px 0px;width: 25px">
+                        <label>Label</label>
+                        <input type="text" name="label" id="sideBarNewItemFormlabel"/>
+                        <span class="help-block">this text will be shown on youre tile</span>
+
+                        <label>Link</label>
+                        <input type="text" name="label" id="sideBarNewItemFormlink"/>
+                        <span class="help-block">this is the link example:http://google.de</span>
+
+
+                        <div class="btn btn-large btn-success" id="sideBarNewItemFormsave" >save</div>
+                        <div class="btn btn-large" id="sideBarNewItemFormicon" >change icon</div>
+                        <div class="btn btn-inverse" id="sideBarNewItemFormchancel" >cancel</div>
+
+
+                </form>
+            </div>
+            <div style="width:280px;height:300px" class="pull-left hidden" id="sideBarNewItemFormiconelement">
+                <div style="width:280px;height:300px;float:left"> 
+
+                    <div id="sideBarNewItemFormiconelementListView" class="listview-container grid-layout" style="height: 378px;
+                         width: 316px;">
+
+
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div id="sideBarWidgetControllerMenue" class="hidden">
+            <div style="width:500px;height:380px" class="pull-left" >
+                <div style="width:500px;height:380px;float:left"> 
+                    <button id="sideBarWidgetControllerMenueAdd" class="btn btn-success btn-large">Add selected Widget to the system</button>
+                    <p></p>
+                    <div id="sideBarWidgetControllerMenueListView" class="listview-container grid-layout" style="
+                         width: 316px;">
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <div id="sideBarInner" class="hidden">
+            <div class="sideBarWrap-header">
+
+                <h2>About</h2>
+            </div>
+            <div class="row-fluid">
+                <div class="span12">
+
+                    <p>
+                        Development: <br/>Kay Schneider <br/>
+                        Burgstallstr. 68<br/>
+                        70199 Stuttgart<br/>
+                        Germany<br/>
+                        mail: kayoliver82@gmail.com<br/>
+                        <br/>
+                        Meet the developer on:<br/>
+                        <a class="btn btn-primary" href="https://facebook.com/ikayschneider">on facebook</a><br/>
+                        <a class="btn btn-primary" href="https://plus.google.com/101394390558382014012">on G+</a><br/>
+                        Special Thanks to:<br/>
+                        Nico from france for great tips and inspiration
+                    </p>
+                    <p>
+                    </p>
+                    <p>
+                        Join the iStart community:<br/>
+                        <a class="btn btn-primary" href="http://www.facebook.com/pages/IStart/541050975929071">iStart on facebook</a><br/>
+                        <a class="btn btn-primary" href="https://plus.google.com/b/112168341334604205436/112168341334604205436">iStart on Gplus</a>
+                        <br/>
+                        Join the community and send me direct <br/>
+                        feedback. Do you miss an feature ?<br/>
+                        Inform about upcoming changes.<br/>
+                        Found an bug ? You are welcome<br/>
+                        to tell me anything about iStart :)
+                    </p>
+
+                </div>
+            </div>
+
+        </div>
+        <div id="sideBarHelp" class="hidden">
+
+            <div class="sideBarWrap-header">
+                <p> <a href="http://istart.lokamat.de/support/show" style="color:white">visit online help center</a></p>
+                <h2>Help</h2>
+            </div>
+            <div class="row-fluid">
+
+                <div class="listview-container grid-layout metroHelp" style="width:200px">
+
+                    <h3>Edit an tile ( App or Favorite )</h3>
+                    <p>
+                        <b>click with the right mouse button</b> on the tile you
+                        like to edit.<br/>
+                        At the bottom of the new tab you see now <b>an blue  edit panel</b>,
+                        there you can modify the link, or <b>remove</b> the tile or
+                        app from chrome.
+
+                    </p>
+                    <h3>Add new tile/favorite</h3>
+                    <p>
+                        <b>click on the top right</b> of the screen on the <b>settings</b>
+                        icon.<br/>
+                        Now it opens an new Settings Menue, <b>choose there add new tile/favorite</b>
+                        and you be able to add an new tile to the new tab page.
+                        <br/>
+                        <b>Tip:</b><br/>You can <b>drop an shortcut from chrome</b> into the
+                        "add new favorite/tile" formular and the link will be automatically added
+                    </p>
+                </div>
+            </div>
+
+
+        </div>
+        <div id="sideBarHelper" style="">
+
+        </div>
+
+        <div id="aboutPage" class="hidden">
+
+        </div>
+        <div id="sideBarGlobalSettings" class="hidden">
+
+            <div class="sideBarWrap-header">
+                <h2>Global settings</h2>
+            </div>
+            <div class="row-fluid">
+                <form>
+                    <h3>open page/app in:</h3>
+                    <input type="checkbox" id="globalSettingsOpenPage" name="globalSettingsOpenPage"> new tab<br/>
+                    if deselect to open the link <br/>in the current window
+                </form>
+            </div>
+
+
+        </div>
+        <div class="hidden" style="position:absolute;left:40%;top:83px;" id="iteminsert">
+            <h1 style="color:white;font-size:123px;line-height: 102px;font-weight: bold">Your widget has been added</h1>
+        </div>
+
+
+
+        <div id="g" style="position:absolute;top: 1px;left:0px;padding-left:0px;width:100%;background-color: black;height: 15px" class="hidden">
+
+            <span style="padding-left: 10px;font-size:10px;padding:0px;margin-top: -5px;"></span>
+        </div>
+        <div class="hidden searchResult" id="searchResult">
+            <a id="searchClose" href="javascript:return void();" style="position:fixed;left:923px;top:20px" class="btn btn-inverse btn-large">close</a>
+            <ul id="resultList" style="position:fixed;left:0px;top:50px;width: 100%;overflow:scroll;height: 500px; background-color:transparent;">
+
+            </ul>
+        </div>
+        <div id="enterserial" class="hidden" style="position:fixed;top:50%;margin-top:-125px;width:100%;height:250px;background-color:white;padding: 20px;">
+            <div class="" style="position:relative;text-align: center;width:100%">
+                <div  class="pull-left" style="width:50px;height50px">
+                </div>
+                <div style="text-align: left;width:500px;position: relative;left:50%;margin-left:-250px">
+                    <h2>Enter your iStart Premium license key</h2>
+                    <p>
+                    <form >
+
+                        <input type="text" value="" name="serial" id="serialkey"/>
+                        <span id="messageserial"  ></span>
+                        <label><label>
+                                <a href="#" id="serialbtn" class="btn btn-success btn-large" >check and save serial key</a>
+                                </form>
+                                </p>
+                                <p>
+                                    Dont have an premium license key ?<br/>
+                                    It cost you 1,10.-$(USD) and 2 minutes of your time<br/>
+                                    Free premium for all:<br/>
+                                    3e41c104913bad1b01210ddb15cb8b62
+                                </p>
+                                <p>
+                                    <a class="btn btn-large btn-primary" id="serialclose">close</a>
+                                </p>
+                                </div>
+                                </div>
+                                </div>
+                                <div id="supportme" class="hidden" style="position:fixed;top:50%;margin-top:-125px;width:100%;height:250px;background-color:white;padding: 20px;">
+                                    <div class="" style="position:relative;text-align: center;width:100%">
+                                        <div  class="pull-left" style="width:50px;height50px">
+                                        </div>
+                                        <div style="text-align: left;width:500px;position: relative;left:50%;margin-left:-250px">
+                                            <h2>Thanks for installing & using iStart</h2>
+                                            <p>
+                                                I hope you enjoy iStart like 23.000 users every day. <br/>
+                                                Im working on iStart to build an new tab page app wich doesn`t sucks. Im working on it and im hope with your feedback im getting better and better.<br/>
+                                                kind regards<br/>
+                                                kay
+                                                <a class="btn" id="closesupportme">close</a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="deltethisappbanner" class="hidden" style="position:fixed;top:50%;margin-top:-125px;width:100%;height:250px;background-color:white;padding: 20px;">
+                                    <div class="" style="position:relative;text-align: center;width:100%">
+                                        <div  class="pull-left" style="width:50px;height50px">
+                                        </div>
+                                        <div style="text-align: left;width:500px;position: relative;left:50%;margin-left:-250px">
+                                            <h2>Are you sure to delete iStart from chrome?</h2>
+                                            <p>
+                                                Im sorry that you hate iStart, so no problem. We delete this FU$*%&*$G App from chrome :)
+                                                <a class="btn btn-danger" id="deletethisappdelete">yes, delete iStart</a><br/>
+                                                <a class="btn" id="closedeltethisappbanner">close</a>
+
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="updateCenter" class="hidden" style="position:fixed;top:50%;margin-top:-125px;width:100%;height:250px;background-color:white;padding: 20px;">
+                                    <div class="" style="position:relative;text-align: center;width:100%">
+                                        <div  class="pull-left" style="width:50px;height50px">
+                                        </div>
+                                        <div style="text-align: left;width:500px;position: relative;left:50%;margin-left:-250px">
+                                            <h2>Thanks for using iStart</h2>
+                                            <p>
+                                                Im Kay the developer of iStart.<br/>
+                                                iStart was updated and now you can open an "metro link" in an new tab instead of the current page.
+                                                <br/>
+                                                <b>Important:</b> To enable this feature, click on the settings -> then "global settings"<br/>
+                                                and activate the new module.
+                                                <a class="btn" id="closesupdateCenter">close</a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="activeCornerHelper" style="">
+
+                                </div>
+                                <div id="activeBar"  class="hidden activeBarSide show" >
+                                    <div style=" " class="activebartools">
+                                        <a href="chrome://settings/" title="chrome settings" target="_top" style="background-image:url('../img/configure.png');background-size: 80px;"></a>
+                                        <a href="chrome://downloads/" title="downloads" target="_blank" style="background-image:url('../img/downloads.png');background-size: 80px;"></a>
+                                        <a href="chrome://extensions/" title="extensions" target="_top" style="background-image:url('../img/extensions.png');background-size: 80px;"></a>
+                                        <a href="chrome://bookmarks/" title="bookmarks" target="_top" style="background-image:url('../img/Bookmarks.png');background-size: 80px;"></a>
+                                        <a href="chrome://history/" title="browser history" target="_top" style="background-image:url('../img/systemrestore.png');background-size: 80px;"></a>
+                                    </div
+                                </div>                              <!-- Le javascript
+                                ================================================== -->
+                                <!-- Placed at the end of the document so the pages load faster -->
+
+                                <script src="../js/all.min.js"></script>
+
+                                </body>
+                                </html>
+
+

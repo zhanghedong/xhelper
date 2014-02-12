@@ -1,0 +1,26 @@
+{
+"update_url": "https://clients2.google.com/service/update2/crx",
+
+    "name": "__MSG_appName__",
+    "description": "__MSG_appDesc__",
+    "version": "0.0.0.45",
+    "manifest_version": 2,
+    "default_locale": "en_US",
+    "offline_enabled": true,
+    "permissions": [
+    "management","storage","unlimitedStorage"
+    ],
+    "icons": {
+        "128": "istartIcon.png",
+        "16":"istartIcon16.png"
+    },
+    "app": {
+        "launch": {
+            "local_path": "html/metro.html"
+        }
+    },
+    "chrome_url_overrides" : {
+        "newtab": "html/metro.html"
+    },
+    "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'"
+}

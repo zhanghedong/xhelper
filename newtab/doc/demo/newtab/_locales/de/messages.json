@@ -1,0 +1,13 @@
+{
+  "appName": {
+        "message": "iStart - new tab in Metro Style",
+    "description": "The title of the application, displayed in the web store."
+  },
+  "appDesc": {
+    "message": "Neue Tab Seite im Metro Style. Alle wichtigen links und Apps auf einem Blick!", 
+    "description":"The description of the application, displayed in the web store."
+  },
+  "launchUrl": {
+      "message": "http://amz.lokamat.de#!de"
+  }
+}
