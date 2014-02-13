@@ -1,7 +1,8 @@
 angular.module('app', [
     'ngRoute',
     'templates.app',
-    'home'
+    'home',
+    'bgDirectives'
 ]);
 
 angular.module('app').config(['$routeProvider', '$locationProvider', '$httpProvider', function ($routeProvider, $locationProvider, $httpProvider) {

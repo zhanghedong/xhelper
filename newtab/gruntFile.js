@@ -47,7 +47,9 @@ module.exports = function (grunt) {
             manifest: ['src/manifest.json'],
             tpl: {
                 app: ['src/app/**/*.tpl.html'],
-                common: ['src/common/**/*.tpl.html']
+                common: ['src/common/**/*.tpl.html'],
+                sidebar: ['src/sidebar/**/*.tpl.html'],
+                plugin: ['src/plugin/**/*.tpl.html']
             },
             less: ['src/less/stylesheet.less'], // recess:build doesn't accept ** in its file patterns
             lessWatch: ['src/less/**/*.less']
@@ -81,13 +83,13 @@ module.exports = function (grunt) {
         copy: {
             assets: {
                 files: [
-                    { dest: '<%= distdir %>', src: '**', expand: true, cwd: 'src/assets/' }
+                    { dest: '<%= distdir %>/resource', src: '**', expand: true, cwd: 'src/assets/' }
 
                 ]
             },
             release:{
                 files: [
-                    { dest: '<%= releasedir %>', src: '**', expand: true, cwd: 'dist/' }
+                    { dest: '<%= releasedir %>/resource', src: '**', expand: true, cwd: 'dist/' }
                 ]
             }
         },
@@ -190,11 +192,11 @@ module.exports = function (grunt) {
         },
         watch: {
             all: {
-                files: ['<%= src.js %>', '<%= src.specs %>', '<%= src.lessWatch %>', '<%= src.tpl.app %>', '<%= src.tpl.common %>', '<%= src.html %>', '<%= src.manifest%>','!**/config/config.js'],
+                files: ['<%= src.js %>', '<%= src.specs %>', '<%= src.lessWatch %>', '<%= src.tpl.app %>', '<%= src.tpl.common %>', '<%= src.tpl.sidebar%>', '<%= src.tpl.plugin %>', '<%= src.html %>', '<%= src.manifest%>','!**/config/config.js'],
                 tasks: ['default', 'timestamp']
             },
             build: {
-                files: ['<%= src.js %>', '<%= src.specs %>', '<%= src.lessWatch %>', '<%= src.tpl.app %>', '<%= src.tpl.common %>', '<%= src.html %>', '<%= src.manifest%>','!**/config/config.js'],
+                files: ['<%= src.js %>', '<%= src.specs %>', '<%= src.lessWatch %>', '<%= src.tpl.app %>', '<%= src.tpl.common %>', '<%= src.tpl.sidebar %>', '<%= src.tpl.plugin %>', '<%= src.html %>', '<%= src.manifest%>','!**/config/config.js'],
                 tasks: ['build', 'timestamp']
             }
         },

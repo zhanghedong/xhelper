@@ -16,3 +16,5 @@ google谷歌应用api: https://cloud.google.com/console/project/apps~zhd1625/api
 splitter https://github.com/chaosim/splitter
 http://ngmodules.org/modules/splitter
 indexDB: http://www.recursiverobot.com/post/53767548784/angularjs-with-indexeddb-using-a-helper-library
+
+动态下载图标：

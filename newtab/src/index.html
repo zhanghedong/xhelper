@@ -11,8 +11,16 @@
 <div id="container" class="container">
     <div ng-include="'header.tpl.html'"></div>
     <div class="main-view">
-        <ng-view />
+        <bg-splitter orientation="horizontal">
+            <bg-pane min-size="100">
+                <div ng-include="'sidebar/left.tpl.html'" class="sidebar"></div>
+            </bg-pane>
+            <bg-pane min-size="200">
+                    <ng-view />
+            </bg-pane>
+        </bg-splitter>
     </div>
+
 </div>
 </body>
 </html>
