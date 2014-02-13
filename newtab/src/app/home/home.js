@@ -13,6 +13,8 @@ angular.module('home',['config']).controller('homeCtrl', ['$scope', function ($s
     },{
         bgColor:'#62707D'
     },{
+        bgColor:'#62707D'
+    },{
         bgColor:'#B7C0C7'
     }];
 }]);
