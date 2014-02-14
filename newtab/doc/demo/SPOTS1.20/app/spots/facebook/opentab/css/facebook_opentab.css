@@ -1,0 +1,26 @@
+#spots .notifications .notification .content .facebookNotification{
+    direcation:ltr;
+}
+
+#spots .notifications .notification .content .facebookNotification  .image {
+    width: 50px ;
+    height: 50px;
+}
+#spots .notifications .notification .content .facebookNotification  .image img {
+    max-width: 50px ;
+    max-height: 50px;
+}
+
+#spots .facebookNotification .event a, #spots .facebookNotification  a:link, #spots .facebookNotification .event a:visited{
+    text-decoration: none;
+    color:white;
+}
+
+#spots .notifications .notification .content .facebookNotification  .title {
+    font-weight: bold;
+}
+
+#spots .notifications .notification .content .facebookNotification  .description {
+    display: online-block;
+    line-height:35px;
+}

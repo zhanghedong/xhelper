@@ -14,6 +14,7 @@
         "newtab": "index.html"
     },
     "permissions": [
+        "topSites"
     ],
 
     "app": {

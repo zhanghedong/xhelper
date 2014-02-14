@@ -1,0 +1,9 @@
+/**
+ * Spots - 2014-01-28
+ * http://spotsmagic.com
+ *
+ * Copyright (c) 2014 ironSource
+ * Licensed Commercial <http://spotsmagic.com/terms>
+ */
+
+.spots-web-hider{opacity:0!important;transition:opacity 500ms}@font-face{font-family:Gotham;src:url(chrome-extension://__MSG_@@extension_id__/css/fonts/Gotham-Medium_0.otf) format("opentype")}@font-face{font-family:Gotham;font-weight:400;src:url(chrome-extension://__MSG_@@extension_id__/css/fonts/Gotham-Medium_0.otf) format("opentype")}@font-face{font-family:Gotham;font-weight:700;src:url(chrome-extension://__MSG_@@extension_id__/css/fonts/Gotham-Bold.otf) format("opentype")}@font-face{font-family:Gotham;font-weight:900;src:url(chrome-extension://__MSG_@@extension_id__/css/fonts/Gotham-Black.otf) format("opentype")}@font-face{font-family:Gotham;font-weight:300;src:url(chrome-extension://__MSG_@@extension_id__/css/fonts/Gotham-Book_0.otf) format("opentype")}@font-face{font-family:Gotham;font-weight:200;src:url(chrome-extension://__MSG_@@extension_id__/css/fonts/Gotham-Light_0.otf) format("opentype")}@font-face{font-family:Gotham;font-weight:100;src:url(chrome-extension://__MSG_@@extension_id__/css/fonts/Gotham-XLight.otf) format("opentype")}

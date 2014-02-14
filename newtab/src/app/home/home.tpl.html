@@ -2,20 +2,22 @@
     <div class="favorites">
         <ul class="categories"> <!--ng-repeat="cateory in sites track by category.id"-->
             <li class="category">
-                <h2><span class="title">热门推荐</span>
+                <h2><span class="title">{{name}}热门推荐</span>
                     <a class="btn edit">edit</a>
                     <a class="btn delete">delete</a></h2>
                 <ul class="sites">
                     <li class="item-wrap" ng-repeat=" item in items">
                         <div class="item">
-                            <a class="info">
-                                <div class="icon" ng-style="{'background-color':item.bgColor}">
+                            <a class="info" ng-href="{{item.url}}" target="_self">
+                                <div class="icon" ng-style="{'background-color':item.bgColor || '#ddd'}">
                                     <!--<span class="letters">深入</span>-->
-                                    <img class="img ng-scope" src="/resource/spots/google.svg">
+                                    <img class="img" ng-if="item.icon" ng-src="{{item.icon}}" src="/resource/icons/s.gif" />
+                                    <span class="letter" ng-if="!item.icon">C</span>
+                                    <!--<img class="img" ng-if="item.icon" src="/resource/spots/google.svg" />-->
                                 </div>
                                 <div class="details">
-                                    <span class="title">深入了解 CSS3 新特性<br></span>
-                                    <span class="url">ibm.com</span>
+                                    <span class="title" title="{{item.title}}">{{item.title}}<br></span>
+                                    <span class="url" title="{{item.url}}">{{item.url}}</span>
                                 </div>
                             </a>
                             <div class="hover-mode" ng-if="!1">
@@ -41,7 +43,7 @@
             <a class="insert-category" href="#">+</a>
         </div>
         <div class="sys-menu">
-            <a href="#">Apps</a>
+            <a >Apps</a>
             <a href="#">最近关闭</a>
         </div>
     </div>

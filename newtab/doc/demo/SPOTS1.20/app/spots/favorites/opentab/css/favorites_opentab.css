@@ -1,0 +1,256 @@
+/**
+ * Favorites Spot
+ */
+#spots .category label {
+    display: block;
+    margin-bottom: .5em
+}
+
+#spots .category {
+    margin: 10px;
+}
+
+#spots .category > * {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#spots .category input[type="text"],
+#spots .category select {
+    margin: 0;
+    padding: .2em .4em;
+    background: #F0F0F0;
+    border: none;
+    font-size: 1.4em;
+    display: inline-block;
+    height: auto;
+    box-shadow: none;
+    line-height: 1.5em;
+    color: #555555;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+
+#spots .category select {
+    padding: .2em;
+}
+
+
+
+#spots #topRight .favorites-spot {
+    text-align: left;
+    display: block;
+    padding: 0;
+    min-width: 360px;
+    max-width: 480px;
+    border: #efefef 1px solid;
+    font-size: 14px;
+    background-color: #fff;
+    transition: top 0.5s ease-in-out;
+    text-shadow: none;
+}
+
+#spots #topRight .favorites-spot .close-btn {
+    cursor: pointer;
+    display: block;
+    position:absolute;
+    right:5px;
+    top: 0px;
+    width: 20px;
+    height: 20px;
+    margin: 10px 0;
+    opacity: 0.8;
+    border-radius: 50%;
+    background-size: 50% 50%;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-image: url('chrome-extension://__MSG_@@extension_id__/img/close-btn.png');
+}
+
+#spots #topRight .favorites-spot .close-btn:hover {
+    opacity: 0.6;
+}
+
+#spots #topRight .favorites-spot .add-favorite,
+#spots #topRight .favorites-spot .remove-favorite {
+    margin: 0;
+}
+
+#spots #topRight .favorites-spot .title,
+#spots #topRight .favorites-spot .footer {
+    font-size: inherit;
+    color: inherit;
+    text-transform: uppercase;
+    padding: 10px;
+}
+
+#spots #topRight .favorites-spot .footer {
+    text-align: right;
+    background: rgb(239, 239, 239);
+}
+
+#spots #topRight .favorites-spot .title > span {
+    top: 2px;
+    position: relative;
+    display: inline-block;
+}
+
+#spots #topRight .favorites-spot .circle {
+    display: inline-table;
+    border-radius: 50%;
+    background: #212121;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 24px;
+    height: 42px;
+    width: 42px;
+    margin-right: 8px;
+    background-image: none;
+    background-position: center center;
+    background-size: 36px auto;
+    background-repeat: no-repeat;
+}
+
+#spots #topRight .favorites-spot .circle-cell {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#spots #topRight .favorites-spot .circle .letter {
+    text-transform: capitalize;
+    color: #ffffff;
+    font-weight: bold;
+    letter-spacing: -1px;
+}
+
+#spots #topRight .favorites-spot .details {
+    border-top: 2px solid rgb(239, 239, 239);
+    padding: 10px;
+}
+
+#spots #topRight .favorites-spot .details .title {
+    /*text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-weight: bold;
+    font-size: 1.2em;*/
+}
+
+#spots #topRight .favorites-spot .chrome-app-image {
+    width: 80px;
+    vertical-align: middle;
+    margin-top: 15px;
+    margin-left: 15px;
+}
+
+#spots #topRight .favorites-spot input[type="submit"],
+#spots #topRight .favorites-spot input[type="button"] {
+    color: #FFF;
+    background: transparent;
+    text-transform: uppercase;
+    margin: 0;
+    padding: .5em 1.5em;
+    border: 0;
+    font-size: 1em;
+    text-align: center;
+    display: inline-block;
+    width: auto;
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+#spots #topRight .favorites-spot input[type="submit"]:hover {
+    opacity: 1;
+}
+
+#spots #topRight .favorites-spot input[type="button"] {
+    float: left;
+    padding: 0.5em;
+    color: #000;
+    opacity: 0.6;
+}
+
+#spots #topRight .favorites-spot input[type="button"]:hover {
+    opacity: 0.8;
+}
+
+/**
+ * Color picker
+ */
+
+#spots .color-picker {
+    width: 100%;
+    display: inline-block;
+}
+
+#spots .color-picker .color-picker-family {
+    margin-bottom: 2px;
+}
+
+#spots .color-picker .color-picker-family-item {
+    display:inline-block;
+    height:25px;
+    background: no-repeat center -20px;
+    /*background-image: url(/img/color-picker/family-item-white.png);*/
+    background-image: url('chrome-extension://__MSG_@@extension_id__/img/color-picker/family-item-white.png');
+    transition: background-position-y 0.3s ease-in;
+}
+
+#spots .color-picker.light .color-picker-family-item {
+    /*background-image: url(/img/color-picker/family-item-black.png);*/
+    background-image: url('chrome-extension://__MSG_@@extension_id__/img/color-picker/family-item-black.png');
+}
+
+#spots .color-picker .color-picker-family-item:hover {
+    cursor: pointer;
+    background-position-y: 0;
+    transition: background-position-y 0.1s ease-out;
+}
+
+#spots .color-picker .color-picker-family-item.selected {
+    height: 31px;
+    margin-bottom: -3px;
+    box-shadow: inset 0 0px 0 3px rgba(255, 255, 255, 0.5);
+}
+
+#spots .color-picker.light .color-picker-family-item.selected {
+    box-shadow: inset 0 0px 0 3px rgba(0,0,0, 0.5);
+}
+
+#spots .color-picker .color-picker-shade {
+
+}
+
+#spots .color-picker .color-picker-shade-item {
+    display:inline-block;
+    height:50px;
+
+    background: no-repeat center 200%;
+    /*background-image: url(/img/color-picker/shade-item-white.png);*/
+    background-image: url('chrome-extension://__MSG_@@extension_id__/img/color-picker/shade-item-white.png');
+    transition: background-position-y 0.3s ease-in;
+}
+
+#spots .color-picker.light .color-picker-shade-item {
+    /*background-image: url(/img/color-picker/shade-item-black.png);*/
+    background-image: url('chrome-extension://__MSG_@@extension_id__/img/color-picker/shade-item-black.png');
+}
+
+#spots .color-picker .color-picker-shade-item:hover {
+    cursor: pointer;
+    background-position-y: 100%;
+    transition: background-position-y 0.1s ease-out;
+}
+
+#spots .color-picker .color-picker-shade-item.selected {
+    background: no-repeat center center;
+    /*background-image: url(/img/color-picker/shade-item.selected-white.png);*/
+    background-image: url('chrome-extension://__MSG_@@extension_id__/img/color-picker/shade-item.selected-white.png');
+}
+
+#spots .color-picker.light .color-picker-shade-item.selected {
+    /*background-image: url(/img/color-picker/shade-item.selected-black.png);*/
+    background-image: url('chrome-extension://__MSG_@@extension_id__/img/color-picker/shade-item.selected-black.png');
+}

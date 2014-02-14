@@ -1,0 +1,42 @@
+{
+   "author": "Fried Cookie Software",
+   "background": {
+      "page": "/background.html",
+      "persistent": true
+   },
+   "chrome_url_overrides": {
+      "newtab": "/newtab.html"
+   },
+   "content_scripts": [ {
+      "css": [ "/css/opentab_global.css" ],
+      "js": [ "/lib/angular.min.js", "/lib/jquery-2.0.3.min.js", "/lib/lodash.underscore.min.js", "/lib/moment-with-langs.min.js", "/js/opentab.js" ],
+      "matches": [ "http://*/*", "https://*/*" ],
+      "run_at": "document_idle"
+   } ],
+   "content_security_policy": "script-src 'self' https://s3.amazonaws.com https://stats.g.doubleclick.net https://ssl.google-analytics.com https://*.uservoice.com; object-src  'self' ",
+   "default_locale": "en",
+   "description": "Give your homepage cool designs & awesome features - speed dial your favorites sites, text message from your computer, discover\u2026",
+   "icons": {
+      "128": "/img/icons/128.png",
+      "16": "/img/icons/16.png",
+      "48": "/img/icons/48.png"
+   },
+   "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCJXjrQt7jKCZQdMALYOHZaSFPyOmV6D7HDbMUlCozWlqEbQFWOChMKH3WOSij9aksw0c5v9l8ULAoAdjYlUeOr6ncgAo9RA/XdWTFu/HnDvaIUVVO2zJ6C6nM0LCCrXqb97r9NskqRRk9i9xgLqe0MsHFFFKMLGzIWHtiGy7MRAQIDAQAB",
+   "manifest_version": 2,
+   "minimum_chrome_version": "23",
+   "name": "SPOTS - A better way to start",
+   "page_action": {
+      "default_icon": {
+         "19": "/img/icons/pageAction/19x19.png",
+         "38": "/img/icons/pageAction/38x38.png"
+      },
+      "default_title": ""
+   },
+   "permissions": [ "notifications", "storage", "unlimitedStorage", "contextMenus", "webNavigation", "history", "bookmarks", "tabs", "management", "topSites", "cookies", "webRequest", "webRequestBlocking", "chrome://favicon/", "http://*/*", "https://*/*" ],
+   "sandbox": {
+      "pages": [  ]
+   },
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "0.1.20",
+   "web_accessible_resources": [ "/img/*", "/css/fonts/*.otf", "/opentab.html", "css/opentab.css", "/app/spots/gallery/images/*" ]
+}

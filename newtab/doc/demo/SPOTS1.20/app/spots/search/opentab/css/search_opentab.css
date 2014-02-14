@@ -1,0 +1,389 @@
+/**
+ * Search Spot
+ */
+
+#spots #spots_search{
+font-size:14px;
+font-family: 'Gotham', sans-serif;
+}
+
+#spots #spots_search .search-bar {
+    width: 350px;
+    height: 70px;
+    box-shadow: 5px 5px 10px -1px rgba(0, 0, 0, 0.08);
+}
+
+#spots #spots_search .search-bar .search-box {
+    float: left;
+    min-width: 200px;
+    width: calc(100% - 110px);
+    height: 50px;
+    margin: 10px;
+    padding: 0;
+    line-height: 60px;
+    font-size: 21px;
+    color: #ffffff;
+    font-weight: 200;
+    border: none;
+    outline: none;
+    font-family: 'Gotham', sans-serif;
+}
+
+#spots #spots_search .search-bar .search-btn {
+    float: left;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100% 100%;
+    width: 50px;
+    height: 50px;
+    margin: 10px 0 10px 10px;
+    cursor: pointer;
+}
+
+#spots #spots_search .search-bar .search-handle {
+    float: right;
+    height: 80px;
+    background-repeat: repeat-y;
+    width: 20px;
+    cursor: pointer;
+}
+
+#spots #spots_search .search-bar .search-handle .search-handle-tip {
+    height: 30px;
+    margin: 25px 5px 25px 0;
+}
+
+#spots #spots_search .search-results a:hover {
+    text-decoration: none;
+}
+
+/***** Search Results *****/
+#spots #spots_search .search-results {
+    position: absolute;
+    top: 70px;
+    left: 0;
+    text-align: left;
+    width: 100%;
+    max-width: 600px;
+    -webkit-user-select: none;
+}
+
+#spots #spots_search .search-results .result {
+    display: block;
+    position: relative;
+    min-height: 60px;
+    line-height: 60px;
+    background: rgba(255, 255, 255, 1);
+    color: rgb(0, 0, 0);
+    box-shadow: 5px 5px 10px -1px rgba(0, 0, 0, 0.08);
+    border-top: 1px solid rgb(240, 240, 240);
+    cursor: pointer;
+    font-weight:200;
+}
+
+#spots #spots_search .search-results .result a {
+    color:rgb(0, 0, 0);
+    line-height: 60px;
+    pointer: cursor;
+}
+
+#spots #spots_search .search-results .result.selected a {
+    color: #ffffff;
+}
+
+#spots #spots_search .search-results .result.selected {
+    background: rgba(255, 255, 255, 0);
+    color: #ffffff;
+}
+
+#spots #spots_search .search-results .result a {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/***** Favorites Search *****/
+#spots #spots_search .search-results .result .opentab-favorites-search-result {
+    padding: 0 20px 0 20px;
+}
+
+#spots #spots_search .search-results .result .opentab-favorites-search-result .letter {
+    line-height: 40px;
+}
+
+#spots #spots_search .search-results .result .opentab-favorites-search-result .title {
+    float: left;
+    width: 200px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    line-height: 60px;
+}
+
+#spots #spots_search .search-results .result .newtab-favorites-search-result .bookmarks {
+    padding-left: 55px;
+    background: no-repeat 10px center;
+}
+
+#spots #spots_search .search-results .icon.medium {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 50%;
+    color: #ffffff;
+    background: #222222;
+    text-align: center;
+    text-transform: capitalize;
+    font-weight: 400;
+    margin: 5px 15px 5px 0;
+    float: left;
+    font-size: 18px;
+}
+
+#spots #spots_search .search-results .icon img {
+    width: 65%;
+    height: 65%;
+    margin: 15%;
+}
+
+#spots #spots_search .search-results .result .opentab-favorites-search-result .favorites {
+    font-weight: 400;
+}
+
+#spots #spots_search .search-results .result .opentab-favorites-search-result .top-sites {
+    font-weight: 400;
+}
+
+#spots #spots_search .search-results .result .opentab-favorites-search-result .chrome-apps {
+    font-weight: 400;
+}
+
+#spots #spots_search .search-results .result .opentab-favorites-search-result .chrome-apps .app-icon {
+    float: left;
+    width: 40px;
+    height: 40px;
+    margin: 5px 15px 5px 0;
+}
+
+#spots #spots_search .search-results .result .opentab-favorites-search-result .bookmarks {
+    padding-left: 55px;
+    background-repeat: no-repeat;
+    background-position: 10px;
+
+}
+
+#spots #spots_search .search-results .result .opentab-favorites-search-result .bookmarks a {
+    display: block;
+}
+
+/**
+ * Contacts Search Results
+ */
+
+#spots #spots_search .search-results .result .opentab-contacts-search-result .name {
+    float: left;
+    cursor: pointer;
+    line-height: 60px;
+    font-size:18px;
+    width:200px;
+    overflow:hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-weight: 400;
+
+}
+#spots #spots_search .search-results .result.selected .opentab-contacts-search-result .name{
+    width:150px;
+}
+
+#spots #spots_search .search-results .result .opentab-contacts-search-result .btn {
+    display: none;
+}
+
+#spots #spots_search .search-results .result.selected .opentab-contacts-search-result .btn {
+    display: block;
+    float: right;
+    width: 40px;
+    height: 40px;
+    margin: 10px 0 10px 10px;
+    border-radius: 50%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100%;
+    cursor: pointer;
+    opacity: 0.85;
+}
+
+#spots #spots_search .search-results .result.selected .opentab-contacts-search-result .btn:hover {
+    opacity: 1;
+}
+
+/** Contact image **/
+#spots #spots_search .search-results .result .opentab-contacts-search-result .contact-image {
+    float: left;
+    width: 40px;
+    height: 40px;
+    margin: 10px 15px 10px 0;
+    display: block;
+}
+
+#spots #spots_search .search-results .result .opentab-contacts-search-result .contact-image img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+#spots #spots_search .search-results .result .opentab-contacts-search-result .contact-image .no-image {
+    background-color: rgba(0, 0, 0, 0.3);
+    width: 100%;
+    height: 100%;
+    background-size: 100% 100%;
+    border-radius: 50%;
+}
+
+#spots #spots_search .search-results .result .opentab-contacts-search-result .contact-image img{
+    background-color:rgba(0,0,0,0.3);
+}
+
+#spots #spots_search .search-results .result.selected .opentab-contacts-search-result .contact-image .no-image {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+/** Default View **/
+#spots #spots_search .search-results .result .default-view {
+    min-height: 60px;
+    cursor: pointer;
+    padding: 0 20px;
+}
+
+/** All numbers **/
+#spots #spots_search .search-results .result .open-contact {
+    background: rgba(0, 0, 0, 0.1);
+    min-height: 60px;
+}
+
+#spots #spots_search .search-results .result .contact-image {
+    cursor: pointer;
+}
+
+#spots #spots_search .search-results .result .open-contact .numbers {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+#spots #spots_search .search-results .result .open-contact .contact-info {
+    padding: 0 20px;
+}
+
+#spots #spots_search .search-results .result .open-contact .number-row {
+    padding: 0 20px;
+    line-height: 60px;
+}
+
+/** Calling contact **/
+@-webkit-keyframes changeBackground {
+    from {
+        background-color: rgba(255, 255, 255, 0);
+    }
+    to {
+        background-color: rgba(255, 255, 255, 0.5);
+    }
+}
+
+#spots #spots_search .search-results .result .opentab-contacts-search-result .calling-view {
+    display: block;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    color: #ffffff;
+}
+
+#spots #spots_search .search-results .result .opentab-contacts-search-result .calling-view .animation-cont {
+
+    height: 100%;
+    padding: 0 20px;
+
+    -webkit-animation-duration: 0.7s;
+    -webkit-animation-name: changeBackground;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-direction: alternate;
+}
+
+#spots #spots_search .search-results .result .opentab-contacts-search-result .call-connected {
+    display: block;
+    height: 100%;
+    position: absolute;
+    color: #ffffff;
+    width: 100%;
+
+}
+
+#spots #spots_search .search-results .result .opentab-contacts-search-result .call-connected .response-cont {
+    background-color: rgba(255, 255, 255, 0.5);
+    height: 100%;
+}
+
+#spots #spots_search .search-results .result .opentab-contacts-search-result .cancel-btn {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    top: 10px;
+    right: 25px;
+    border-radius: 50%;
+    background-size: 100%;
+    cursor: pointer;
+    opacity: 0.85;
+    z-index: 9999;
+}
+
+#spots #spots_search .search-results .result .opentab-contacts-search-result .cancel-btn:hover {
+    opacity: 1;
+}
+
+/*web search results*/
+
+/**
+ * Web Search Results
+ */
+
+#spots #spots_search .search-results .result .newtab-search-result {
+    padding: 0 20px 0 20px;
+}
+
+#spots #spots_search #search_term {
+    padding: 0 20px 0 20px;
+}
+
+#spots #spots_search .search-results .result .newtab-search-result .web {
+    padding-left: 55px;
+    background-repeat: no-repeat;
+    background-position: 10px;
+}
+
+/**
+ * Default search result (i.e "Search for: XXXX")
+ */
+#spots #spots_search .search-results .result .newtab-search-result .web.default .search-term {
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+/**
+ * Calculator Results
+ */
+#spots #spots_search .search-results .result .newtab-search-result .calculator {
+    padding-left: 55px;
+    background-repeat: no-repeat;
+    background-position: 10px;
+}
+
+/**
+ * Navigation Results
+ */
+#spots #spots_search .search-results .result .newtab-search-result .navigation {
+    padding-left: 55px;
+    background-repeat: no-repeat;
+    background-position: 10px;
+}
+
+
+

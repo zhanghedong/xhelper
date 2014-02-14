@@ -43,6 +43,16 @@ ul, li {
     padding: 0;
 }
 
+a{
+    color: #555;
+    text-decoration: none;
+    &:hover{
+        color:#222;
+        text-decoration: none;
+    }
+
+}
+
 .container {
     display: -webkit-box;
     display: box;
@@ -64,5 +74,18 @@ ul, li {
     -webkit-box-flex: 1;
     box-flex: 1;
     xheight: 100%;
+}
+.clearfix{
+
+}
+.clearfix() {
+    &:before,
+    &:after {
+        content: " "; /* 1 */
+        display: table; /* 2 */
+    }
+    &:after {
+        clear: both;
+    }
 }
 

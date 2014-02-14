@@ -5,16 +5,14 @@
 angular.module('home', [], ['$routeProvider', function ($routeProvider) {
 
 }]);
-angular.module('home',['config']).controller('homeCtrl', ['$scope', function ($scope) {
-    $scope.items = [{
-        bgColor:'#51B46D'
-    },{
-        bgColor:'#9D8AC7'
-    },{
-        bgColor:'#62707D'
-    },{
-        bgColor:'#62707D'
-    },{
-        bgColor:'#B7C0C7'
-    }];
-}]);
+angular.module('home', ['config']).controller('homeCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
+        chrome.topSites.get(function (d) {
+            $timeout(function(){
+                d.length = 10;
+                $scope.items = d;
+            })
+        });
+
+    }]).directive('getTopSites', function () {
+
+    });
