@@ -8,15 +8,14 @@
                 <ul class="sites">
                     <li class="item-wrap" ng-repeat=" item in items">
                         <div class="item">
-                            <a class="info" ng-href="{{item.url}}" target="_self">
+                            <a class="info" ng-style="{'background-image':item.icon}" ng-href="{{item.url}}" target="_self">
                                 <div class="icon" ng-style="{'background-color':item.bgColor || '#ddd'}">
-                                    <!--<span class="letters">深入</span>-->
                                     <img class="img" ng-if="item.icon" ng-src="{{item.icon}}" src="/resource/icons/s.gif" />
-                                    <span class="letter" ng-if="!item.icon">C</span>
-                                    <!--<img class="img" ng-if="item.icon" src="/resource/spots/google.svg" />-->
+                                    <!--{{item.letter}}-->
+                                    <span class="letter" ng-style="{'color':item.color||'#fff'}"  ng-if="!item.icon">{{item.letter | uppercase}}</span>
                                 </div>
                                 <div class="details">
-                                    <span class="title" title="{{item.title}}">{{item.title}}<br></span>
+                                    <span class="title"title="{{item.title}}">{{item.title}}<br></span>
                                     <span class="url" title="{{item.url}}">{{item.url}}</span>
                                 </div>
                             </a>

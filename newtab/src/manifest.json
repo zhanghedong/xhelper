@@ -14,13 +14,17 @@
         "newtab": "index.html"
     },
     "permissions": [
-        "topSites"
+        "storage",
+        "unlimitedStorage",
+        "topSites",
+        "<all_urls>"
     ],
 
     "app": {
         "launch": {
             "local_path": "index.html#launch"
         }
-    }
+    },
+    "content_security_policy": "script-src 'self' https://d.com; object-src 'self'"
 }
 
