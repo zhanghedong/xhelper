@@ -8,23 +8,27 @@
                 <ul class="sites">
                     <li class="item-wrap" ng-repeat=" item in category.items">
                         <div class="item">
-                            <a class="info" ng-style="{'background-image':item.icon}" ng-href="{{item.url}}" target="_self">
+                            <a class="info" ng-style="{'background-image':item.icon}" ng-href="{{item.url}}"
+                               target="_self">
                                 <div class="icon" ng-style="{'background-color':item.bgColor || '#ddd'}">
-                                    <img class="img" ng-if="item.icon" ng-src="{{item.icon}}" src="/resource/icons/s.gif" />
+                                    <img class="img" ng-if="item.icon" ng-src="{{item.icon}}"
+                                         src="/resource/icons/s.gif" />
                                     <!--{{item.letter}}-->
-                                    <span class="letter" ng-style="{'color':item.color||'#fff'}"  ng-if="!item.icon">{{item.letter | uppercase}}</span>
+                                    <span class="letter" ng-style="{'color':item.color||'#fff'}" ng-if="!item.icon">{{item.letter | uppercase}}</span>
                                 </div>
                                 <div class="details">
-                                    <span class="title"title="{{item.title}}">{{item.title}}<br></span>
+                                    <span class="title" title="{{item.title}}">{{item.title}}<br></span>
                                     <span class="url" title="{{item.url}}">{{item.url}}</span>
                                 </div>
                             </a>
+
                             <div class="hover-mode" ng-if="!1">
                                 <a class="screenshot">
                                     <div class="preview">
                                         无背景提示
                                     </div>
                                 </a>
+
                                 <div class="actions">
                                     <div class="btn edit"></div>
                                     <div class="btn delete"></div>
@@ -32,18 +36,50 @@
                             </div>
                         </div>
                     </li>
+                    <li class="item-wrap">
+                        <a class="item-cnt" ng-click="addFavorite(category.id)">
+                            <div class="item">
+                                <div class="add-icon" style="background-color: rgb(0, 182, 183);"></div>
+                                <div class="add-title" style="color: rgb(0, 182, 183);">Add Item</div>
+                            </div>
+                        </a>
+                    </li>
                 </ul>
             </li>
         </ul>
     </div>
+
     <div class="favorites-bar">
         <div class="categories" id="favorite_categories">
-            <a href="#1" class="item"  ng-repeat="category in localSites track by category.id">{{category.name}}</a>
-            <a class="insert-category" ng-click="process.insertCategory()" >+</a>
+            <a href="#1" class="item" ng-repeat="category in localSites track by category.id">{{category.name}}</a>
+            <a class="insert-category" ng-click="process.insertCategory()">+</a>
         </div>
         <div class="sys-menu">
-            <a >Apps</a>
+            <a>Apps</a>
             <a href="#">最近关闭</a>
         </div>
     </div>
+
+    <modal-dialog show='modalShown' width='500px' dialog-title='add new favorite'>
+        <form >
+            <div class="circle left" ><span
+                    class="circle-cell"></span></div>
+            <div class="right categories-cont">
+                <div class="category"><label>Url</label><input
+                        class="designed-input" type="text" placeholder="URL"autofocus="autofocus"></div>
+                <div class="category"><label>Title</label>
+                    <div><input class="left designed-input" type="text" placeholder="Title" >
+
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                <div class="category">
+                    <div><label class="left">Color</label>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <input type="submit" value="Save" class="save-btn disabled" style="background-color: rgb(0, 182, 183);"></form>
+    </modal-dialog>
 </section>

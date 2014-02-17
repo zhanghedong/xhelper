@@ -147,6 +147,10 @@ module.exports = function (grunt) {
             angular: {
                 src: ['vendor/angular/angular.js', 'vendor/angular/angular-route.js','vendor/angular/angular-resource.js'],
                 dest: '<%= distdir %>/angular.js'
+            },
+            plugin:{
+                src:['vendor/ng_modal/ng-modal.js'],
+                dest: '<%= distdir %>/plugin.js'
             }
 //            jquery: {
 //                src: ['vendor/jquery/*.js'],

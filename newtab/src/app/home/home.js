@@ -2,10 +2,7 @@
  * Created by zhanghd on 13-10-11 下午4:39
  * Copyright 2013 17173, Inc. All rights reserved.
  */
-angular.module('home', ['resources.sites'], ['$routeProvider', function ($routeProvider) {
-
-}]);
-angular.module('home', ['config']).controller('homeCtrl', ['$scope', '$timeout', 'Sites', function ($scope, $timeout, sites) {
+angular.module('home', ['resources.sites','config','ngModal']).controller('homeCtrl', ['$scope', '$timeout', 'Sites', function ($scope, $timeout, sites) {
     var helper = null, configIcon = null, localSites = [], dataModule, process = {};
     configIcon = {
         "www.google.com": {"icon": "/resource/logo/google.svg", "bgColor": "#3369E8"},
@@ -79,4 +76,8 @@ angular.module('home', ['config']).controller('homeCtrl', ['$scope', '$timeout',
     };
     $scope.process = process;
 
+    $scope.modalShown = false;
+    $scope.addFavorite = function(category_id) {
+        $scope.modalShown = !$scope.modalShown;
+    };
 }]);
