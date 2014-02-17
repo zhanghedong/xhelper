@@ -23,6 +23,7 @@ indexDB: http://www.recursiverobot.com/post/53767548784/angularjs-with-indexeddb
    "http://z.abc.stackoverflow.com.cn/010questio1204040ns/5343288/get-the-domain-and-page-name-from-a-string-url".match(r)[1]
 
 天气接口：
+
     configAPI.setDefault("geolocationServiceUrl", "http://ip-api.com/json"),
 
     {"status":"success","country":"China","countryCode":"CN","region":"07","regionName":"Fujian","city":"Fuzhou","zip":"","lat":"26.0614","lon":"119.3061","timezone":"Asia\/Shanghai","isp":"China Telecom FUJIAN","org":"China Telecom FUJIAN","as":"AS4134 Chinanet","query":"218.66.59.108"}

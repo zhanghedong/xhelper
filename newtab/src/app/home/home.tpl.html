@@ -1,12 +1,12 @@
 <section class="favorites-view">
     <div class="favorites">
         <ul class="categories"> <!--ng-repeat="cateory in sites track by category.id"-->
-            <li class="category">
-                <h2><span class="title">{{name}}热门推荐</span>
+            <li class="category" ng-repeat="category in localSites track by category.id">
+                <h2><span class="title">{{category.name}}</span>
                     <a class="btn edit">edit</a>
                     <a class="btn delete">delete</a></h2>
                 <ul class="sites">
-                    <li class="item-wrap" ng-repeat=" item in items">
+                    <li class="item-wrap" ng-repeat=" item in category.items">
                         <div class="item">
                             <a class="info" ng-style="{'background-image':item.icon}" ng-href="{{item.url}}" target="_self">
                                 <div class="icon" ng-style="{'background-color':item.bgColor || '#ddd'}">
@@ -37,9 +37,9 @@
         </ul>
     </div>
     <div class="favorites-bar">
-        <div class="categories">
-            <a href="#1" class="item">推荐</a>
-            <a class="insert-category" href="#">+</a>
+        <div class="categories" id="favorite_categories">
+            <a href="#1" class="item"  ng-repeat="category in localSites track by category.id">{{category.name}}</a>
+            <a class="insert-category" ng-click="process.insertCategory()" >+</a>
         </div>
         <div class="sys-menu">
             <a >Apps</a>
