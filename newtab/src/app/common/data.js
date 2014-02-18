@@ -8,7 +8,6 @@ ntp.localData = {
     },
     getLocalSites: function (callback) {
         chrome.storage.local.get('ntp_sites', function (data) {
-            console.log(data);
             callback(data.ntp_sites);
         });
     },

@@ -8,6 +8,9 @@
     background-color: #eee;
     .categories {
         text-align: center;
+        a{
+            margin:0 8px;
+        }
     }
     .sys-menu {
         position: absolute;
@@ -77,6 +80,21 @@
                     height: 100px;
                     align-items: center;
                     justify-content: center;
+                    .edit, .delete {
+                        position: absolute;
+                        visibility: hidden;
+                    }
+                    .edit{
+                        right:60px;
+                    }
+                    .delete{
+                        right:10px;
+                    }
+                    &:hover {
+                        .edit, .delete {
+                            visibility: visible;
+                        }
+                    }
                     img {
                         height: 80%;
                         vertical-align: middle;
@@ -87,8 +105,8 @@
                         font-size: 2rem;
                         white-space: nowrap;
                     }
-                    &:hover{
-                        width:100%;
+                    &:hover {
+                        width: 100%;
                     }
                 }
                 .details {

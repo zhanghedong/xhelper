@@ -7,6 +7,9 @@ angular.module('home', ['config', 'ngModal', 'ngSanitize']).controller('homeCtrl
     g.params = {
         addTileToCategoryID: 0
     };
+    g.config = {
+        defaultColor: '#222'
+    };
     configIcon = {
         "www.google.com": {"icon": "/resource/logo/google.svg", "bgColor": "#3369E8"},
         "microsoft.com": { "bgColor": "#7CBB00"}
@@ -88,6 +91,7 @@ angular.module('home', ['config', 'ngModal', 'ngSanitize']).controller('homeCtrl
         init: function () {
             //获取数据
             helper.getLocalSites(function (data) {
+                console.log(JSON.stringify(data));
                 var localSites = data;
                 $timeout(function () {
                     $scope.localSites = localSites;
@@ -153,35 +157,49 @@ angular.module('home', ['config', 'ngModal', 'ngSanitize']).controller('homeCtrl
                 $scope.modalShownCategory = false;
             });
         },
-        showEditFavorite: function (categoryID, favorite, event) {
+        showEditFavorite: function (categoryID, favorite, event,idx) {
+            console.log(idx);
             event.preventDefault();
             event.stopPropagation();
-
             g.params.addTileToCategoryID = categoryID;
             $scope.editFavoriteInfo = favorite || {
                 url: 'http://',
                 title: ''
             };
+            $scope.editFavoriteInfo.idx = idx ? idx : 0;
             $scope.modalShownFavorite = !$scope.modalShownFavorite;
         },
         updateFavorite: function () {
             var favorite = {
                 "title": $scope.editFavoriteInfo.title,
                 "url": $scope.editFavoriteInfo.url,
-                "icon": "",
+                "icon": "",//ICON TODO
                 "letter": $scope.editFavoriteInfo.title.substr(0, 2),
-                "bgColor": $scope.editFavoriteInfo.bgColor
+                "bgColor": $scope.editFavoriteInfo.bgColor || g.config.defaultColor
             };
             var parentCategoryID = g.params.addTileToCategoryID;
             helper.getLocalSites(function (data) {
-                for (var i = 0, j = data.length; i < j; i++) {
-                    if (data[i].id === parentCategoryID) {
-                        data[i].items.push(favorite);
+                var i, j, items;
+                if (!$scope.editFavoriteInfo.idx) {
+                    for (i = 0, j = data.length; i < j; i++) {
+                        if (data[i].id === parentCategoryID) {
+                            data[i].items.push(favorite);
+                        }
+                    }
+                } else {
+                    for (i = 0, j = data.length; i < j; i++) {
+                        if (data[i].id === parentCategoryID) {
+                            items = data[i].items;
+                            data[i].items[$scope.editFavoriteInfo.idx] = favorite;
+                        }
                     }
                 }
-                helper.setLocalSites(data);
+                console.log(data);
                 $timeout(function () {
                     $scope.localSites = data;
+                    $timeout(function () {
+                        helper.setLocalSites($scope.localSites);
+                    }, 50);
                 });
             });
 

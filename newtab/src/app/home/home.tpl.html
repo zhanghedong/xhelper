@@ -16,7 +16,7 @@
                                     <img class="img" ng-if="item.icon" ng-src="{{item.icon}}"
                                          src="/resource/icons/s.gif" />
                                     <span class="letter" ng-style="{'color':item.color||'#fff'}" ng-if="!item.icon">{{item.letter | uppercase}}</span>
-                                    <div class="btn edit" ng-click="process.showEditFavorite(category.id,item,$event);">edit</div>
+                                    <div class="btn edit" ng-click="process.showEditFavorite(category.id,item,$event,$index);">edit</div>
                                     <div class="btn delete" ng-click="process.deleteFavorite(item,$event);">delete</div>
                                 </div>
                                 <div class="details">
@@ -40,7 +40,7 @@
                         </div>
                     </li>
                     <li class="item-wrap">
-                        <a class="item-cnt" ng-click="process.showEditFavorite(category.id)">
+                        <a class="item-cnt" ng-click="process.showEditFavorite(category.id,'',$event)">
                             <div class="item">
                                 <div class="add-icon" style="background-color: rgb(0, 182, 183);"></div>
                                 <div class="add-title" style="color: rgb(0, 182, 183);">Add Item</div>
