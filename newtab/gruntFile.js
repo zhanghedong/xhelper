@@ -145,11 +145,11 @@ module.exports = function (grunt) {
                 }
             },
             angular: {
-                src: ['vendor/angular/angular.js', 'vendor/angular/angular-route.js','vendor/angular/angular-resource.js'],
+                src: ['vendor/angular/angular.js', 'vendor/angular/angular-route.js','vendor/angular/angular-resource.js','vendor/angular/angular-sanitize.js'],
                 dest: '<%= distdir %>/angular.js'
             },
             plugin:{
-                src:['vendor/ng_modal/ng-modal.js'],
+                src:['vendor/underscore/underscore-min.js','vendor/ng_modal/ng-modal.js'],
                 dest: '<%= distdir %>/plugin.js'
             }
 //            jquery: {

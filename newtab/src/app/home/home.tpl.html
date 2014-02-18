@@ -2,9 +2,11 @@
     <div class="favorites">
         <ul class="categories"> <!--ng-repeat="cateory in sites track by category.id"-->
             <li class="category" ng-repeat="category in localSites track by category.id">
-                <h2><span class="title">{{category.name}}</span>
-                    <a class="btn edit">edit</a>
-                    <a class="btn delete">delete</a></h2>
+                <h2>
+                    <span class="title">{{category.name}}</span>
+                    <a class="btn edit" ng-click="process.showEditCategory(category.id,category.name)">edit</a>
+                    <a class="btn delete" ng-click="process.showDeleteCategory(category.id,category.name)">delete</a>
+                 </h2>
                 <ul class="sites">
                     <li class="item-wrap" ng-repeat=" item in category.items">
                         <div class="item">
@@ -13,8 +15,9 @@
                                 <div class="icon" ng-style="{'background-color':item.bgColor || '#ddd'}">
                                     <img class="img" ng-if="item.icon" ng-src="{{item.icon}}"
                                          src="/resource/icons/s.gif" />
-                                    <!--{{item.letter}}-->
                                     <span class="letter" ng-style="{'color':item.color||'#fff'}" ng-if="!item.icon">{{item.letter | uppercase}}</span>
+                                    <div class="btn edit" ng-click="process.showEditFavorite(category.id,item,$event);">edit</div>
+                                    <div class="btn delete" ng-click="process.deleteFavorite(item,$event);">delete</div>
                                 </div>
                                 <div class="details">
                                     <span class="title" title="{{item.title}}">{{item.title}}<br></span>
@@ -37,7 +40,7 @@
                         </div>
                     </li>
                     <li class="item-wrap">
-                        <a class="item-cnt" ng-click="addFavorite(category.id)">
+                        <a class="item-cnt" ng-click="process.showEditFavorite(category.id)">
                             <div class="item">
                                 <div class="add-icon" style="background-color: rgb(0, 182, 183);"></div>
                                 <div class="add-title" style="color: rgb(0, 182, 183);">Add Item</div>
@@ -52,34 +55,64 @@
     <div class="favorites-bar">
         <div class="categories" id="favorite_categories">
             <a href="#1" class="item" ng-repeat="category in localSites track by category.id">{{category.name}}</a>
-            <a class="insert-category" ng-click="process.insertCategory()">+</a>
+            <a class="insert-category" ng-click="process.showEditCategory()">+</a>
         </div>
         <div class="sys-menu">
             <a>Apps</a>
             <a href="#">最近关闭</a>
         </div>
     </div>
-
-    <modal-dialog show='modalShown' width='500px' dialog-title='add new favorite'>
-        <form >
-            <div class="circle left" ><span
-                    class="circle-cell"></span></div>
-            <div class="right categories-cont">
-                <div class="category"><label>Url</label><input
-                        class="designed-input" type="text" placeholder="URL"autofocus="autofocus"></div>
-                <div class="category"><label>Title</label>
-                    <div><input class="left designed-input" type="text" placeholder="Title" >
-
-                        <div class="clearfix"></div>
+    <modal-dialog show='modalShownDeleteCategory' dialog-title="delete category">
+        <p class="desc" ng-bind-html="updateCategoryInfo.deleteMsg"></p>
+        <div class="btn" ng-click="process.confirmDeleteCategory('yes')">Yes</div>
+        <div class="btn" ng-click="process.confirmDeleteCategory('cancel')">cancel</div>
+    </modal-dialog>
+    <modal-dialog show='modalShownCategory' width='500px' dialog-title='add new category'>
+        <form ng-submit="process.updateCategory()">
+            <div class="form-data">
+                <div class="data-wrap">
+                    <div class="ipt-item">
+                        <label>Name</label>
+                        <div class="ipt-wrap">
+                            <input class="left designed-input" type="text" ng-model="updateCategoryInfo.name"
+                                   placeholder="Name">
+                        </div>
                     </div>
                 </div>
-                <div class="category">
-                    <div><label class="left">Color</label>
-                        <div class="clearfix"></div>
-                    </div>
-                </div>
+                <input type="submit" value="Save" class="save-btn disabled" style="background-color: rgb(0, 182, 183);">
             </div>
-            <div class="clearfix"></div>
-            <input type="submit" value="Save" class="save-btn disabled" style="background-color: rgb(0, 182, 183);"></form>
+        </form>
+    </modal-dialog>
+    <modal-dialog show='modalShownFavorite' width='500px' dialog-title='add new favorite'>
+        <form ng-submit="process.updateFavorite()">
+            <div class="circle left"><span class="circle-cell"></span></div>
+            <div class="form-data">
+                <div class="data-wrap">
+                    <div class="ipt-item">
+                        <label>Url</label>
+
+                        <div class="ipt-wrap">
+                            <input class="designed-input" type="url" ng-model="editFavoriteInfo.url" placeholder="URL"
+                                   autofocus="autofocus" required>
+                        </div>
+                    </div>
+                    <div class="ipt-item">
+                        <label>Title</label>
+
+                        <div class="ipt-wrap">
+                            <input class="left designed-input" type="text" ng-model="editFavoriteInfo.title"
+                                   placeholder="Title">
+                        </div>
+                    </div>
+                    <div class="ipt-item">
+                        <label>Color</label>
+                        <div class="ipt-wrap">
+                            select color
+                        </div>
+                    </div>
+                </div>
+                <input type="submit" value="Save" class="save-btn disabled" style="background-color: rgb(0, 182, 183);">
+            </div>
+        </form>
     </modal-dialog>
 </section>

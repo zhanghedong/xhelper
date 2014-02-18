@@ -1,5 +1,6 @@
 var ntp = {};
 angular.module('app', [
+    'underscore',
     'ngRoute',
     'templates.app',
     'resources.sites',
