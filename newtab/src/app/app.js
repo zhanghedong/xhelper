@@ -6,7 +6,8 @@ angular.module('app', [
     'resources.sites',
     'bgDirectives',
     'favorites',
-    'note'
+    'note',
+    'buy'
 ]);
 angular.module('app').config(['$routeProvider', '$locationProvider', '$httpProvider', '$compileProvider', function ($routeProvider, $locationProvider, $httpProvider, $compileProvider) {
         //$locationProvider.html5Mode(true);
@@ -15,7 +16,10 @@ angular.module('app').config(['$routeProvider', '$locationProvider', '$httpProvi
         $routeProvider.when('/note', {
             templateUrl: 'note/note.tpl.html',
             controller: 'noteCtrl'
-        }).otherwise({redirectTo: '/note'});
+        }).when('/buy', {
+                templateUrl: 'buy/buy.tpl.html',
+                controller: 'buyCtrl'
+            }).otherwise({redirectTo: '/note'});
     }]).run(function ($route, $http, $templateCache) {
         angular.forEach($route.routes, function (r) {
             if (r.templateUrl) {

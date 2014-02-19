@@ -91,7 +91,6 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
         init: function () {
             //获取数据
             helper.getLocalSites(function (data) {
-                console.log(JSON.stringify(data));
                 var localSites = data;
                 $timeout(function () {
                     $scope.localSites = localSites;
