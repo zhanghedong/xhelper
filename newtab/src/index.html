@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="app" >
+<html lang="en" ng-app="app">
 <head>
     <meta charset='utf-8'>
     <link rel="stylesheet" type="text/css" href="./<%= grunt.config.get('pkg.name') %>.css" />
@@ -14,10 +14,18 @@
     <div class="main-view">
         <bg-splitter orientation="horizontal">
             <bg-pane min-size="100">
-                <div ng-include="'sidebar/left.tpl.html'" class="sidebar"></div>
+                <div class="sidebar">
+                    <div id="plugin_btn" class="plugin-btn">
+                        btn
+
+                    </div>
+                    <div id="plugin_content" class="plugin-content">
+                        <ng-view />
+                    </div>
+                </div>
             </bg-pane>
             <bg-pane min-size="200">
-                    <ng-view />
+                <div ng-include="'favorites/favorites.tpl.html'" class="favorites-wrap"></div>
             </bg-pane>
         </bg-splitter>
     </div>

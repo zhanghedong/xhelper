@@ -2,7 +2,7 @@
  * Created by zhanghd on 13-10-11 下午4:39
  * Copyright 2013 17173, Inc. All rights reserved.
  */
-angular.module('home', ['config', 'ngModal', 'ngSanitize']).controller('homeCtrl', ['$scope', '$sce', '$timeout', 'Sites', '_', function ($scope, $sce, $timeout, sites, _) {
+angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('favoritesCtrl', ['$scope', '$sce', '$timeout', 'Sites', '_', '$location', '$anchorScroll', function ($scope, $sce, $timeout, sites, _, $location, $anchorScroll) {
     var helper = null, g = {}, configIcon = null, localSites = [], dataModule, process = {};
     g.params = {
         addTileToCategoryID: 0
@@ -157,8 +157,26 @@ angular.module('home', ['config', 'ngModal', 'ngSanitize']).controller('homeCtrl
                 $scope.modalShownCategory = false;
             });
         },
-        showEditFavorite: function (categoryID, favorite, event,idx) {
-            console.log(idx);
+        deleteFavorite: function (categoryID, favorite, event, idx) {
+            event.preventDefault();
+            event.stopPropagation();
+            helper.getLocalSites(function (data) {
+                var i, j, items;
+                for (i = 0, j = data.length; i < j; i++) {
+                    if (data[i].id === categoryID) {
+                        items = data[i].items;
+                        data[i].items.splice(idx, 1);
+                    }
+                }
+                $timeout(function () {
+                    $scope.localSites = data;
+                    $timeout(function () {
+                        helper.setLocalSites($scope.localSites);
+                    }, 50);
+                });
+            });
+        },
+        showEditFavorite: function (categoryID, favorite, event, idx) {
             event.preventDefault();
             event.stopPropagation();
             g.params.addTileToCategoryID = categoryID;
@@ -194,7 +212,6 @@ angular.module('home', ['config', 'ngModal', 'ngSanitize']).controller('homeCtrl
                         }
                     }
                 }
-                console.log(data);
                 $timeout(function () {
                     $scope.localSites = data;
                     $timeout(function () {
@@ -205,6 +222,11 @@ angular.module('home', ['config', 'ngModal', 'ngSanitize']).controller('homeCtrl
 
             $scope.modalShownFavorite = false;
             return false;
+        },
+        scrollTo: function (anchor) {
+            $location.hash(anchor);
+            $anchorScroll();
+
         }
     };
     $scope.process = process;

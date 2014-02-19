@@ -15,6 +15,14 @@ ntp.localData = {
         chrome.storage.local.set({'ntp_sites': data}, function (data) {
 //            callback && callback(data.ntp_sites);
         })
+    },
+    getNote:function(callback){
+        chrome.storage.local.get('ntp_note', function (data) {
+            callback(data.ntp_note);
+        });
+    },
+    setNote:function(note){
+        chrome.storage.local.set({'ntp_note': note}, function (data) {})
     }
 };
 

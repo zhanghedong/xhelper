@@ -1,8 +1,8 @@
-<section class="favorites-view">
+<section class="favorites-view" ng-controller="favoritesCtrl">
     <div class="favorites">
         <ul class="categories"> <!--ng-repeat="cateory in sites track by category.id"-->
             <li class="category" ng-repeat="category in localSites track by category.id">
-                <h2>
+                <h2 id="category_header_{{category.id}}" >
                     <span class="title">{{category.name}}</span>
                     <a class="btn edit" ng-click="process.showEditCategory(category.id,category.name)">edit</a>
                     <a class="btn delete" ng-click="process.showDeleteCategory(category.id,category.name)">delete</a>
@@ -17,7 +17,7 @@
                                          src="/resource/icons/s.gif" />
                                     <span class="letter" ng-style="{'color':item.color||'#fff'}" ng-if="!item.icon">{{item.letter | uppercase}}</span>
                                     <div class="btn edit" ng-click="process.showEditFavorite(category.id,item,$event,$index);">edit</div>
-                                    <div class="btn delete" ng-click="process.deleteFavorite(item,$event);">delete</div>
+                                    <div class="btn delete" ng-click="process.deleteFavorite(category.id,item,$event,$index);">delete</div>
                                 </div>
                                 <div class="details">
                                     <span class="title" title="{{item.title}}">{{item.title}}<br></span>
@@ -54,7 +54,7 @@
 
     <div class="favorites-bar">
         <div class="categories" id="favorite_categories">
-            <a href="#1" class="item" ng-repeat="category in localSites track by category.id">{{category.name}}</a>
+            <a ng-click="process.scrollTo('category_header_'+category.id)" class="item" ng-repeat="category in localSites track by category.id">{{category.name}}</a>
             <a class="insert-category" ng-click="process.showEditCategory()">+</a>
         </div>
         <div class="sys-menu">

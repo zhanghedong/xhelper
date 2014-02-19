@@ -1,6 +1,12 @@
+.favorites-wrap{
+    height:100%;
+    box-sizing: border-box;
+    overflow-y: scroll;
+}
 .favorites-bar {
     position: absolute;
     bottom: 0;
+    z-index: 1000;
     height: 36px;
     line-height: 36px;
     width: 100%;
@@ -21,12 +27,14 @@
 
 .favorites-view {
     padding: 0 20px;
-    overflow: scroll;
-    height: 100%;
 }
 
 .favorites {
+    .clearfix();
     -webkit-transition: all .5s ease-in-out 0s;
+    .categories{
+        padding-bottom:50px;
+    }
     .category {
         h2 {
             display: flex;
