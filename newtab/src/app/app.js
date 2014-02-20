@@ -9,6 +9,14 @@ angular.module('app', [
     'note',
     'buy'
 ]);
+
+
+var process = {
+    onClick:function(){
+        alert('s');
+    }
+};
+
 angular.module('app').config(['$routeProvider', '$locationProvider', '$httpProvider', '$compileProvider', function ($routeProvider, $locationProvider, $httpProvider, $compileProvider) {
         //$locationProvider.html5Mode(true);
         $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension):/);

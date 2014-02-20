@@ -6,6 +6,15 @@
 angular.module('buy', ['config', 'ngSanitize']).controller('buyCtrl', ['$scope', '$sce', '$timeout', function ($scope, $sce, $timeout) {
     var process = {};
     process = {
+        onClick:function(){
+            console.log('abc');
+        },
+        init: function () {
+// Create a parent item and two children.
+            console.log('contextMenus');
+        }
     };
+    process.init();
+    console.log('zbc');
     $scope.process = process;
 }]);

@@ -27,4 +27,4 @@ var ntp = window.ntp || {};
             chrome.storage.local.set({'ntp_note': note}, function (data) {})
         }
     };
-}())
+}());

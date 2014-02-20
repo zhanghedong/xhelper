@@ -17,9 +17,12 @@
         "storage",
         "unlimitedStorage",
         "topSites",
+        "contextMenus",
         "<all_urls>"
     ],
-
+    "background": {
+        "scripts": ["background.js"]
+    },
     "app": {
         "launch": {
             "local_path": "index.html#launch"
