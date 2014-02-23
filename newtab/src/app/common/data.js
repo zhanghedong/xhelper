@@ -1,12 +1,14 @@
 var ntp = window.ntp || {};
 //chrome.storage.local.set({'ntp_sites':''});
+//chrome.storage.local.set({'ntp_blog':''});
+//chrome.storage.local.set({'ntp_sites':''});
 (function(){
 //    var storage = chrome.storage;
     ntp.localData = {
         getTopSites: function (callback) {
             chrome.topSites.get(function (d) {
                 callback(d);
-            })
+            });
         },
         getLocalSites: function (callback) {
             chrome.storage.local.get('ntp_sites', function (data) {
@@ -14,9 +16,7 @@ var ntp = window.ntp || {};
             });
         },
         setLocalSites: function (data, callback) {
-            chrome.storage.local.set({'ntp_sites': data}, function (data) {
-//            callback && callback(data.ntp_sites);
-            })
+            chrome.storage.local.set({'ntp_sites': data}, function (data) { });
         },
         getNote:function(callback){
             chrome.storage.local.get('ntp_note', function (data) {
@@ -24,7 +24,15 @@ var ntp = window.ntp || {};
             });
         },
         setNote:function(note){
-            chrome.storage.local.set({'ntp_note': note}, function (data) {})
+            chrome.storage.local.set({'ntp_note': note}, function (data) {});
+        },
+        getBlog:function(callback){
+            chrome.storage.local.get('ntp_blog', function (data) {
+                callback(data.ntp_blog);
+            });
+        },
+        setBlog:function(data,callback){
+            chrome.storage.local.set({'ntp_blog': data}, function (data) {});
         }
     };
 }());

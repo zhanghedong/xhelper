@@ -8,7 +8,7 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
         addTileToCategoryID: 0
     };
     g.config = {
-        defaultColor: '#222'
+        defaultColor: ['#2F09FF','#E82C2A','#FFC53B','#56E82A','#00C0FF']
     };
     configIcon = {
         "www.google.com": {"icon": "/resource/logo/google.svg", "bgColor": "#3369E8"},
@@ -16,12 +16,24 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
     };
 
     helper = {
+        getRandColor:function(){
+            var idx = Math.floor(Math.random() * 5 );
+            return g.config.defaultColor[idx];
+        },
         getDomain: function (url) {
             var r = /:\/\/(.[^/]+)/;
             return url.match(r)[1];
         },
+        getGUID: function () {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        },
         getLocalSites: function (callback) {
+            console.log((new Date()).valueOf());
             ntp.localData.getLocalSites(function (data) {
+                console.log((new Date()).valueOf());
                 if (!data.length) {//本地有数据
                     ntp.localData.getTopSites(function (d) {
                         d = d || [];
@@ -34,7 +46,7 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                         }
                         var localSites = [
                             {
-                                "id": 1,
+                                "id": helper.getGUID(),
                                 "name": "Recommended",
                                 "items": d
                             }
@@ -42,6 +54,9 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                         $scope.localSites = localSites;
                         ///这里取服务器数据
                         var tempSites = localSites[0].items;
+                        $scope.localSites = localSites;
+                        callback(localSites);
+
                         sites.query(function (data) {
                             for (var i = 0, j = data.length; i < j; i++) {
                                 var domain = helper.getDomain(data[i].url), exist = false, tempDomain = '';
@@ -64,8 +79,6 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                                 ntp.localData.setLocalSites($scope.localSites);
                             });
                         });
-                        $scope.localSites = localSites;
-                        callback(localSites);
                     });
                 } else {
                     callback(data);
@@ -73,11 +86,9 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
             });
         },
         setLocalSites: function (data, callback) {
-            ntp.localData.setLocalSites(data, callback)
+            ntp.localData.setLocalSites(data, callback);
         }
     };
-
-
     $scope.modalShownFavorite = false;
     $scope.modalShownCategory = false;
     $scope.modalShownDeleteCategory = false;
@@ -90,6 +101,23 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
     process = {
         init: function () {
             //获取数据
+            process.resetFavorites();
+            process.onMessage();
+        },
+        sendMessage: function (obj) {
+            chrome.runtime.sendMessage(obj);
+        },
+        onMessage: function () {
+            chrome.runtime.onMessage.addListener(
+                function (request, sender, sendResponse) {
+                    if(request.action === 'updateFavorite'){
+                        process.resetFavorites();
+                    }
+                    return true;
+                });
+
+        },
+        resetFavorites:function(){
             helper.getLocalSites(function (data) {
                 var localSites = data;
                 $timeout(function () {
@@ -115,6 +143,7 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                             break;
                         }
                     }
+                    process.sendMessage({action: "deleteContextMenu", id: $scope.updateCategoryInfo.id});
                     helper.setLocalSites(data);
                     $timeout(function () {
                         $scope.localSites = data;
@@ -132,18 +161,21 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
         },
         updateCategory: function () {
             helper.getLocalSites(function (data) {
-                var categoryInfo = {};
+                var categoryInfo = {}, optionID = $scope.updateCategoryInfo.id || helper.getGUID(),option='';
                 if ($scope.updateCategoryInfo.id) {
+                    option = 'update';
                     //修改操作
                     for (var i = 0, j = data.length; i < j; i++) {
                         if (data[i].id === $scope.updateCategoryInfo.id) {
                             data[i].name = $scope.updateCategoryInfo.name;
+                            break;
                         }
                     }
                 } else {
+                    option = 'insert';
                     //添加操作
                     categoryInfo = {
-                        "id": data.length + 1,
+                        "id": optionID,
                         "name": $scope.updateCategoryInfo.name,
                         "items": []
                     };
@@ -154,7 +186,12 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                     $scope.localSites = data;
                 });
                 $scope.modalShownCategory = false;
+                process.sendMessage({action: "updateContextMenu",option:option, title: $scope.updateCategoryInfo.name, id: optionID});
+                $timeout(function(){
+                    process.scrollTo(optionID);
+                });
             });
+
         },
         deleteFavorite: function (categoryID, favorite, event, idx) {
             event.preventDefault();
@@ -192,7 +229,7 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                 "url": $scope.editFavoriteInfo.url,
                 "icon": "",//ICON TODO
                 "letter": $scope.editFavoriteInfo.title.substr(0, 2),
-                "bgColor": $scope.editFavoriteInfo.bgColor || g.config.defaultColor
+                "bgColor": $scope.editFavoriteInfo.bgColor || helper.getRandColor()
             };
             var parentCategoryID = g.params.addTileToCategoryID;
             helper.getLocalSites(function (data) {

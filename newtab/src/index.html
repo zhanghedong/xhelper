@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="app">
+<html lang="en" ng-app="app" ng-controller="AppCtrl">
 <head>
     <meta charset='utf-8'>
+    <title>{{title}}</title>
     <link rel="stylesheet" type="text/css" href="./<%= grunt.config.get('pkg.name') %>.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no" />
     <script type="text/javascript" src="./angular.js"></script>
     <script type="text/javascript" src="./plugin.js"></script>
     <script type="text/javascript" src="./<%= grunt.config.get('pkg.name') %>.js"></script>
 </head>
-<body ng-controller="AppCtrl">
+<body>
 <div id="container" class="container">
     <div ng-include="'header.tpl.html'"></div>
     <div class="main-view">
@@ -19,7 +20,7 @@
                         <ul>
                             <li><a ng-href="#/note">note</a></li>
                             <li><a ng-href="#/buy">buy</a></li>
-                            <li>blog</li>
+                            <li><a ng-href="#/blog">blog</a></li>
                         </ul>
                     </div>
                     <div id="plugin_content" class="plugin-content">

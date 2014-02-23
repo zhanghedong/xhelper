@@ -1,0 +1,50 @@
+{
+    "title": {
+        "message": "C导航",
+        "description": "导航名称"
+    },
+    "desc": {
+        "message": "快捷工具导航",
+        "description": "应用描述"
+    },
+    "menuBuyTitle": {
+        "message": "待购商品",
+        "description": "关注商品"
+    },
+    "menuBlogTitle": {
+        "message": "待读文章",
+        "description": "关注文章"
+    },
+    "notifyTip": {
+        "message": "操作提示",
+        "description": "添加收藏后提示"
+    },
+    "notifyExistDesc": {
+        "message": " $category$ 已存在该网址",
+        "description": "添加收藏后提示",
+        "placeholders": {
+            "category": {
+                "content": "$1",
+                "example": "Recommended"
+            }
+        }
+    },
+    "notifySuccess": {
+        "message": "操作成功",
+        "description": "添加收藏后提示"
+    },
+    "notifySuccessDesc": {
+        "message": "已添加到 $category$ ",
+        "description": "添加收藏后提示",
+        "placeholders": {
+            "category": {
+                "content": "$1",
+                "example": "Recommended"
+            }
+        }
+    },
+    "notifyBlogDesc": {
+        "message": "已添加到待读文章",
+        "description": "添加到待读文章"
+    }
+}

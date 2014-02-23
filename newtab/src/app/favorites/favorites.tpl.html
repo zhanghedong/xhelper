@@ -2,13 +2,13 @@
     <div class="favorites">
         <ul class="categories"> <!--ng-repeat="cateory in sites track by category.id"-->
             <li class="category" ng-repeat="category in localSites track by category.id">
-                <h2 id="category_header_{{category.id}}" >
+                <h2 id="{{category.id}}" >
                     <span class="title">{{category.name}}</span>
                     <a class="btn edit" ng-click="process.showEditCategory(category.id,category.name)">edit</a>
                     <a class="btn delete" ng-click="process.showDeleteCategory(category.id,category.name)">delete</a>
                  </h2>
                 <ul class="sites">
-                    <li class="item-wrap" ng-repeat=" item in category.items">
+                    <li class="item-wrap" ng-repeat=" item in category.items track by item.url">
                         <div class="item">
                             <a class="info" ng-style="{'background-image':item.icon}" ng-href="{{item.url}}"
                                target="_self">
@@ -54,7 +54,7 @@
 
     <div class="favorites-bar">
         <div class="categories" id="favorite_categories">
-            <a ng-click="process.scrollTo('category_header_'+category.id)" class="item" ng-repeat="category in localSites track by category.id">{{category.name}}</a>
+            <a ng-click="process.scrollTo(category.id)" class="item" ng-repeat="category in localSites track by category.id">{{category.name}}</a>
             <a class="insert-category" ng-click="process.showEditCategory()">+</a>
         </div>
         <div class="sys-menu">

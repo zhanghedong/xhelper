@@ -12,11 +12,11 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-html2js');
 
     // Default task.
-    grunt.registerTask('default', ['ngconstant:development','jshint', 'build']);//,'karma:unit'
-    grunt.registerTask('build', ['clean', 'html2js', 'concat', 'recess:build', 'copy:assets']);
+    grunt.registerTask('default', ['ngconstant:development', 'jshint', 'build']);//,'karma:unit'
+    grunt.registerTask('build', ['clean', 'html2js', 'concat', 'recess:build', 'copy:assets', 'copy:i18n']);
     grunt.registerTask('release', ['clean', 'html2js', 'uglify', 'jshint', 'concat:index', 'recess:min', 'copy:assets']);//'karma:unit',
 //    grunt.registerTask('test-watch', ['karma:watch']);
-    grunt.registerTask('release', ['ngconstant:production','jshint', 'build','copy:release']);
+    grunt.registerTask('release', ['ngconstant:production', 'jshint', 'build', 'copy:release']);
 
     // Print a timestamp (useful for when watching)
     grunt.registerTask('timestamp', function () {
@@ -44,6 +44,7 @@ module.exports = function (grunt) {
             specs: ['test/**/*.spec.js'],
             scenarios: ['test/**/*.scenario.js'],
             html: ['src/index.html'],
+            i18n: ['_locales/**/*.json'],
             manifest: ['src/manifest.json'],
             tpl: {
                 app: ['src/app/**/*.tpl.html'],
@@ -63,21 +64,23 @@ module.exports = function (grunt) {
                 name: 'config',
                 constants: {
                     API: {
-                        HOST:'http://ihome.com/api/'
+                        HOST: 'http://ihome.com/api/'
                     },
-                    ENV:'development'
+                    ENV: 'development'
                 }
             },
-            production: [{
-                dest: '<%= srcDir %>/config/config.js',
-                name: 'config',
-                constants: {
-                    API: {
-                        HOST:'http://api.czmin.com/api/'
-                    },
-                    ENV: 'production'
+            production: [
+                {
+                    dest: '<%= srcDir %>/config/config.js',
+                    name: 'config',
+                    constants: {
+                        API: {
+                            HOST: 'http://api.czmin.com/api/'
+                        },
+                        ENV: 'production'
+                    }
                 }
-            }]
+            ]
         },
         clean: ['<%= distdir %>/*'],
         copy: {
@@ -87,7 +90,12 @@ module.exports = function (grunt) {
 
                 ]
             },
-            release:{
+            i18n: {
+                files: [
+                    { dest: '<%= distdir %>/_locales', src: '**', expand: true, cwd: 'src/_locales/' }
+                ]
+            },
+            release: {
                 files: [
                     { dest: '<%= releasedir %>/resource', src: '**', expand: true, cwd: 'dist/' }
                 ]
@@ -145,11 +153,11 @@ module.exports = function (grunt) {
                 }
             },
             angular: {
-                src: ['vendor/angular/angular.js', 'vendor/angular/angular-route.js','vendor/angular/angular-resource.js','vendor/angular/angular-sanitize.js'],
+                src: ['vendor/angular/angular.js', 'vendor/angular/angular-route.js', 'vendor/angular/angular-resource.js', 'vendor/angular/angular-sanitize.js'],
                 dest: '<%= distdir %>/angular.js'
             },
-            plugin:{
-                src:['vendor/underscore/underscore-min.js','vendor/ng_modal/ng-modal.js'],
+            plugin: {
+                src: ['vendor/underscore/underscore-min.js', 'vendor/ng_modal/ng-modal.js'],
                 dest: '<%= distdir %>/plugin.js'
             }
 //            jquery: {
@@ -196,11 +204,11 @@ module.exports = function (grunt) {
         },
         watch: {
             all: {
-                files: ['<%= src.js %>', '<%= src.specs %>', '<%= src.lessWatch %>', '<%= src.tpl.app %>', '<%= src.tpl.common %>', '<%= src.tpl.sidebar%>', '<%= src.tpl.plugin %>', '<%= src.html %>', '<%= src.manifest%>','!**/config/config.js'],
+                files: ['<%= src.js %>', '<%= src.specs %>', '<%= src.lessWatch %>', '<%= src.tpl.app %>', '<%= src.tpl.common %>', '<%= src.tpl.sidebar%>', '<%= src.tpl.plugin %>', '<%= src.html %>', '<%= src.manifest%>', '<%= src.i18n%>', '!**/config/config.js'],
                 tasks: ['default', 'timestamp']
             },
             build: {
-                files: ['<%= src.js %>', '<%= src.specs %>', '<%= src.lessWatch %>', '<%= src.tpl.app %>', '<%= src.tpl.common %>', '<%= src.tpl.sidebar %>', '<%= src.tpl.plugin %>', '<%= src.html %>', '<%= src.manifest%>','!**/config/config.js'],
+                files: ['<%= src.js %>', '<%= src.specs %>', '<%= src.lessWatch %>', '<%= src.tpl.app %>', '<%= src.tpl.common %>', '<%= src.tpl.sidebar %>', '<%= src.tpl.plugin %>', '<%= src.html %>', '<%= src.manifest%>', '<%= src.i18n%>', '!**/config/config.js'],
                 tasks: ['build', 'timestamp']
             }
         },

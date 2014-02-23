@@ -2,6 +2,13 @@
 记事本
 购物
 
+菜单：
+    菜单与类别一致
+
+右击添加网址，从background实现
+
+重复添加判断
+
 
 
 http://blog.segmentfault.com/fenbox/1190000000264347

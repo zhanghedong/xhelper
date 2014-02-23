@@ -1,4 +1,4 @@
-chrome = {};
+chrome.notifications.create("id"+notID++, options, creationCallback);chrome = {};
 chrome.storage = {};
 chrome.storage.sync = {};
 storage_get_called = false;

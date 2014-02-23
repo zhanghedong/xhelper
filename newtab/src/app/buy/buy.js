@@ -7,7 +7,6 @@ angular.module('buy', ['config', 'ngSanitize']).controller('buyCtrl', ['$scope',
     var process = {};
     process = {
         onClick:function(){
-            console.log('abc');
         },
         init: function () {
 // Create a parent item and two children.
@@ -15,6 +14,5 @@ angular.module('buy', ['config', 'ngSanitize']).controller('buyCtrl', ['$scope',
         }
     };
     process.init();
-    console.log('zbc');
     $scope.process = process;
 }]);
