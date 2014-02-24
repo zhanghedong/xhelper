@@ -37,7 +37,7 @@ var backgroundProcess = {};
         }
     };
     helper = {
-        timestamp:function(){
+        timestamp: function () {
             return (new Date()).valueOf();
         },
         getRandColor: function () {
@@ -133,25 +133,25 @@ var backgroundProcess = {};
                         var blog = {
                             "title": data.title,
                             "url": data.url,
-                            "timestamp":helper.timestamp()
-                        },option={};
+                            "timestamp": helper.timestamp()
+                        }, option = {};
                         localData.getData(function (sites) {
-                            var localBlog = sites.ntp_blog || [],noIn = true;
-                            for(var i = 0,j=localBlog.length ; i<j; i++){
-                               var t = localBlog[i];
-                                if(t.url === blog.url){
-
+                            var localBlog = sites.ntp_blog || [], noIn = true;
+                            for (var i = 0, j = localBlog.length; i < j; i++) {
+                                var t = localBlog[i];
+                                if (t.url === blog.url) {
+                                    noIn = false;
                                 }
                             }
-                            if(noIn){
-                                localBlog.push(blog);
+                            if (noIn) {
+                                localBlog.splice(0, 0, blog);
                                 localData.setBlog(localBlog);
                                 option = {
                                     title: chrome.i18n.getMessage('notifySuccess'),
                                     desc: chrome.i18n.getMessage('notifyBlogDesc')
                                 };
                                 process.sendMessage({"action": "updateToReadBlog"});
-                            }else{
+                            } else {
                                 option = {
                                     title: chrome.i18n.getMessage('notifySuccess'),
                                     desc: chrome.i18n.getMessage('notifyExistDesc')
