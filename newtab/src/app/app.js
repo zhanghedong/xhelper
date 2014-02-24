@@ -31,6 +31,9 @@ angular.module('app').config(['$routeProvider', '$locationProvider', '$httpProvi
             }).when('/blog', {
                 templateUrl: 'blog/blog.tpl.html',
                 controller: 'blogCtrl'
+            }).when('/app', {
+                templateUrl: 'app/app.tpl.html',
+                controller: 'appCtrl'
             }).otherwise({redirectTo: '/note'});
     }]).run(function ($route, $http, $templateCache) {
         angular.forEach($route.routes, function (r) {
@@ -43,30 +46,4 @@ angular.module('app').config(['$routeProvider', '$locationProvider', '$httpProvi
     .controller('AppCtrl', function ($scope, $location, $window) {
         $scope.title = chrome.i18n.getMessage('title');
         console.log(chrome.i18n.getMessage('title'));
-//        chrome.runtime.getBackgroundPage(function(bgScript){
-//            console.log(bgScript);
-//
-//            bgScript.backgroundProcess.installed();
-//        });
-//        chrome.runtime.sendMessage({getCounters: true}, function (response) {
-//            log("In-memory counter is: " + response.counter);
-//            log("Persisted counter is: " + response.persistentCounter);
-//        });
-//        chrome.notifications.create(
-//            "id1", {
-//                type: "basic",
-//                iconUrl: "image1.png",
-//                title: "Althe Frazon",
-//                message: "Hi, what's going on tonight?",
-//                buttons: [
-//                    { title: "Call",
-//                        iconUrl: "call.png"},
-//                    { title: "Send Email",
-//                        iconUrl: "email.png"}
-//                ],
-//                priority: 0},
-//            function () {
-//            }
-//
-//        );
     });

@@ -8,7 +8,7 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
         addTileToCategoryID: 0
     };
     g.config = {
-        defaultColor: ['#2F09FF','#E82C2A','#FFC53B','#56E82A','#00C0FF']
+        defaultColor: ['#2F09FF', '#E82C2A', '#FFC53B', '#56E82A', '#00C0FF']
     };
     configIcon = {
         "www.google.com": {"icon": "/resource/logo/google.svg", "bgColor": "#3369E8"},
@@ -16,8 +16,8 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
     };
 
     helper = {
-        getRandColor:function(){
-            var idx = Math.floor(Math.random() * 5 );
+        getRandColor: function () {
+            var idx = Math.floor(Math.random() * 5);
             return g.config.defaultColor[idx];
         },
         getDomain: function (url) {
@@ -36,27 +36,29 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                 console.log((new Date()).valueOf());
                 if (!data.length) {//本地有数据
                     ntp.localData.getTopSites(function (d) {
+                        var localSites = [], guid = helper.getGUID(), domain, i, j;
                         d = d || [];
                         d.length = d.length > 10 ? 10 : d.length;
-                        for (var i = 0, j = d.length; i < j; i++) {
-                            var domain = helper.getDomain(d[i].url);
+                        for (i = 0, j = d.length; i < j; i++) {
+                            domain = helper.getDomain(d[i].url);
                             d[i].letter = domain.substr(0, 2);
                             d[i].icon = configIcon[domain] && configIcon[domain].icon || '';
                             d[i].bgColor = configIcon[domain] && configIcon[domain].bgColor || '';
                         }
-                        var localSites = [
+                        localSites = [
                             {
-                                "id": helper.getGUID(),
-                                "name": "Recommended",
+                                "id": guid,
+                                "name": chrome.i18n.getMessage('recommend'),
                                 "items": d
                             }
                         ];
                         $scope.localSites = localSites;
+                        //初次加载时添加到右击菜单
+                        process.sendMessage({action: "updateContextMenu", option: 'insert', title: chrome.i18n.getMessage('recommend'), id: guid});
                         ///这里取服务器数据
                         var tempSites = localSites[0].items;
                         $scope.localSites = localSites;
                         callback(localSites);
-
                         sites.query(function (data) {
                             for (var i = 0, j = data.length; i < j; i++) {
                                 var domain = helper.getDomain(data[i].url), exist = false, tempDomain = '';
@@ -110,14 +112,14 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
         onMessage: function () {
             chrome.runtime.onMessage.addListener(
                 function (request, sender, sendResponse) {
-                    if(request.action === 'updateFavorite'){
+                    if (request.action === 'updateFavorite') {
                         process.resetFavorites();
                     }
                     return true;
                 });
 
         },
-        resetFavorites:function(){
+        resetFavorites: function () {
             helper.getLocalSites(function (data) {
                 var localSites = data;
                 $timeout(function () {
@@ -161,7 +163,7 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
         },
         updateCategory: function () {
             helper.getLocalSites(function (data) {
-                var categoryInfo = {}, optionID = $scope.updateCategoryInfo.id || helper.getGUID(),option='';
+                var categoryInfo = {}, optionID = $scope.updateCategoryInfo.id || helper.getGUID(), option = '';
                 if ($scope.updateCategoryInfo.id) {
                     option = 'update';
                     //修改操作
@@ -186,8 +188,8 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                     $scope.localSites = data;
                 });
                 $scope.modalShownCategory = false;
-                process.sendMessage({action: "updateContextMenu",option:option, title: $scope.updateCategoryInfo.name, id: optionID});
-                $timeout(function(){
+                process.sendMessage({action: "updateContextMenu", option: option, title: $scope.updateCategoryInfo.name, id: optionID});
+                $timeout(function () {
                     process.scrollTo(optionID);
                 });
             });
@@ -262,6 +264,18 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
         scrollTo: function (anchor) {
             $location.hash(anchor);
             $anchorScroll();
+
+        },
+        /**
+         * 显示系统快速导航
+         */
+        chromeMenu: function () {
+
+        },
+        /**
+         * 显示最近关闭
+         */
+        recentlyClosed:function(){
 
         }
     };

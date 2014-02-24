@@ -16,7 +16,6 @@ angular.module('note', ['config', 'ngSanitize']).controller('noteCtrl', ['$scope
                 callback(data);
             });
         }
-
     };
     process.getNote(function (data) {
         $timeout(function () {

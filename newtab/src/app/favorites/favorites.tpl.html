@@ -51,16 +51,20 @@
             </li>
         </ul>
     </div>
-
     <div class="favorites-bar">
         <div class="categories" id="favorite_categories">
             <a ng-click="process.scrollTo(category.id)" class="item" ng-repeat="category in localSites track by category.id">{{category.name}}</a>
             <a class="insert-category" ng-click="process.showEditCategory()">+</a>
         </div>
         <div class="sys-menu">
-            <a>Apps</a>
-            <a href="#">最近关闭</a>
+            <a ng-click="process.chromeMenu()">Chrome</a>
+            <a ng-click="process.recentlyClosed()">最近关闭</a>
         </div>
+    </div>
+    <div class="chrome_menu" ng-show="showChromeMenu">
+        <ul>
+            <li></li>
+        </ul>
     </div>
     <modal-dialog show='modalShownDeleteCategory' dialog-title="delete category">
         <p class="desc" ng-bind-html="updateCategoryInfo.deleteMsg"></p>

@@ -7,6 +7,10 @@
         "message": "快捷工具导航",
         "description": "应用描述"
     },
+    "recommend": {
+        "message": "热门推荐",
+        "description": "应用描述"
+    },
     "menuBuyTitle": {
         "message": "待购商品",
         "description": "关注商品"
