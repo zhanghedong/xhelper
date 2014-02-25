@@ -9,8 +9,9 @@ angular.module('apps', ['config', 'ngSanitize']).controller('appsCtrl', ['$scope
         },
         init: function () {
             chrome.management.getAll(function(data){
-                console.log(data);
-                $scope.apps = data;
+                $timeout(function(){
+                    $scope.apps = data;
+                });
             });
         },
         launchApp:function(id,event){

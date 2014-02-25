@@ -6,6 +6,11 @@
 <body>
 <ul>
     <li ng-repeat="item in apps | filter: {isApp:true}">
+        <div class="app-img-container">
+            <!--{{item.icons}}-->
+            <img ng-if="item.enabled === true" ng-src="{{item.icons[1].url}}" alt="" />
+            <img ng-if="item.enabled === false" ng-src="{{item.icons[1].url}}+'?grayscale=true'" alt="" />
+        </div>
         <span ng-click="process.launchApp(item.id)">{{item.name}}</span>
     </li>
 </ul>

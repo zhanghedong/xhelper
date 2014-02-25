@@ -1,5 +1,5 @@
 var ntp = window.ntp || {};
-chrome.storage.local.set({'ntp_sites':''});
+//chrome.storage.local.set({'ntp_sites':''});
 //chrome.storage.local.set({'ntp_blog':''});
 //chrome.storage.local.set({'ntp_sites':''});
 (function(){
