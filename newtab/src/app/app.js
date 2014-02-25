@@ -8,13 +8,12 @@ angular.module('app', [
     'favorites',
     'note',
     'buy',
-    'blog'
+    'blog',
+    'apps'
 ]);
-
 
 var process = {
     onClick: function () {
-        alert('s');
     }
 };
 
@@ -31,9 +30,9 @@ angular.module('app').config(['$routeProvider', '$locationProvider', '$httpProvi
             }).when('/blog', {
                 templateUrl: 'blog/blog.tpl.html',
                 controller: 'blogCtrl'
-            }).when('/app', {
-                templateUrl: 'app/app.tpl.html',
-                controller: 'appCtrl'
+            }).when('/apps', {
+                templateUrl: 'apps/apps.tpl.html',
+                controller: 'appsCtrl'
             }).otherwise({redirectTo: '/note'});
     }]).run(function ($route, $http, $templateCache) {
         angular.forEach($route.routes, function (r) {

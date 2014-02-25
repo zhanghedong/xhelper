@@ -19,6 +19,7 @@
         "unlimitedStorage",
         "topSites",
         "contextMenus",
+        "management",
         "notifications",
         "<all_urls>"
     ],

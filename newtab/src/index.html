@@ -2,7 +2,7 @@
 <html lang="en" ng-app="app" ng-controller="AppCtrl">
 <head>
     <meta charset='utf-8'>
-    <title>{{title}}</title>
+    <title ng-bind="title"></title>
     <link rel="stylesheet" type="text/css" href="./<%= grunt.config.get('pkg.name') %>.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no" />
     <script type="text/javascript" src="./angular.js"></script>
@@ -21,7 +21,7 @@
                             <li><a ng-href="#/note">note</a></li>
                             <li><a ng-href="#/buy">buy</a></li>
                             <li><a ng-href="#/blog">blog</a></li>
-                            <li><a ng-href="#/app">app</a></li>
+                            <li><a ng-href="#/apps">apps</a></li>
                         </ul>
                     </div>
                     <div id="plugin_content" class="plugin-content">

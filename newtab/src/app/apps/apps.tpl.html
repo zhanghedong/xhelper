@@ -1,0 +1,13 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<ul>
+    <li ng-repeat="item in apps | filter: {isApp:true}">
+        <span ng-click="process.launchApp(item.id)">{{item.name}}</span>
+    </li>
+</ul>
+</body>
+</html>
