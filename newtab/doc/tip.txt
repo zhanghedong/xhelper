@@ -34,3 +34,34 @@ indexDB: http://www.recursiverobot.com/post/53767548784/angularjs-with-indexeddb
 
     http://api.openweathermap.org/data/2.5/weather?lat=26.0614&lon=119.3061
     {"coord":{"lon":119.31,"lat":26.06},"sys":{"message":0.0982,"country":"CN","sunrise":1392331121,"sunset":1392371707},"weather":[{"id":803,"main":"Clouds","description":"broken clouds","icon":"04d"}],"base":"cmc stations","main":{"temp":282.15,"pressure":1023,"humidity":61,"temp_min":282.15,"temp_max":282.15},"wind":{"speed":6,"deg":70},"clouds":{"all":75},"dt":1392368400,"id":1810821,"name":"Fuzhou","cod":200}
+
+
+
+    应用描述：
+
+    Chrome浏览器扩展应用。提供了商品收藏比价、随手记、网站快速拨号、实时天气、应用管理、数据云备份等功能增强了Chrome原生新标签页，为你提供更便捷的上网服务
+
+    QQ微博 oauth2  :
+
+    quickdial
+    http://quickdial.czmin.com
+
+    App Key:801481778
+    App Secret:8cb8559d5085ab5a4c3d5aac3fa98a27
+
+    QQ微博开放平台教程：http://wiki.open.t.qq.com/index.php/OAuth2.0%E9%89%B4%E6%9D%83
+
+    QQ：
+
+    快拨quickdial
+
+    APP ID:1101237121
+
+    APP KEY:2nfxCD4y0qDP3IAK
+
+    地址：http://op.open.qq.com/index.php?mod=appinfo&act=main&appid=1101237121
+    http://wiki.open.qq.com/wiki/API%E5%88%97%E8%A1%A8
+
+
+
+
