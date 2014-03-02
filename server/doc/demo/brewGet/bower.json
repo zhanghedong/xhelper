@@ -1,0 +1,17 @@
+{
+  "name": "brewGet",
+  "version": "0.1.1",
+  "dependencies": {
+    "angular": "1.2.14",
+    "angular-animate": "1.2.14",
+    "angular-cookies": "1.2.14",
+    "angular-resource": "1.2.14",
+    "angular-route": "1.2.14",
+    "angular-touch": "1.2.14",
+    "font-awesome": "4.x",
+    "html5-boilerplate": "4.x",
+    "ng-file-upload": "1.2.7",
+    "normalize-css": "3.x",
+    "susy": "1.x"
+  }
+}
