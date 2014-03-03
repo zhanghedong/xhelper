@@ -3,7 +3,7 @@
  * App models, in load order
  */
 var models = [
-    'user'
+  'user'
 ];
 
 module.exports = function (modelsPath) {

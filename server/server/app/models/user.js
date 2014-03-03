@@ -15,21 +15,16 @@ var crypto = require('crypto')
 /**
  * Schema dependencies; subdocuments
  */
-var LocationSchema = require('../../config/schemas').location;
+//var
+//    ImageSchema = mongoose.model('Image').schema
+//  , Location = mongoose.model('Location')
+//  , LocationSchema = require('../../config/schemas').location;
 
 /**
  * User schema
  */
 var UserSchema = new Schema({
-  birthday: {
-    type: Date,
-    validate: [
-      { validator: validate.over21, msg: msg.birthday.under21 },
-      { validator: validate.isDate, msg: msg.birthday.notDate },
-      { validator: validate.notNull, msg: msg.birthday.isNull }
-    ]
-  },
-  email: { 
+  email: {
     type: String,
     validate: [ 
       { validator: validate.isEmail, msg: msg.email.notEmail },
@@ -37,13 +32,7 @@ var UserSchema = new Schema({
     ]
   },
   hash: String,
-//  images: [ ImageSchema ],
   location: String,
-//  _location: LocationSchema,
-  role: { 
-    type: Number, 
-    default: 1 
-  },
   salt: String,
   slug: {
     type: String,
@@ -84,7 +73,7 @@ UserSchema.pre('validate', function (next) {
 
   // ensure that the nest is not processed if nothing has changed
   if (this._location && this._location.formatted_address && this.location === this._location.formatted_address) return next();
-  this.processNest(next, 2);
+//  this.processNest(next, 2);
 });
 
 /**
@@ -131,30 +120,30 @@ UserSchema.methods = {
    * @param {number} [count=0] - number of times the function has been called
    */
   processNest: function (next, limit, count) {
-    if (!count) count = 1;
-    else count++;
-
-    var _location = new Location({ raw: this.location });
-    if (_location.slug && _location.slug.city && _location.slug.state) {
-      Promise.promisify(Location.findOne, Location)({ 'slug.city': _location.slug.city, 'slug.state': _location.slug.state }).bind(this).then(function (location) {
-        if (!location) return Promise.promisify(_location.save, _location)();
-        else return location;
-      }).then(function (location) {
-        if (location[0]) location = location[0];
-        this._location = location;
-        this.location = location.formatted_address;
-        next();
-      }).catch(function (err) {
-        if (err.name === 'RejectionError' && err.cause) err = err.cause;
-        // pass error to next() if limit has been reached, or if the error is not an async-caused duplicate key error
-        if (count >= limit || ( err.code !== 11000 && err.code !== 11001 )) return next(err);
-        this.processNest(next, limit, count);
-      }); 
-    } else {
-      this.location = sanitize.escape(this.location);
-      this._location = {};
-      next();
-    }
+//    if (!count) count = 1;
+//    else count++;
+//
+//    var _location = new Location({ raw: this.location });
+//    if (_location.slug && _location.slug.city && _location.slug.state) {
+//      Promise.promisify(Location.findOne, Location)({ 'slug.city': _location.slug.city, 'slug.state': _location.slug.state }).bind(this).then(function (location) {
+//        if (!location) return Promise.promisify(_location.save, _location)();
+//        else return location;
+//      }).then(function (location) {
+//        if (location[0]) location = location[0];
+//        this._location = location;
+//        this.location = location.formatted_address;
+//        next();
+//      }).catch(function (err) {
+//        if (err.name === 'RejectionError' && err.cause) err = err.cause;
+//        // pass error to next() if limit has been reached, or if the error is not an async-caused duplicate key error
+//        if (count >= limit || ( err.code !== 11000 && err.code !== 11001 )) return next(err);
+//        this.processNest(next, limit, count);
+//      });
+//    } else {
+//      this.location = sanitize.escape(this.location);
+//      this._location = {};
+//      next();
+//    }
   }
 };
 

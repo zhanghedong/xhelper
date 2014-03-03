@@ -6,30 +6,17 @@
  */
 var path = require('path')
   , port = process.env.PORT || 3010
-  , rootPath = path.normalize(__dirname + '/../..')
+  , rootPath = path.normalize(__dirname + '/../..');
+
 module.exports = {
   development: {
     env: 'development',
     mongo: {
       host: 'localhost',
-      db: 'db_dial_dev'
+      db: 'db_dev1'
     },
     path: {
-      root: rootPath,
-      tmp: rootPath + '/server/assets/tmp'
-    },
-    port: port,
-    secrets: ['secretString']
-  },
-  test: {
-    env: 'test',
-    mongo: {
-      host: 'localhost',
-      db: 'db_test'
-    },
-    path: {
-      root: rootPath,
-      tmp: rootPath + '/server/assets/tmp'
+      root: rootPath
     },
     port: port,
     secrets: ['secretString']
@@ -38,11 +25,10 @@ module.exports = {
     env: 'production',
     mongo: {
       host: 'localhost',
-      db: 'db_dial'
+      db: 'db_prod'
     },
     path: {
-      root: rootPath,
-      tmp: rootPath + '/server/assets/tmp'
+      root: rootPath
     },
     port: port,
     secrets: ['secretString']

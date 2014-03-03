@@ -1,0 +1,23 @@
+{
+    "name": "vco-koa-blog-Example",
+    "description": "Examples using Koa by @ckken vcotime.com",
+    "version": "0.0.1",
+    "dependencies": {
+        "koa": "*",
+        "koa-route": "*",
+        "koa-static": "*",
+        "koa-static-cache":"*",
+        "koa-logger":"*",
+        "co":"*",
+        "co-fs": "*",
+        "co-body": "*",
+        "co-views": "*",
+        "koa-compose":"*",
+        "swig": "*",
+        "xss":"*",
+        "mongoose":"*"
+    },
+    "engines": {
+        "node": ">= 11.3"
+    }
+}

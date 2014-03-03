@@ -7,13 +7,13 @@ var compress = require('koa-compress')
   , mongoose = require('mongoose')
   , mongooseStore = require('koa-session-mongoose')
   , router = require('koa-router')
-  , session = require('koa-session-store')
+  , session = require('koa-session-store');
 
 /**
  * Middleware
  */
-var autocomplete = require('./autocomplete-routes')
-  , error = require('../app/middleware/error')
+var error = require('../app/middleware/error')
+//    ,autocomplete = require('./autocomplete-routes')
   , notFound = require('../app/middleware/404')
   , user = require('../app/controllers/users').sessions.show;
 
@@ -21,7 +21,6 @@ module.exports = function (app, config) {
 
   // collapse JSON responses
   app.jsonSpaces = 0;
-
 
   // logger
   if (config.env !== 'test') app.use(logger());
@@ -36,7 +35,7 @@ module.exports = function (app, config) {
 //  app.use(static(config.path.static));
 
   // autocomplete routes; before sessions middleware
-  app.use(autocomplete.middleware());
+//  app.use(autocomplete.middleware());
 
   // sessions 
   app.keys = config.secrets;
@@ -46,6 +45,7 @@ module.exports = function (app, config) {
     },
     store: mongooseStore.create()
   }));
+
   app.use(user());
 
   // api routes 
@@ -53,4 +53,4 @@ module.exports = function (app, config) {
 
   // 404 Not Found
   app.use(notFound());
-};
+}

@@ -8,7 +8,6 @@ var compress = require('koa-compress')
   , mongooseStore = require('koa-session-mongoose')
   , router = require('koa-router')
   , session = require('koa-session-store')
-  , static = require('koa-static');
 
 /**
  * Middleware
@@ -33,10 +32,10 @@ module.exports = function (app, config) {
   app.use(error());
 
   // static files 
-  app.use(static(config.path.static));
+//  app.use(static(config.path.static));
 
   // autocomplete routes; before sessions middleware
-  app.use(autocomplete.middleware());
+//  app.use(autocomplete.middleware());
 
   // sessions 
   app.keys = config.secrets;

@@ -1,13 +1,14 @@
+
 /**
  * Koa core
  * 0.x
  */
 var koa = require('koa')
-  , app = koa();
+    , app = koa();
 
 // use environment-specific configuration; default to 'development' if unspecified
 var env = process.env.NODE_ENV || 'development'
-  , config = require('./config/config')[env];
+    , config = require('./config/config')[env];
 
 // global utilities
 require('./assets/lib/console-utilities');
@@ -24,6 +25,6 @@ require('./config/app')(app, config);
 // server routes
 require('./config/routes')(app);
 
-// listen 
+// listen
 app.listen(config.port);
-console.success('Listening for Connections', { port: config.port });
+console.log('Listening for Connections', { port: config.port });
