@@ -12,7 +12,8 @@ var coBody = require('co-body')
 /**
  * Models
  */
-var  User = mongoose.model('User');
+    //var  User = mongoose.model('User',true);//启用严格
+var  User = mongoose.model('User'); ///
 
 /**
  * Mongo projection paramater; includes or excludes fields

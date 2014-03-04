@@ -44,10 +44,10 @@ var UserSchema = new Schema({
       { validator: validate.notNull, msg: msg.username.isNull }
     ]
   }
-});
+});//,{safe:true}
 
 /**
- * Virtuals
+ * Virtuals 虚拟属性
  */
 UserSchema.virtual('password')
   .set(function (password) {
@@ -66,7 +66,7 @@ UserSchema.virtual('password')
 UserSchema.pre('validate', function (next) {
   // ensure that certain variables exists on new User objects for validation purposes
   if (!this.password && this.isNew) this.password = null;
-  if (!this.birthday && this.isNew) this.birthday = null;
+//  if (!this.birthday && this.isNew) this.birthday = null;
 
   this.email = sanitize.escape(this.email);
   this.username = sanitize.escape(this.username);
