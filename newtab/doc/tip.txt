@@ -51,6 +51,8 @@ indexDB: http://www.recursiverobot.com/post/53767548784/angularjs-with-indexeddb
 
     QQ微博开放平台教程：http://wiki.open.t.qq.com/index.php/OAuth2.0%E9%89%B4%E6%9D%83
 
+    https://open.t.qq.com/cgi-bin/oauth2/authorize?client_id=APP_KEY&response_type=code&redirect_uri=http://www.myurl.com/example
+
     QQ：
 
     快拨quickdial
@@ -59,9 +61,44 @@ indexDB: http://www.recursiverobot.com/post/53767548784/angularjs-with-indexeddb
 
     APP KEY:2nfxCD4y0qDP3IAK
 
+
+
+    http://connect.qq.com/sdk/webtools/index2.html?
+    Qzone登录用这个：http://connect.qq.com/manage/index
+    http://connect.qq.com/toc/auth_manager
+
+
+
+    QQ登录认证：http://wiki.open.qq.com/wiki/%E3%80%90QQ%E7%99%BB%E5%BD%95%E3%80%91Qzone_OAuth%E8%AE%A4%E8%AF%81%E7%AE%80%E4%BB%8B
+    登录认证： http://openapi.qzone.qq.com/oauth/show?which=Login&client_id=1101237121&redirect_uri=http://quickdial.czmin.com:3010/&scope=get_user_info
+
+
+    开发在址：http://quickdial.czmin.com:3010/
+
+    oauth_consumer_key
+    oauth_nonce
+
+
+
     地址：http://op.open.qq.com/index.php?mod=appinfo&act=main&appid=1101237121
     http://wiki.open.qq.com/wiki/API%E5%88%97%E8%A1%A8
 
 
+    google:  https://developers.google.com/drive/training/drive-apps/getting-started/register?hl=zh-CN
+
+
+
+
+http://openapi.qzone.qq.com/oauth/show?which=Login&
+display=pc&
+auth_time=&
+page_type=&
+viewPage=&
+client_id=100292325&
+redirect_uri=http%3A%2F%2Fhao.weidunewtab.com%2Foauth%2Fqq_callback.php%3Freferer%3Dchrome-extension%3A%2F%2Fdlmmfcbpgflaeiipmbhelananakfcodj%2Findex.html%26hash%3Dsynchronize%26source%3D%26oauthKey%3D2580_1381895446295&
+scope=get_user_info&
+response_type=code&
+redirect_uri=http%3A%2F%2Fhao.weidunewtab.com%2Foauth%2Fqq_callback.php%3Freferer%3Dchrome-extension%3A%2F%2Fdlmmfcbpgflaeiipmbhelananakfcodj%2Findex.html%26hash%3Dsynchronize%26source%3D%26oauthKey%3D2580_1381895446295&
+client_id=100292325
 
 

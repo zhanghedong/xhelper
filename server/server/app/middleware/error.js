@@ -43,6 +43,7 @@ module.exports = function () {
     // error handling for downstream middleware
     } catch (err) {
 
+        console.log(err);
       // shift rejection errors to their cause if they involve validation
       if (err.name === 'RejectionError' && err.cause && validationsError.indexOf(err.cause.name) >= 0) err = err.cause;
 

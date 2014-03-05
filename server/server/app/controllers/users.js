@@ -46,21 +46,12 @@ module.exports = {
      * POST /api/users
      */
     create: function *(next) {
-//        console.log(User);
-        console.log(yield coBody(this));
-//        var abc = new User({username:'zhanghd',email:'zhanghedong@gmail.com',password:'abc'});
-//        var user = new User(yield coBody(this));
-
-//        user.save();
-        var xx = new User({ username: 'zhanghd11xxx', email: 'zhanghedossng@gmail.com', password: 'fasdfsadf' });
-        xx.save();
-        this.body = {"abc":123};
-//        var user = new User(yield coBody(this));
-//        console.log(user);
-//        yield Promise.promisify(user.save, user)();
-//        this.session.user = user;
-//        this.status = 201; // 201 Created
-//        this.body = yield cU.created('user', user, user.username);
+        var info = yield coBody(this);
+        var user = new User(info);
+        yield Promise.promisify(user.save, user)();
+        this.session.user = user;
+        this.status = 201; // 201 Created
+        this.body = yield cU.created('user', user, user.username);
     },
 
     /**
@@ -69,7 +60,7 @@ module.exports = {
      */
     update: function *(next) {
         if (!this.user) return yield next; // 404 Not Found
-        this.user = _.extend(this.user, _.omit(yield coBody(this), 'images'));
+        this.user = _.extend(this.user, yield coBody(this));
         yield Promise.promisify(this.user.save, this.user)();
         this.body = yield cU.updated('user', this.user, this.user.username);
     }
