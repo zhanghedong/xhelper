@@ -78,14 +78,14 @@ indexDB: http://www.recursiverobot.com/post/53767548784/angularjs-with-indexeddb
     http://connect.qq.com/toc/auth_manager
     http://wiki.connect.qq.com/%E4%BD%BF%E7%94%A8authorization_code%E8%8E%B7%E5%8F%96access_token#Step1.EF.BC.9A.E8.8E.B7.E5.8F.96AuthorizationCode
     https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=101032455&redirect_uri=http://quickdial.czmin.com&state=test
-
-
+nodejs oauth 库
+https://github.com/harrisiirak/oauth-client
+https://github.com/andreareginato/simple-oauth2
 
 
     QQ登录认证：http://wiki.open.qq.com/wiki/%E3%80%90QQ%E7%99%BB%E5%BD%95%E3%80%91Qzone_OAuth%E8%AE%A4%E8%AF%81%E7%AE%80%E4%BB%8B
     登录认证： http://openapi.qzone.qq.com/oauth/show?which=Login&client_id=1101237121&redirect_uri=http://quickdial.czmin.com/&scope=get_user_info
 
-https://github.com/harrisiirak/oauth-client
 
     开发在址：http://quickdial.czmin.com:3010/
 
