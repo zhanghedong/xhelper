@@ -29,7 +29,13 @@ module.exports = {
      * GET /api/users
      */
     index: function *(next) {
-        this.body = yield Promise.promisify(User.find, User)({}, projection);
+        this.body = yield Promise.promisify(User.findOne, User)({ $and: [
+            { username: 'zhanghd' },
+            { email: 'zhanghedong@gmail.com'}
+        ]});
+        console.log('find one-------');
+//    this.body = yield Promise.promisify(User.find, User)({}, projection);
+//        this.body = yield Promise.promisify(User.find, User)({}, projection);
     },
 
     /**

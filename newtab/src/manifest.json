@@ -31,6 +31,9 @@
             "local_path": "index.html#launch"
         }
     },
+    "web_accessible_resources":[
+        "index.html"
+    ],
     "content_security_policy": "script-src 'self' https://d.com; object-src 'self'"
 }
 

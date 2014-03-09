@@ -14,8 +14,7 @@ var crypto = require('crypto')
 /**
  * Schema dependencies; subdocuments
  */
-//var
-//    ImageSchema = mongoose.model('Image').schema
+var AuthSchema = mongoose.model('Auth').schema;
 //  , Location = mongoose.model('Location')
 //  , LocationSchema = require('../../config/schemas').location;
 
@@ -23,7 +22,7 @@ var crypto = require('crypto')
  * User schema
  */
 var UserSchema = new Schema({
-    username: {
+    nickname: {
         type: String,
         validate: [
             { validator: validate.notNull, msg: msg.username.isNull }
@@ -40,14 +39,18 @@ var UserSchema = new Schema({
             { validator: validate.notNull, msg: msg.email.isNull }
         ]
     },
-    password: String
+    password: String,
+    auth_source:String,
+    open_id:String,
+    auth:[AuthSchema],
+    create_at: { type : Date, default: Date.now }
 });
 
 /**
  * Pre-save hook
  */
 UserSchema.pre('save', function (next) {
-    this.slug = cU.slug(this.username, true);
+    this.slug = cU.slug(this.nickname, true);
     next();
 });
 mongoose.model('User', UserSchema);
