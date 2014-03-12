@@ -48,11 +48,12 @@ module.exports = {
             tokenPath: '/token',
             authSource: 'qq'
         });
+        oAuth.authSource = 'qq';
 // Authorization uri definition
         var authorization_uri = oAuth.AuthCode.authorizeURL({
             redirect_uri: 'http://quickdial.czmin.com/api/oauth/callback',
             scope: 'get_user_info',
-            state: '3(#0/!~'
+            state: '3(#0/!sdfasfsafdsf~'
         });
         this.response.redirect(authorization_uri);
     },
@@ -67,7 +68,6 @@ module.exports = {
             code: code,
             redirect_uri: 'http://quickdial.czmin.com/api/oauth/callback'
         }, saveToken);
-
 
         function saveToken(error, result) {
             if (error) {
@@ -95,16 +95,12 @@ module.exports = {
             oAuth.AuthCode.getOAuthApi('https://graph.qq.com/user/get_user_info', params, saveUserInfo);
         }
 
-        function saveUserInfo(error, result) {
-            console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-            if (error) {
-                console.log('Access Token Error', error.message);
-            }
-            var user =yield Promise.promisify(User.findOne, User)({ $and: [
+        function *saveToDb(result) {
+
+            var user = yield Promise.promisify(User.findOne, User)({ $and: [
                 { open_id: oAuth.OpenId.open_id },
                 { auth_source: 'qq'}
             ]});
-            console.log('user====',user);
             var auth = {
                 auth_key: 'abcdefg',
                 access_token: oAuth.AccessToken.token.access_token,
@@ -112,24 +108,32 @@ module.exports = {
                 refresh_token: oAuth.AccessToken.token.refresh_token,
                 ip: '127.0.0.1'
             };
+
             if (!user) {
                 var tUser = {
                     nickname: result.nickname,
                     password: '',
-                    email: '',
+                    email: 'zhanghedong@gmail.com',
                     auth_source: oAuth.authSource,
-                    open_id: oAuth.open_id,
+                    open_id: oAuth.OpenId.open_id,
                     auth: []
                 };
                 tUser.auth.push(auth);
-//                console.log(tUser);
-                var userModule = new User(info);
-//                console.log(userModule);
-               Promise.promisify(userModule.save, userModule)();
+                var userModule = new User(tUser);
+                Promise.promisify(userModule.save, userModule)();
             }
+        }
+
+        function saveUserInfo(error, result) {
+            if (error) {
+                console.log('Access Token Error', error.message);
+            }
+            var s = saveToDb(result);
+            s.next();
+//           s.next();
+
 
 //            var user = yield Promise.promisify(User.findOne, User)({ $or: [ { open_id: body.username }, { email: body.username } ] });
-
 //            var user = yield Promise.promisify(User.findOne, User)({ $or: [ { open_id: body.username }, { email: body.username } ] });
 //            var body = yield coBody(this);
         }

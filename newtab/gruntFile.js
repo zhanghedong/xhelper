@@ -157,7 +157,7 @@ module.exports = function (grunt) {
                 dest: '<%= distdir %>/angular.js'
             },
             plugin: {
-                src: ['vendor/underscore/underscore-min.js', 'vendor/ng_modal/ng-modal.js'],
+                src: ['vendor/underscore/underscore-min.js', 'vendor/ng_modal/ng-modal.js','vendor/idbwrapper/idbstore.min.js'],
                 dest: '<%= distdir %>/plugin.js'
             }
 //            jquery: {
