@@ -208,7 +208,8 @@ var backgroundProcess = {};
             }
         },
         installed: function () {
-            chrome.runtime.onInstalled.addListener(function () {
+
+           // chrome.runtime.onInstalled.addListener(function () {
                 chrome.contextMenus.create({"title": chrome.i18n.getMessage("title"), "id": g.params.rootMenuId, "contexts": ["all"]});
                 var child1 = chrome.contextMenus.create({
                     "title": chrome.i18n.getMessage('menuBuyTitle'),
@@ -238,7 +239,7 @@ var backgroundProcess = {};
                     }
                 });
 
-            });
+           // });
             //https://crxdoc-zh.appspot.com/extensions/event_pages
             //因为监听器本身只在事件页面的环境中存在，您必须每次在事件页面加载时使用 addListener，仅仅在 runtime.onInstalled 这么做是不够的。
         }

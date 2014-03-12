@@ -1,3 +1,5 @@
+//server:
+
 var user = {
     nickname: 'string',
     password: 'string',
@@ -22,3 +24,9 @@ var user_data = {
     category:'string',//bookmark,blog,shop,note
     create_at:'timestamp'
 };
+
+//client:
+
+var favorites = {
+
+}
