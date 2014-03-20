@@ -408,7 +408,8 @@
                     "title": noteData.title,
                     "sourceUrl": noteData.sourceUrl || "",
                     "content": noteData.content || "",
-                    "belongTo": noteData.belong_to || g.params.belongTo
+                    "categories": noteData.categories || '',
+                    "tags":noteData.tags
                 };
                 g.params.noteID = noteHelper.getGUID();
                 g.params.firstItem = noteHelper.getGUID();
@@ -465,8 +466,10 @@
                     nonce: '6959e9621b',
                     title: params.title,
                     content: params.content,
-                    attachment:['http://i.stack.imgur.com/dmHl0.png'],
-                    status: 'publish'
+                    categories: params.categories || 'uncategorized',
+//                    attachment:'http:/i.stack.imgur.com/dmHl0.png',
+                    status: 'publish',
+                    tags:params.tags
                 };
 
                 params.belongTo && noteConfig.setBelongTo(params.belongTo);

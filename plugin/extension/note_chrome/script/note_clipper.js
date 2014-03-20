@@ -377,7 +377,7 @@
                 if (param.isAppend && !param.content) return;//add blank node, return;
                 var port = chrome.extension.connect({name:'actionsetpopupcontent'});
                 var title = param.title || helper.escapeHTML(document.title && document.title.split('-')[0]);
-                var outLinkHtml = '<p>转载自： <a href="'+document.location.href+'">'+document.location.href+'</a></p>';
+                var outLinkHtml = '<p><a href="'+document.location.href+'">源文地址</a></p>';
                 param.content = param.content + outLinkHtml;
                 var data = {
                     "title":title,

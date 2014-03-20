@@ -3,32 +3,33 @@
 
     var g = {};
     g.params = {
-        sid:''
+        sid: ''
     };
     g.node = {
-        closeBtn:$('#close_btn'),
-        cleanBtn:$('#clean_btn'),
-        loginOut:$('#login_out'),
-        userStatus:$('#user_status'),
-        inspector:$('#mouse_select'),
-        sidebar:$('#sidebar'),
-        content:$('#content'),
-        title:$('#title_panel'),
-        subDir:$('#subdir_panel'),
-        detail:$('#detail_panel'),
-        loginPanel:$('#login_panel'),
-        labelUserName:$('#label_user_name'),
-        labelPassword:$('#label_password'),
-        iptUserName:$('#ipt_user_name'),
-        iptPassword:$('#ipt_password'),
-        btnLogin:$('#btn_login'),
-        loginNotice:$('#login_notice'),
-        save:$('#save'),
-        doc:$(document),
-        body:$(document.body)
+        closeBtn: $('#close_btn'),
+        cleanBtn: $('#clean_btn'),
+        loginOut: $('#login_out'),
+        userStatus: $('#user_status'),
+        inspector: $('#mouse_select'),
+        sidebar: $('#sidebar'),
+        content: $('#content'),
+        title: $('#title_panel'),
+        subDir: $('#subdir_panel'),
+        detail: $('#detail_panel'),
+        loginPanel: $('#login_panel'),
+        labelUserName: $('#label_user_name'),
+        labelPassword: $('#label_password'),
+        iptUserName: $('#ipt_user_name'),
+        iptPassword: $('#ipt_password'),
+        btnLogin: $('#btn_login'),
+        loginNotice: $('#login_notice'),
+        save: $('#save'),
+        tagsPanel: $('#tags_panel'),
+        doc: $(document),
+        body: $(document.body)
     };
     g.helper = {
-        mouseSelectTip:function (str) {
+        mouseSelectTip: function (str) {
             if (!noteConfig.getLocalStorage('mouseSelectTip')) {
                 if (!g.node.tip) {
                     var html = '<div class="mouse-tip">' + str + '<a class="close" href="#">×</a></div>';
@@ -49,7 +50,7 @@
     };
     var process = {
 
-        init:function () {
+        init: function () {
             g.node.body.find('#loading').show();
             process.addEvents();
             process.initExtensionRequest();
@@ -62,37 +63,37 @@
              }
              */
         },
-        autoContentHeight:function () {
+        autoContentHeight: function () {
             var winHeight = $(window).height();
             var titleHeight = g.node.title.outerHeight();
             var subDirHeight = g.node.subDir.outerHeight();
             var detailHeight = winHeight - titleHeight - subDirHeight;
             g.node.detail.css('height', detailHeight);
         },
-        addEvents:function () {
+        addEvents: function () {
             g.node.title.bind('keyup', function () {
                 process.autoContentHeight();
             });
             g.node.closeBtn.bind('click', function (e) {
-                parent.postMessage({name:'closefromnotepopup'}, '*');
+                parent.postMessage({name: 'closefromnotepopup'}, '*');
                 return false;
             });
             g.node.cleanBtn.bind('click', function (e) {
 //                g.node.title.html('');
                 g.node.detail.html('');
-                parent.postMessage({name:'actionfrompopupclearinspecotr'}, '*');
+                parent.postMessage({name: 'actionfrompopupclearinspecotr'}, '*');
                 return false;
             });
             g.node.userStatus.bind('click', function (e) {
                 if (!noteConfig.getSid()) {
-                    chrome.extension.sendRequest({name:'openloginwin'});
+                    chrome.extension.sendRequest({name: 'openloginwin'});
                 } else {
                     noteConfig.setSid('');
                     noteConfig.setUserName('');
                     noteConfig.setTicket('');
                     noteConfig.setBlowFish('');
                     location.href = "http://note.91.com/Logout.aspx";
-                    parent.postMessage({name:'closefromnotepopup'}, '*');
+                    parent.postMessage({name: 'closefromnotepopup'}, '*');
                 }
                 return false;
             });
@@ -101,9 +102,9 @@
                 $(this).toggleClass('active');
 //                    noteConfig.setInspectorSwitch('false');
                 if ($(this).hasClass('active')) {
-                    parent.postMessage({name:'actionfrompopupinspecotr'}, '*');
+                    parent.postMessage({name: 'actionfrompopupinspecotr'}, '*');
                 } else {
-                    parent.postMessage({name:'actionfrompopupremoveinspecotr'}, '*');
+                    parent.postMessage({name: 'actionfrompopupremoveinspecotr'}, '*');
                 }
                 return false;
             });
@@ -114,27 +115,32 @@
                 var contentClone = g.node.detail.clone();
                 var belongTo = g.node.subDir.find('select').val();
                 var noteData = {
-                    title:title,
-                    content:contentClone.html(),
-                    belong_to:belongTo,
-                    tags:''
+                    title: title,
+                    content: contentClone.html(),
+                    categories: belongTo,
+                    tags: $('#tags').val() || ''
                 };
-                parent.postMessage({name:'actionfrompopupsavenote', noteData:noteData}, '*');
+                parent.postMessage({name: 'actionfrompopupsavenote', noteData: noteData}, '*');
                 return false;
             });
             window.onload = function () {
 //                process.loginInit();
 //                parent.postMessage({name:'checkloginfromnotepopup'}, '*');
-                chrome.extension.sendRequest({name:'checkloginfromnotepopup'});
+                chrome.extension.sendRequest({name: 'checkloginfromnotepopup'});
                 return false;
             }
         },
-        loginInit:function () {
+        loginInit: function () {
             g.node.sidebar.find('.is-login').show();
             g.node.content.show();
             process.getSubDir(function (data) {//读取分类列表
                 process.subDirLayout(data);
-                parent.postMessage({name:'getpagecontentfromnotepopup'}, '*');
+                parent.postMessage({name: 'getpagecontentfromnotepopup'}, '*');
+            });
+            process.getTags(function (data) {
+
+
+                process.tagsLayout(data);
             });
             if (noteConfig.getLocalStorage('note91sid')) {
                 g.node.userStatus.removeClass('no-login');
@@ -146,30 +152,58 @@
                 g.node.userStatus.attr('title', '点击登录');
             }
         },
-        subDirLayout:function (items) {
-            var html = '<span>分类：</span><select id="subdir">';
-            html += '<option value="00000000-0000-0000-0000-000000000000">未分类</option>';
+        tagsLayout: function (items) {
+            var html = '<span>常用标签：</span><select id="tags_select">';
+            //去掉未分类
             if (items && items.length) {
                 var lastBelongTo = noteConfig.getBelongTo();
                 console.log(lastBelongTo);
                 for (var i = 0, j = items.length; i < j; i++) {
-                    html += '<option value="' + items[i]['id'] + '"';
-                    if (items[i]['id'] == lastBelongTo) {
-                        html += ' selected="selected" ';
-                    }
+                    html += '<option value="' + items[i]['slug'] + '"';
                     html += '>';
-                    html += items[i]['name'];
+                    html += items[i]['title'];
                     html += '</option>';
                 }
             }
             html += '</select>';
-            html += '<a href="http://note.91.com" target="_blank" class="manager-subdir">管理分类</a>';
+            g.node.tagsPanel.find('.tags-exist').html(html);
+            var tagsNode = $('#tags');
+            $('#tags_select').on('change', function () {
+                var _this = $(this), val = _this.val(), str = tagsNode.val() || '';
+                if (str != '') {
+                    if (str.indexOf(val) == -1) {
+                        tagsNode.val(str + ',' + val);
+                    }
+                } else {
+                    tagsNode.val(val);
+                }
+            });
+        },
+        subDirLayout: function (items) {
+            var html = '<span>分类：</span><select id="subdir">';
+            //去掉未分类
+//            html += '<option value="00000000-0000-0000-0000-000000000000">未分类</option>';
+            if (items && items.length) {
+                var lastBelongTo = noteConfig.getBelongTo();
+                console.log(lastBelongTo);
+                for (var i = 0, j = items.length; i < j; i++) {
+                    html += '<option value="' + items[i]['slug'] + '"';
+                    if (items[i]['id'] == lastBelongTo) {
+                        html += ' selected="selected" ';
+                    }
+                    html += '>';
+                    html += items[i]['title'];
+                    html += '</option>';
+                }
+            }
+            html += '</select>';
+//            html += '<a href="http://note.91.com" target="_blank" class="manager-subdir">管理分类</a>';
             if (noteConfig.getLocalStorage('nickName')) {
                 html += '<p class="welcome"><span>欢迎：</span><a href="http://note.91.com/NoteMain/Index.aspx" target="_blank">' + noteConfig.getLocalStorage('nickName') + '</a></p>';
             }
             g.node.subDir.html(html);
         },
-        loginLayout:function (callback) {
+        loginLayout: function (callback) {
             g.node.labelUserName.text(chrome.i18n.getMessage("label_user_name"));
             g.node.labelPassword.text(chrome.i18n.getMessage("label_password"));
             g.node.btnLogin.val(chrome.i18n.getMessage("btn_login_label"));
@@ -191,33 +225,48 @@
                 }
             });
         },
-        getSubDir:function (successCallback, failCallback) {
-            if (!noteConfig.getSid()) {
+        getTags: function (callback) {
+            $.ajax({ //由于登录方式修改,改到登录后再取
+                url: noteConfig.url.getTags,
+                type: "GET",
+                success: function (data) {
+                    if (data.status == 'ok') {
+                        callback(data.tags);
+                    }
+                    return;
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                }
+            });
+        },
+        getSubDir: function (successCallback, failCallback) {
+            if (false && !noteConfig.getSid()) {/////wordpress支持
                 var data = noteConfig.getLocalStorage('note91chromesubdir') || [];
                 successCallback(data);
             } else {
                 $.ajax({ //由于登录方式修改,改到登录后再取
-                    url:noteConfig.url.getSubDir + '?1=1' + noteConfig.getVerifierQueryStr(),
-                    type:"POST",
-                    success:function (data) {
-                        if (data.code != 200) {
+                    url: noteConfig.url.getSubDir,
+                    type: "GET",
+                    success: function (data) {
+                        console.log(data);
+                        if (data.status != 'ok') {
                             if (failCallback) {
                                 failCallback(true);
                             }
                             return;
                         }
                         if (successCallback) {
-                            successCallback(data.items);
+                            successCallback(data.categories);
                         }
                     },
-                    error:function (jqXHR, textStatus, errorThrown) {
+                    error: function (jqXHR, textStatus, errorThrown) {
                         var data = noteConfig.getLocalStorage('note91chromesubdir') || [];
                         successCallback(data);
                     }
                 });
             }
         },
-        login:function () {
+        login: function () {
             var userName = $.trim(g.node.iptUserName.val());
             var password = $.trim(g.node.iptPassword.val());
             var blowFish = noteConfig.getBlowFish();//获取blowFish用与票据登录使用
@@ -230,19 +279,19 @@
                 return false;
             }
             var dataObj = {
-                username:userName,
-                password:password,
-                blowfish:blowFish
+                username: userName,
+                password: password,
+                blowfish: blowFish
             };
             $.ajax({
-                headers:{
-                    'X-Requested-With':'XMLHttpRequest'
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
                 },
-                type:'POST',
-                url:noteConfig.url.login,
-                data:JSON.stringify(dataObj),
-                dataType:'json',
-                success:function (data) {
+                type: 'POST',
+                url: noteConfig.url.login,
+                data: JSON.stringify(dataObj),
+                dataType: 'json',
+                success: function (data) {
                     if (data.code == 200) {
                         noteConfig.setUserName(userName);
                         noteConfig.setSid(data.sid);
@@ -258,18 +307,18 @@
                         process.getSubDir(function (data) {//读取分类列表
                             process.subDirLayout(data);
                         });
-                        parent.postMessage({name:'getpagecontentfromnotepopup'}, '*');
-                        parent.postMessage({name:'signinhandlerfrompopup'}, '*');
+                        parent.postMessage({name: 'getpagecontentfromnotepopup'}, '*');
+                        parent.postMessage({name: 'signinhandlerfrompopup'}, '*');
                     } else {
                         g.node.loginNotice.html(data.msg);
                     }
                 },
-                error:function (jqXHR, textStatus, errorThrown) {
+                error: function (jqXHR, textStatus, errorThrown) {
 
                 }
             });
         },
-        setPopupContent:function (data) {
+        setPopupContent: function (data) {
             if (data.isAppend) {
                 g.node.detail.append($('<div note91clip="true" id="' + data.uid + '"></div>').append(data.content));
                 if (data.title) {
@@ -291,10 +340,10 @@
             process.autoContentHeight();
             g.node.body.find('#loading') && g.node.body.find('#loading').hide();
         },
-        removeMask:function () {
+        removeMask: function () {
             g.node.body.find('#mask').hide();
         },
-        initExtensionRequest:function () {
+        initExtensionRequest: function () {
             chrome.extension.onRequest.addListener(function (request, sender, sendResponse) {
                 if (!sender || sender.id !== chrome.i18n.getMessage("@@extension_id")) {
                     return;
