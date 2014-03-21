@@ -31,8 +31,8 @@
         };
         return {
             url: {
-                uploadFile: g.url.baseUrl + 'web/notenew/addItems',
-                saveNote: g.url.baseUrl + 'web/notenew/addNote',
+                uploadFile: g.url.baseUrl + 'api/file/upload_file/',
+                saveNote: g.url.baseUrl + 'api/create_post/',
                 getUserInfo: 'http://uap.91.com/user',
                 login: g.url.baseUrl + 'common/log/loginname',
 //                getSubDir:g.url.baseUrl + 'web/dirselect/getsubdirsimple',

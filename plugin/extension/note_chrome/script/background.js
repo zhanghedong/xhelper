@@ -217,9 +217,37 @@
             };
             xhr.send(null);
         },
-        _saveImages: function (param, successCallback, failCallback) {
-            var imgs = g.params.imgArr, imgsGUID = g.params.imgGUIDArr, content = '';
-            if (g.params.saveImagesToServer) {
+        _saveImages: function (noteData, successCallback, failCallback) {
+            var imgs, imgsGUID , content = '';
+            //替换照片src
+            var itemContent = $(noteData.content);
+            g.params.imgArr = [];
+            g.params.imgGUIDArr = [];
+            itemContent.find('img').each(function (i) {
+                if (this.tagName.toLocaleLowerCase() == 'img') {
+                    var url = this.src;
+                    if (!/.*?(data:image)/.test(url)) {
+                        var suffix = helper.getSuffix(url);
+//                    var imgGUID = noteHelper.getGUID();
+                        var imgGUIDSrc = noteHelper.getGUID();
+                        if (/^\.(gif|jpg|png|jpeg|bmp)$/.test(suffix)) {
+                            imgGUIDSrc += suffix;
+                        } else {
+                            imgGUIDSrc += '.jpg';//默认为jpg
+                        }
+                        g.params.imgArr.push(url);
+                        g.params.imgGUIDArr.push(imgGUIDSrc);
+                        try {
+                            noteData.content = noteData.content.replace(new RegExp(url, "g"), imgGUIDSrc);
+                        } catch (e) {
+                            console.log(e);
+                        }
+                    }
+                }
+            });
+            imgs = g.params.imgArr;
+            imgsGUID = g.params.imgGUIDArr;
+            if (g.params.saveImagesToServer && imgs.length) {
                 //正在保存图片提示
                 noteHelper.notifyHTML(chrome.i18n.getMessage('is_retrieving_remote_image_tip'), false);
                 var totalImgNum = imgs ? imgs.length : 1,
@@ -249,7 +277,7 @@
                             }
                             noteHelper.notifyHTML(chrome.i18n.getMessage('is_uploading_images_tip'), false);
                             $.ajax({
-                                url: noteConfig.url.uploadFile + '?1=1' + noteConfig.getVerifierQueryStr(),
+                                url: noteConfig.url.uploadFile,
 //                                url:noteConfig.url.uploadFile + '?sid=' + noteConfig.getSid(),
                                 type: "POST",
                                 data: form,
@@ -287,8 +315,8 @@
                     if (saveSucceedImgNum + saveFailedImgNum == totalImgNum) {
                         var formData = new FormData(), uploadFlag = false;
                         formData.append('type', 'Embedded');
-                        formData.append('categoryId', param.categoryId || '');
-                        formData.append('id', param.id || '');
+                        formData.append('categoryId', noteData.categoryId || '');
+                        formData.append('id', noteData.id || '');
                         formData.append('note_id', g.params.noteID || '');
                         formData.append('belong_to', noteConfig.getBelongTo() || g.params.belongTo);
                         var currNum = 0;//
@@ -302,8 +330,8 @@
                                 currNum = 0;
                                 formData = new FormData();
                                 formData.append('type', 'Embedded');
-                                formData.append('categoryId', param.categoryId || '');
-                                formData.append('id', param.id || '');
+                                formData.append('categoryId', noteData.categoryId || '');
+                                formData.append('id', noteData.id || '');
                                 formData.append('note_id', g.params.noteID || '');
                                 formData.append('belong_to', g.params.belongTo || '');
                             }
@@ -316,6 +344,7 @@
                 };
                 for (var i = 0, l = totalImgNum; i < l; i++) {
                     process.downloadImage(imgs[i], i, function (file, idx) {
+                        console.log(file);
                         saveSucceedImgNum++;
                         saveSucceedImgIndex.push(idx);
                         filesInfo[imgsGUID[idx]] = file;
@@ -328,12 +357,17 @@
                         //checkComplete();
                     });
                 }
-
-
+            }else{
+                successCallback(noteData);
             }
         },
-        saveImages: function (param, successCallback, failCallback) {
-            process._saveImages(param, successCallback, failCallback);
+        saveImages: function (noteData, successCallback, failCallback) {
+
+//            if (g.params.imgArr.length > 0) {
+                process._saveImages(noteData, successCallback, failCallback);
+//            } else {
+//                successCallback(noteData);
+//            }
         },
         initExtensionRequest: function () {
             chrome.extension.onRequest.addListener(function (request, sender) {
@@ -409,67 +443,40 @@
                     "sourceUrl": noteData.sourceUrl || "",
                     "content": noteData.content || "",
                     "categories": noteData.categories || '',
-                    "tags":noteData.tags
+                    "tags": noteData.tags
                 };
                 g.params.noteID = noteHelper.getGUID();
                 g.params.firstItem = noteHelper.getGUID();
-                //替换照片src
-                var itemContent = $(noteData.content);
-                g.params.imgArr = [];
-                g.params.imgGUIDArr = [];
-                itemContent.find('img').each(function (i) {
-                    if (this.tagName.toLocaleLowerCase() == 'img') {
-                        var url = this.src;
-                        if (!/.*?(data:image)/.test(url)) {
-                            var suffix = helper.getSuffix(url);
-//                    var imgGUID = noteHelper.getGUID();
-                            var imgGUIDSrc = noteHelper.getGUID();
-                            if (/^\.(gif|jpg|png|jpeg|bmp)$/.test(suffix)) {
-                                imgGUIDSrc += suffix;
-                            } else {
-                                imgGUIDSrc += '.jpg';//默认为jpg
-                            }
-                            g.params.imgArr.push(url);
-                            g.params.imgGUIDArr.push(imgGUIDSrc);
-                            try {
-                                params.content = params.content.replace(new RegExp(url, "g"), imgGUIDSrc);
-                            } catch (e) {
-                                console.log(e);
-                            }
-                        }
-                    }
-                });
-                var contentHTML = '<!DOCTYPE HTML>';
-                contentHTML += '    <html>';
-                contentHTML += '           <head>';
-                contentHTML += '                <meta charset="UTF-8">';
-                contentHTML += '                <title>' + params.title + '</title>';
-                contentHTML += '                <link rel="stylesheet" href="' + noteConfig.getTheme().css + '" />';
-                contentHTML += '           </head>';
-                contentHTML += '           <body>';
-                contentHTML += '                <div class="note91-content">';
-                contentHTML += params.content;
-                contentHTML += '                </div>';
-                contentHTML += '           </body>';
-                contentHTML += '    </html>';
-                var dataObj = {
-                    "client_type": "chrome",
-                    "belong_to": params.belongTo, //所属文件夹ID，默认文件夹为GUID_NULL字符串
-                    "title": params.title, //笔记标题
-                    "note_src": params.sourceUrl, //笔记来源
-                    "note_id": g.params.noteID,
-                    "first_item": g.params.firstItem, //主笔记项GUID
-                    "file_ext": "html", //主笔记项的文件夹扩展名
-                    "item_content": contentHTML
-                };
+//                var contentHTML = '<!DOCTYPE HTML>';
+//                contentHTML += '    <html>';
+//                contentHTML += '           <head>';
+//                contentHTML += '                <meta charset="UTF-8">';
+//                contentHTML += '                <title>' + params.title + '</title>';
+//                contentHTML += '                <link rel="stylesheet" href="' + noteConfig.getTheme().css + '" />';
+//                contentHTML += '           </head>';
+//                contentHTML += '           <body>';
+//                contentHTML += '                <div class="note91-content">';
+//                contentHTML += params.content;
+//                contentHTML += '                </div>';
+//                contentHTML += '           </body>';
+//                contentHTML += '    </html>';
+//                var dataObj = {
+//                    "client_type": "chrome",
+//                    "belong_to": params.belongTo, //所属文件夹ID，默认文件夹为GUID_NULL字符串
+//                    "title": params.title, //笔记标题
+//                    "note_src": params.sourceUrl, //笔记来源
+//                    "note_id": g.params.noteID,
+//                    "first_item": g.params.firstItem, //主笔记项GUID
+//                    "file_ext": "html", //主笔记项的文件夹扩展名
+//                    "item_content": contentHTML
+//                };
                 var dataObj1 = {
-                    nonce: '6959e9621b',
+                    nonce: 'e9199ce3b0',
                     title: params.title,
                     content: params.content,
                     categories: params.categories || 'uncategorized',
-//                    attachment:'http:/i.stack.imgur.com/dmHl0.png',
                     status: 'publish',
-                    tags:params.tags
+                    tags: params.tags
                 };
 
                 params.belongTo && noteConfig.setBelongTo(params.belongTo);
@@ -478,8 +485,8 @@
 //                        'X-Requested-With':'XMLHttpRequest'
 //                    },
                     type: 'POST',
-                    url: 'http://ihome.com/api/posts/create_post/',
-//                    url:noteConfig.url.saveNote + '?1=1' + noteConfig.getVerifierQueryStr(),
+//                    url: 'http://ihome.com/api/posts/create_post/',
+                    url: noteConfig.url.saveNote,
                     data: dataObj1,
                     success: function (data) {
                         console.log(data);
@@ -487,10 +494,10 @@
                         if (data.status == 'ok') {
                             successCallback && successCallback();
                             return;
-                        } else if (data.code == 425) {
-                            noteHelper.notifyHTML(chrome.i18n.getMessage('overflow'));
-                            process.closePopup();
-                            return;
+//                        } else if (data.code == 425) {
+//                            noteHelper.notifyHTML(chrome.i18n.getMessage('overflow'));
+//                            process.closePopup();
+//                            return;
                         } else {
                             failCallback && failCallback();
                             return;
@@ -527,22 +534,33 @@
             });
         },
         save: function (noteData) {
-            process.saveNote(noteData, function () {
-                if (g.params.imgArr.length > 0) {
-                    process.saveImages({}, function () {
-                        process.closePopup();
-                        noteHelper.notifyHTML(chrome.i18n.getMessage('note_save_succeed'), 2000);
-                    }, function () {
-                        noteHelper.notifyHTML(chrome.i18n.getMessage('note_save_failed'));
-                    });
-                } else {
+            process.saveImages(noteData, function (noteData) {//替换img url后返回的内容
+                process.saveNote(noteData, function () {
                     process.closePopup();
                     noteHelper.notifyHTML(chrome.i18n.getMessage('note_save_succeed'), 2000);
-                }
+                }, function () {
+                    noteHelper.notifyHTML(chrome.i18n.getMessage('note_save_failed_and_sign_in'));
+                    process.reLogin(noteData);
+                });
             }, function () {
-                noteHelper.notifyHTML(chrome.i18n.getMessage('note_save_failed_and_sign_in'));
-                process.reLogin(noteData);
+                noteHelper.notifyHTML(chrome.i18n.getMessage('note_save_failed'));
             });
+//            process.saveNote(noteData, function () {
+//                if (g.params.imgArr.length > 0) {
+//                    process.saveImages({}, function () {
+//                        process.closePopup();
+//                        noteHelper.notifyHTML(chrome.i18n.getMessage('note_save_succeed'), 2000);
+//                    }, function () {
+//                        noteHelper.notifyHTML(chrome.i18n.getMessage('note_save_failed'));
+//                    });
+//                } else {
+//                    process.closePopup();
+//                    noteHelper.notifyHTML(chrome.i18n.getMessage('note_save_succeed'), 2000);
+//                }
+//            }, function () {
+//                noteHelper.notifyHTML(chrome.i18n.getMessage('note_save_failed_and_sign_in'));
+//                process.reLogin(noteData);
+//            });
         },
         saveSelectImage: function (param) {
             var content = '<div class="image"><img src="' + param.imgs[0] + '" title="' + param.imgTitles + '" /></div>';
