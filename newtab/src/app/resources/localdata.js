@@ -1,64 +1,66 @@
-angular.module('resources.localData',['idbStore']);
-angular.module('resources.localData').factory('LocalData',['IDBStore',function () {
-    var process=null,userData=null,conf = null;
+angular.module('resources.localData', ['idbStore']);
+angular.module('resources.localData').factory('LocalData', ['IDBStore', function () {
+    var process = null, userData = null, userDataReady = false, conf = null, confReady = false;
     userData = new IDBStore({
-       dbVersion:1,
-        storeName:'userData',
-        keyPath:'id',
-        autoIncrement:false,
-        onStoreReady:function(){
+        dbVersion: 1,
+        storeName: 'userData',
+        keyPath: 'id',
+        autoIncrement: false,
+        onStoreReady: function () {
+            userDataReady = true;
             console.log('user data store ready!');
         }
     });
     conf = new IDBStore({
-        dbVersion:1,
-        storeName:'config',
-        keyPath:'id',
-        autoIncrement:false,
-        onStoreReady:function(){
+        dbVersion: 1,
+        storeName: 'config',
+        keyPath: 'id',
+        autoIncrement: false,
+        onStoreReady: function () {
+            confReady = true;
             console.log('config store ready!');
         }
     });
     process = {
-        getTopSite:function(callback){
-            chrome.topSites.get(function(data){
+        getTopSite: function (callback) {
+            chrome.topSites.get(function (data) {
                 callback(data);
             });
+        },
+        onSuccess: function (id) {
+            console.log('Yeah, dude inserted! insertId is: ' + id);
+        },
+        onError: function (error) {
+            console.log('Oh noes, sth went wrong!', error);
         }
     };
 
     return {
-        pushFavorites:function(){
+        putUserData: function (data) {
+            userData.put(data, process.onSuccess, process.onError);
+        },
+        getUserDataById: function (id, callback) {
+            var t = setInterval(function(){
+                if (userDataReady) {
+                    userData.get(id, callback);
+                    clearInterval(t);
+                }
+            })
 
         },
-        getFavorites:function(){
-
+        putConfig: function (data, callback) {
+            conf.put(data, process.onSuccess, process.onError);
         },
-        putNote:function(data,callback){
-
-        },
-        getNote:function(callback){
-
-        },
-        putBlog:function(data,callback){
-
-        },
-        getBlog:function(callback){
-
-        },
-        putConfig:function(data,callback){
-
-        },
-        getConfig:function(callback){
+        getConfigById: function (id, callback) {
+            var t = setInterval(function(){
+                if (confReady) {
+                    conf.get(id, callback);
+                    clearInterval(t);
+                }
+            })
 
         }
     };
-//    return $resource('http://d.com/apps/newtab/xhr/sites.php?id=:site_id', {}, {
-//        query: {method: 'JSON', params: {}, isArray: true},
-//        get: {method: 'JSON', params: {}, isArray: true},
-//        save: {method: 'JSON', params: {}, isArray: true},
-//        remove: {method: 'JSON', params: {}, isArray: true}
-//    });
 }]);
 
 

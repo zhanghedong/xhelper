@@ -3,7 +3,8 @@
 
     var g = {};
     g.params = {
-        sid: ''
+        sid: '',
+        host:'http://1625.me/'
     };
     g.node = {
         closeBtn: $('#close_btn'),
@@ -25,6 +26,7 @@
         loginNotice: $('#login_notice'),
         save: $('#save'),
         tagsPanel: $('#tags_panel'),
+        host:$('#host'),
         doc: $(document),
         body: $(document.body)
     };
@@ -71,6 +73,16 @@
             g.node.detail.css('height', detailHeight);
         },
         addEvents: function () {
+            g.node.host.on('click',function(){
+                g.params.host = $(this).val();
+                process.getSubDir(function (data) {//读取分类列表
+                    process.subDirLayout(data);
+//                    parent.postMessage({name: 'getpagecontentfromnotepopup'}, '*');
+                });
+                process.getTags(function (data) {
+                    process.tagsLayout(data);
+                });
+            });
             g.node.title.bind('keyup', function () {
                 process.autoContentHeight();
             });
@@ -114,10 +126,12 @@
                 var title = g.node.title.text();
                 var contentClone = g.node.detail.clone();
                 var belongTo = g.node.subDir.find('select').val();
+                var host = $('#host').val();
                 var noteData = {
                     title: title,
                     content: contentClone.html(),
                     categories: belongTo,
+                    host: host,
                     tags: $('#tags').val() || ''
                 };
                 parent.postMessage({name: 'actionfrompopupsavenote', noteData: noteData}, '*');
@@ -153,11 +167,10 @@
             }
         },
         tagsLayout: function (items) {
-            var html = '<span>常用标签：</span><select id="tags_select">';
+            var html = '<select id="tags_select">';
             //去掉未分类
             if (items && items.length) {
                 var lastBelongTo = noteConfig.getBelongTo();
-                console.log(lastBelongTo);
                 for (var i = 0, j = items.length; i < j; i++) {
                     html += '<option value="' + items[i]['slug'] + '"';
                     html += '>';
@@ -180,7 +193,7 @@
             });
         },
         subDirLayout: function (items) {
-            var html = '<span>分类：</span><select id="subdir">';
+            var html = '<select id="subdir">';
             //去掉未分类
 //            html += '<option value="00000000-0000-0000-0000-000000000000">未分类</option>';
             if (items && items.length) {
@@ -227,7 +240,7 @@
         },
         getTags: function (callback) {
             $.ajax({ //由于登录方式修改,改到登录后再取
-                url: noteConfig.url.getTags,
+                url: g.params.host + noteConfig.url.getTags,
                 type: "GET",
                 success: function (data) {
                     if (data.status == 'ok') {
@@ -245,7 +258,7 @@
                 successCallback(data);
             } else {
                 $.ajax({ //由于登录方式修改,改到登录后再取
-                    url: noteConfig.url.getSubDir,
+                    url: g.params.host + noteConfig.url.getSubDir,
                     type: "GET",
                     success: function (data) {
                         console.log(data);

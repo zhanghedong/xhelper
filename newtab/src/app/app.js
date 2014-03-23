@@ -5,6 +5,7 @@ angular.module('app', [
     'templates.app',
     'resources.sites',
     'bgDirectives',
+    'resources.localData',
     'favorites',
     'note',
     'buy',

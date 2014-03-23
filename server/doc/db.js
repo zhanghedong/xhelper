@@ -42,7 +42,7 @@ var user_data = {
         {
             name: 'string',
             gid: 'string',
-            sites: [
+            items: [
                 {
                     title: 'string',
                     url: 'string',

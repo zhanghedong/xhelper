@@ -31,10 +31,16 @@
     </div>
     <div id="content" class="hide note91-content">
         <div id="title_panel"></div>
-        <div id="subdir_panel"></div>
+        <div id="host_panel">
+            <select name="host" id="host">
+                <option value="http://1625.me/" selected>http://1625.me</option>
+                <option value="http://ihome.com/">http://ihome.com</option>
+            </select>
+            <span id="subdir_panel"></span>
+        </div>
         <div id="tags_panel">
-            <p><input type="text" id="tags" placeholder="tags" /></p>
-            <p class="tags-exist"></p>
+            <input type="text" id="tags" placeholder="tags" />
+            <span class="tags-exist"></span>
         </div>
         <div id="detail_panel"></div>
     </div>

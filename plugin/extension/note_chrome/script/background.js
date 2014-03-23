@@ -17,11 +17,26 @@
         noteData: '',
         uploadFilesNum: 20,
         pageComplete: false,
-        signalAjax: false
+        signalAjax: false,
+        host:''
+
     };
     var helper = {
         getSuffix: function (url) {
             return url.substr(url.length - 4).toLocaleLowerCase();
+        },
+        getNonce: function (controller, method, callback) {
+            $.ajax({
+                url: g.params.host + noteConfig.url.getNonce,
+                type: "GET",
+                data: {controller: controller, method: method},
+                success: function (data) {
+                    if (data.status == 'ok') {
+                        callback(data.nonce);
+                        return;
+                    }
+                }
+            });
         }
     };
     var process = {
@@ -276,35 +291,36 @@
                                 saveSucceedImgIndexByOrder[saveSucceedImgIndex[i]] = i.toString();
                             }
                             noteHelper.notifyHTML(chrome.i18n.getMessage('is_uploading_images_tip'), false);
-                            $.ajax({
-                                url: noteConfig.url.uploadFile,
+                            helper.getNonce('file', 'upload_file', function (nonce) {
+                                $.ajax({
+                                    url: g.params.host + noteConfig.url.uploadFile + '?nonce=' + nonce,
 //                                url:noteConfig.url.uploadFile + '?sid=' + noteConfig.getSid(),
-                                type: "POST",
-                                data: form,
-                                processData: false,
-                                contentType: false,
-                                success: function (data) {
-                                    if (data.code != 200) {
-                                        //todo: server error, pending note...
-                                        console.log('Internal error: ');
-                                        if (failCallback) {
-                                            failCallback(true);
+                                    type: "POST",
+                                    data: form,
+                                    processData: false,
+                                    contentType: false,
+                                    success: function (data) {
+                                        if (data.status == 'ok') {
+                                            //is replace images in page content
+                                            var files = data.files;
+                                            console.log(noteData);
+                                            for(var i = 0,j = files.length;i<j;i++){
+                                                var file = files[i];
+                                               if(file.url && file.key){
+                                                   var imgKey = file.key.replace('_','.');
+//                                                   console.log(file.url,'====',file.key);
+                                                   noteData.content = noteData.content.replace(new RegExp(imgKey, "g"), file.url);
+                                               }
+                                            }
+                                            successCallback(noteData, saveSucceedImgIndexByOrder);
                                         }
                                         removeFiles();
-                                        return;
+                                    },
+                                    error: function (jqXHR, textStatus, errorThrown) {
+                                        removeFiles();
+                                        noteHelper.notifyHTML(chrome.i18n.getMessage('upload_images_failed'));
                                     }
-                                    if (successCallback) {
-                                        //is replace images in page content
-                                        successCallback(data, saveSucceedImgIndexByOrder);
-                                    }
-                                    removeFiles();
-                                },
-                                error: function (jqXHR, textStatus, errorThrown) {
-                                    console.log('xhr error: ')
-                                    console.log(textStatus)
-                                    removeFiles();
-                                    noteHelper.notifyHTML(chrome.i18n.getMessage('upload_images_failed'));
-                                }
+                                });
                             });
                         }
                     }
@@ -357,14 +373,14 @@
                         //checkComplete();
                     });
                 }
-            }else{
+            } else {
                 successCallback(noteData);
             }
         },
         saveImages: function (noteData, successCallback, failCallback) {
 
 //            if (g.params.imgArr.length > 0) {
-                process._saveImages(noteData, successCallback, failCallback);
+            process._saveImages(noteData, successCallback, failCallback);
 //            } else {
 //                successCallback(noteData);
 //            }
@@ -471,7 +487,6 @@
 //                    "item_content": contentHTML
 //                };
                 var dataObj1 = {
-                    nonce: 'e9199ce3b0',
                     title: params.title,
                     content: params.content,
                     categories: params.categories || 'uncategorized',
@@ -480,35 +495,33 @@
                 };
 
                 params.belongTo && noteConfig.setBelongTo(params.belongTo);
-                g.params.signalAjax = $.ajax({
-//                    headers:{
-//                        'X-Requested-With':'XMLHttpRequest'
-//                    },
-                    type: 'POST',
-//                    url: 'http://ihome.com/api/posts/create_post/',
-                    url: noteConfig.url.saveNote,
-                    data: dataObj1,
-                    success: function (data) {
-                        console.log(data);
-                        g.params.signalAjax = false;
-                        if (data.status == 'ok') {
-                            successCallback && successCallback();
-                            return;
-//                        } else if (data.code == 425) {
-//                            noteHelper.notifyHTML(chrome.i18n.getMessage('overflow'));
-//                            process.closePopup();
-//                            return;
-                        } else {
+
+                helper.getNonce('posts', 'create_post', function (nonce) {
+                    dataObj1.nonce = nonce;
+                    g.params.signalAjax = $.ajax({
+                        type: 'POST',
+                        url: g.params.host + noteConfig.url.saveNote,
+                        data: dataObj1,
+                        success: function (data) {
+                            console.log(data);
+                            g.params.signalAjax = false;
+                            if (data.status == 'ok') {
+                                successCallback && successCallback();
+                                return;
+                            } else {
+                                failCallback && failCallback();
+                                return;
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            g.params.signalAjax = false;
                             failCallback && failCallback();
-                            return;
+                            noteHelper.notifyHTML(chrome.i18n.getMessage('note_save_failed'));
                         }
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        g.params.signalAjax = false;
-                        failCallback && failCallback();
-                        noteHelper.notifyHTML(chrome.i18n.getMessage('note_save_failed'));
-                    }
+                    });
+
                 });
+
             } else {
                 noteHelper.notifyHTML(chrome.i18n.getMessage('re_submit'));
                 return false;
@@ -534,6 +547,8 @@
             });
         },
         save: function (noteData) {
+
+            g.params.host = noteData.host;
             process.saveImages(noteData, function (noteData) {//替换img url后返回的内容
                 process.saveNote(noteData, function () {
                     process.closePopup();

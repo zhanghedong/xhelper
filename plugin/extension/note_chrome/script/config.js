@@ -31,13 +31,14 @@
         };
         return {
             url: {
-                uploadFile: g.url.baseUrl + 'api/file/upload_file/',
-                saveNote: g.url.baseUrl + 'api/create_post/',
+                getNonce:  'api/get_nonce/',
+                uploadFile: 'api/file/upload_file/',
+                saveNote: 'api/create_post/',
                 getUserInfo: 'http://uap.91.com/user',
                 login: g.url.baseUrl + 'common/log/loginname',
 //                getSubDir:g.url.baseUrl + 'web/dirselect/getsubdirsimple',
-                getSubDir: g.url.baseUrl + 'api/get_category_index/',
-                getTags: g.url.baseUrl + 'api/get_tag_index/',
+                getSubDir: 'api/get_category_index/',
+                getTags: 'api/get_tag_index/',
                 webSignIn: 'http://note.91.com/NoteMain/Index.aspx',
                 webSignOut: 'http://note.91.com/Logout.aspx'
             },
