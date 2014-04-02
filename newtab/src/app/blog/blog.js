@@ -1,10 +1,21 @@
 /**
  * Created by zhanghd on 14-2-17 下午4:14
- * Copyright 2013 ND, Inc. All rights reserved.
+ * Copyright 2013 , Inc. All rights reserved.
  */
 
-angular.module('blog', ['config', 'ngSanitize']).controller('blogCtrl', ['$scope', '$sce', '$timeout', '_', function ($scope, $sce, $timeout, _) {
-    var process = {};
+angular.module('blog', ['config', 'ngSanitize']).controller('blogCtrl', ['$scope', '$sce', '$timeout', '_', 'LocalData', function ($scope, $sce, $timeout, _, localDataModule) {
+    var process = {}, helper = {};
+    helper = {
+        getLocalBlog: function (callback) {
+            localDataModule.getUserDataById('blog', function (data) {
+                data = data && data.data || [];
+                callback(data);
+            })
+        },
+        setLocalBlog:function(data){
+            localDataModule.putUserData({id: 'blog', data: data});
+        }
+    };
     process = {
         onClick: function () {
         },
@@ -23,7 +34,7 @@ angular.module('blog', ['config', 'ngSanitize']).controller('blogCtrl', ['$scope
 
         },
         resetBlog: function () {
-            ntp.localData.getBlog(function (data) {
+            helper.getLocalBlog(function (data) {
                 $timeout(function () {
                     if (data.length) {
                         $scope.blogs = data;
@@ -32,7 +43,7 @@ angular.module('blog', ['config', 'ngSanitize']).controller('blogCtrl', ['$scope
             });
         },
         deleteBlog: function (url) {
-            ntp.localData.getBlog(function (data) {
+            helper.getLocalBlog(function (data) {
                 for (var i = 0, j = data.length; i < j; i++) {
                     if (data[i].url === url) {
                         data.splice(i, 1);
@@ -41,7 +52,7 @@ angular.module('blog', ['config', 'ngSanitize']).controller('blogCtrl', ['$scope
                 }
                 $timeout(function () {
                     $scope.blogs = data;
-                    ntp.localData.setBlog(data);
+                    helper.setLocalBlog(data);
                 });
             });
         }

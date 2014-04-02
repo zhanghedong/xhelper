@@ -21,6 +21,7 @@
         "contextMenus",
         "management",
         "notifications",
+        "bookmarks",
         "<all_urls>"
     ],
     "background": {

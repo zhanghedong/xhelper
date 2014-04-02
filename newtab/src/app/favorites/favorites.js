@@ -32,10 +32,8 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                 });
             },
             getLocalSites: function (id, callback) {
-                console.log((new Date()).valueOf());
 //            ntp.localData.getLocalSites(function (data) {
                 localDataModule.getUserDataById(id,function (data) {
-                    console.log((new Date()).valueOf());
                     data = data && data.data || [];
                     console.log('favrites=indexeddb==',data);
                     if (!data.length) {//本地木有数据
@@ -94,8 +92,6 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                 });
             },
             setLocalSites: function (data, callback) {
-                console.log('favorites======', data);
-                console.log(localDataModule);
                 localDataModule.putUserData({id: 'favorites', data: data});
 //            ntp.localData.setLocalSites(data, callback);
             }
@@ -108,7 +104,6 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
             title: '',
             bgColor: '#222'
         };
-
         process = {
             init: function () {
                 //获取数据

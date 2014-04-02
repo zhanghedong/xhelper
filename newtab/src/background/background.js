@@ -32,29 +32,7 @@ var backgroundProcess = {};
             }
         },
         setUserData: function (data, callback) {
-            console.log('右击保存=====', data);
             userData.put(data);
-        },
-
-        getData: function (callback) {
-            chrome.storage.local.get(function (data) {
-                console.log(data);
-                callback(data);
-            });
-        },
-        getNtpSite: function (callback) {
-            chrome.storage.local.get(function (data) {
-                callback(data);
-            });
-        },
-        setNtpSite: function (data, callback) {
-            chrome.storage.local.set({'ntp_sites': data}, function (data) {
-            });
-        },
-
-        setBlog: function (data, callback) {
-            chrome.storage.local.set({'ntp_blog': data}, function (data) {
-            });
         }
     };
     helper = {
@@ -174,7 +152,8 @@ var backgroundProcess = {};
                             }
                             if (noIn) {
                                 localBlog.splice(0, 0, blog);
-                                localData.setBlog(localBlog);
+                               // localData.setBlog(localBlog);
+                                localData.setUserData({id: 'blog', data: localBlog}, function () {});
                                 option = {
                                     title: chrome.i18n.getMessage('notifySuccess'),
                                     desc: chrome.i18n.getMessage('notifyBlogDesc')
@@ -192,6 +171,7 @@ var backgroundProcess = {};
                     break;
                 default:
                     (function () {
+                        //添加到收藏夹
                         var favorite = {
                             "title": data.title,
                             "url": data.url,
@@ -231,9 +211,7 @@ var backgroundProcess = {};
                                     break;
                                 }
                             }
-
-                            localData.setUserData({id: 'favorites', data: categories}, function () {
-                            });
+                            localData.setUserData({id: 'favorites', data: categories}, function () {});
                             helper.notification(option);
                             process.sendMessage({"action": "updateFavorite"});
                         });
