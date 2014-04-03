@@ -86,13 +86,16 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                             ];
                             $scope.localSites = localSites;
                             //初次加载时添加到右击菜单
+
                             process.sendMessage({action: "updateContextMenu", option: 'insert', title: chrome.i18n.getMessage('recommend'), id: guid});
                             ///这里取服务器数据
                             var tempSites = localSites[0].items;
                             $scope.localSites = localSites;
                             process.loadBookmarks(function(data){
-                                localSites.concat(data);
-                                callback(localSites);
+                                var dd = _.union(localSites,data);
+                                console.log('data============'.data);
+                                console.log('dd===========',dd);
+                                callback(dd);
                             });
                         });
                     } else {
@@ -101,6 +104,7 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                 });
             },
             loadBookmarks: function (callback) {
+
                 //取本地数据
                 chrome.bookmarks.getTree(function (data) {
                     var count = 0;
@@ -114,7 +118,9 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                                 "name": obj.title,
                                 "items": []
                             };
-                            categorys.push(oo);
+                            if(obj.title!=''){
+                                categorys.push(oo);
+                            }
                             oo = {};
                         }
                         for (var key in obj) {
@@ -127,7 +133,7 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                                     "letter": obj.title.substr(0, 2),
                                     "bgColor": helper.getRandColor()
                                 };
-                                leaf.push(obj);
+                                leaf.push(le);
                                 le = {};
                                 count++;
                             }
