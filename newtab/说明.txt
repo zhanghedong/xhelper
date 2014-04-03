@@ -1,0 +1,6 @@
+1、安装下nodejs环境  nodejs.org 下载
+2、到目录下执行npm install 
+3、执行grunt watch
+4、修改代码自动编译到dist目录下（如果grunt watch提示异常，重新执行一次3、4步骤）
+5、打开chrome,进入扩展程序，开启“开发者模式”，加载dist目录
+6、打开新tab

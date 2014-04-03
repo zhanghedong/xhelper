@@ -36,6 +36,11 @@ angular.module('resources.localData').factory('LocalData', ['IDBStore', function
     };
 
     return {
+        getTopSite:function(callback){
+            chrome.topSites.get(function (data) {
+                callback(data);
+            });
+        },
         putUserData: function (data) {
             userData.put(data, process.onSuccess, process.onError);
         },

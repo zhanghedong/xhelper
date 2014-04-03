@@ -31,6 +31,63 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                     return v.toString(16);
                 });
             },
+            getLocalSites: function (id, callback) {
+                localDataModule.getUserDataById(id,function (data) {
+                    data = data && data.data || [];
+                    if (!data.length) {//本地木有数据
+                        console.log('本地木有数据');
+                        ntp.localData.getTopSites(function (d) {
+                            var localSites = [], guid = helper.getGUID(), domain, i, j;
+                            d = d || [];
+                            d.length = d.length > 10 ? 10 : d.length;
+                            for (i = 0, j = d.length; i < j; i++) {
+                                domain = helper.getDomain(d[i].url);
+                                d[i].letter = domain.substr(0, 2);
+                                d[i].icon = configIcon[domain] && configIcon[domain].icon || '';
+                                d[i].bgColor = configIcon[domain] && configIcon[domain].bgColor || '';
+                            }
+                            localSites = [
+                                {
+                                    "id": guid,
+                                    "name": chrome.i18n.getMessage('recommend'),
+                                    "items": d
+                                }
+                            ];
+                            $scope.localSites = localSites;
+                            //初次加载时添加到右击菜单
+                            process.sendMessage({action: "updateContextMenu", option: 'insert', title: chrome.i18n.getMessage('recommend'), id: guid});
+                            ///这里取服务器数据
+                            var tempSites = localSites[0].items;
+                            $scope.localSites = localSites;
+                            callback(localSites);
+                            sites.query(function (data) {
+                                for (var i = 0, j = data.length; i < j; i++) {
+                                    var domain = helper.getDomain(data[i].url), exist = false, tempDomain = '';
+                                    //判断本地与服务端数据是否有重复
+                                    for (var m = 0, n = tempSites.length; m < n; m++) {
+                                        tempDomain = helper.getDomain(tempSites[m].url);
+                                        if (tempDomain === domain) {
+                                            exist = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!exist) {
+                                        data[i].letter = domain.substr(0, 2);
+                                        localSites[0].items.push(data[i]);
+                                    }
+                                    exist = false;
+                                }
+                                $timeout(function () {
+                                    $scope.localSites = localSites;
+                                    helper.setLocalSites($scope.localSites);
+                                });
+                            });
+                        });
+                    } else {
+                        callback(data);
+                    }
+                });
+            },
             setLocalSites: function (data, callback) {
                 localDataModule.putUserData({id: 'favorites', data: data});
             }
@@ -62,53 +119,14 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                     });
 
             },
-            getLocalSites: function (id, callback) {
-                localDataModule.getUserDataById(id, function (data) {
-                    data = data && data.data || [];
-                    if (!data.length) {//本地木有数据
-                        console.log('本地木有数据');
-                        localDataModule.getTopSites(function (d) {
-                            var localSites = [], guid = helper.getGUID(), domain, i, j;
-                            d = d || [];
-                            d.length = d.length > 10 ? 10 : d.length;
-                            for (i = 0, j = d.length; i < j; i++) {
-                                domain = helper.getDomain(d[i].url);
-                                d[i].letter = domain.substr(0, 2);
-                                d[i].icon = configIcon[domain] && configIcon[domain].icon || '';
-                                d[i].bgColor = configIcon[domain] && configIcon[domain].bgColor || '';
-                            }
-                            localSites = [
-                                {
-                                    "id": guid,
-                                    "name": chrome.i18n.getMessage('recommend'),
-                                    "items": d
-                                }
-                            ];
-                            $scope.localSites = localSites;
-                            //初次加载时添加到右击菜单
-                            process.sendMessage({action: "updateContextMenu", option: 'insert', title: chrome.i18n.getMessage('recommend'), id: guid});
-                            ///这里取服务器数据
-                            var tempSites = localSites[0].items;
-                            $scope.localSites = localSites;
-                            process.loadBookmarks(function(data){
-                                localSites.concat(data);
-                                callback(localSites);
-                            });
-                        });
-                    } else {
-                        callback(data);
-                    }
-                });
-            },
-            loadBookmarks: function (callback) {
+            loadBookmarks:function(callback){
                 //取本地数据
-                chrome.bookmarks.getTree(function (data) {
+                chrome.bookmarks.getTree(function(data){
                     var count = 0;
                     var count1 = 0;
-                    var leaf = [], categorys = [], oo = {};
-
+                    var leaf = [],categorys =[],oo={};
                     function iterate(obj) {
-                        if (!obj['url'] && obj.children && obj.children.length) {
+                        if(!obj['url'] && obj.children && obj.children.length){
                             oo = {
                                 "id": obj.id,
                                 "name": obj.title,
@@ -121,7 +139,7 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                             var elem = obj[key];
                             if (key === "url" && elem) {
                                 var le = {
-                                    "title": obj.title,
+                                    "title":  obj.title,
                                     "url": obj.url,
                                     "icon": "",//ICON TODO
                                     "letter": obj.title.substr(0, 2),
@@ -136,13 +154,12 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                             }
                         }
                     }
-
                     iterate(data); // start iterating the topmost element (`data`)
-                    for (var i = 0, j = categorys.length; i < j; i++) {
+                    for(var i = 0,j = categorys.length; i<j; i++){
                         var category = categorys[i];
-                        for (var k = 0, m = leaf.length; k < m; k++) {
+                        for(var k=0,m=leaf.length; k<m; k++){
                             var le = leaf[k];
-                            if (category.id === le.parentId) {
+                            if(category.id === le.parentId ){
                                 category.items.push(le);
                             }
                         }
@@ -151,7 +168,7 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                 })
             },
             resetFavorites: function () {
-                process.getLocalSites('favorites', function (data) {
+                helper.getLocalSites('favorites', function (data) {
                     var localSites = data;
                     $timeout(function () {
                         $scope.localSites = localSites;
@@ -169,7 +186,7 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
             confirmDeleteCategory: function (flag) {
                 var categoryID = $scope.updateCategoryInfo.id;
                 if ('yes' === flag) {
-                    process.getLocalSites('favorites', function (data) {
+                    helper.getLocalSites('favorites', function (data) {
                         for (var i = 0, j = data.length; i < j; i++) {
                             if (data[i].id === categoryID) {
                                 data.splice(i, 1);
@@ -193,7 +210,7 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                 $scope.modalShownCategory = !$scope.modalShownCategory;
             },
             updateCategory: function () {
-                process.getLocalSites('favorites', function (data) {
+                helper.getLocalSites('favorites', function (data) {
                     var categoryInfo = {}, optionID = $scope.updateCategoryInfo.id || helper.getGUID(), option = '';
                     if ($scope.updateCategoryInfo.id) {
                         option = 'update';
@@ -229,7 +246,7 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
             deleteFavorite: function (categoryID, favorite, event, idx) {
                 event.preventDefault();
                 event.stopPropagation();
-                process.getLocalSites('favorites', function (data) {
+                helper.getLocalSites('favorites', function (data) {
                     var i, j, items;
                     for (i = 0, j = data.length; i < j; i++) {
                         if (data[i].id === categoryID) {
@@ -265,7 +282,7 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                     "bgColor": $scope.editFavoriteInfo.bgColor || helper.getRandColor()
                 };
                 var parentCategoryID = g.params.addTileToCategoryID;
-                process.getLocalSites('favorites', function (data) {
+                helper.getLocalSites('favorites', function (data) {
                     var i, j, items;
                     if (!$scope.editFavoriteInfo.idx) {
                         for (i = 0, j = data.length; i < j; i++) {

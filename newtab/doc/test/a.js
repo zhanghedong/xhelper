@@ -1414,25 +1414,44 @@ var data = [
             {"dateAdded": 1380296233528, "id": "3572", "index": 8, "parentId": "3", "title": "个人所得税计算器、所得税计算器、个税计算器-银率网", "url": "http://www.bankrate.com.cn/tools/personal-income-tax-calculator.html"}
         ], "dateAdded": 1377847242596, "dateGroupModified": 1381195278890, "id": "3", "index": 2, "parentId": "0", "title": "移动设备书签"}
     ], "dateAdded": 1396341546243, "id": "0", "title": ""}
-]
-var count = 0;
+];
 
+var count = 0;
+var count1 = 0;
+var leaf = [],categorys =[],oo={};
 function iterate(obj) {
+    if(!obj['url'] && obj.children && obj.children.length){
+        oo.title = obj.title;
+        oo.id = obj.id;
+        oo.parentId=obj.parentId;
+        oo.dateAdded=obj.dateAdded;
+        oo.dateGroupModified=obj.dateGroupModified;
+        oo.children = [];
+        categorys.push(oo);
+        oo = {};
+    }
     for (var key in obj) { // iterate, `key` is the property key
         var elem = obj[key]; // `obj[key]` is the value
-
-        if (key === "url") { // found "text" property
+        if (key === "url" && elem) { // found "text" property
+            leaf.push(obj);
             count++;
         }
-
         if (typeof elem === "object") { // is an object (plain object or array),
             // so contains children
             iterate(elem); // call recursively
         }
     }
 }
-
 iterate(data); // start iterating the topmost element (`data`)
-i
-alert(count);
-console.log(count); // 9
+for(var i = 0,j = categorys.length; i<j; i++){
+    var category = categorys[i];
+    for(var k=0,m=leaf.length; k<m; k++){
+        var le = leaf[k];
+        if(category.id === le.parentId ){
+            category.children.push(le);
+        }
+    }
+}
+
+console.log((new Date()).valueOf());
+//console.log(JSON.stringify(categorys));
