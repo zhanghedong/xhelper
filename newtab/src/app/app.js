@@ -10,6 +10,7 @@ angular.module('app', [
     'note',
     'buy',
     'blog',
+    'search',
     'apps'
 ]);
 

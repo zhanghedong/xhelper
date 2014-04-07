@@ -10,7 +10,7 @@ angular.module('blog', ['config', 'ngSanitize']).controller('blogCtrl', ['$scope
             localDataModule.getUserDataById('blog', function (data) {
                 data = data && data.data || [];
                 callback(data);
-            })
+            });
         },
         setLocalBlog:function(data){
             localDataModule.putUserData({id: 'blog', data: data});

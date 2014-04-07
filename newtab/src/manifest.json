@@ -22,10 +22,11 @@
         "management",
         "notifications",
         "bookmarks",
+        "tabs",
         "<all_urls>"
     ],
     "background": {
-        "scripts": ["background.js"]
+        "page": "background.html"
     },
     "app": {
         "launch": {

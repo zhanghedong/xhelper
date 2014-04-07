@@ -36,33 +36,33 @@ angular.module('resources.localData').factory('LocalData', ['IDBStore', function
     };
 
     return {
-        getTopSites:function(callback){
+        getTopSites: function (callback) {
             chrome.topSites.get(function (data) {
                 callback(data);
             });
         },
-        putUserData: function (data) {
-            userData.put(data, process.onSuccess, process.onError);
+        putUserData: function (data, onSuccess, onError) {
+            userData.put(data, onSuccess, onError || process.onError);
         },
         getUserDataById: function (id, callback) {
-            var t = setInterval(function(){
+            var t = setInterval(function () {
                 if (userDataReady) {
                     userData.get(id, callback);
                     clearInterval(t);
                 }
-            })
+            });
 
         },
         putConfig: function (data, callback) {
             conf.put(data, process.onSuccess, process.onError);
         },
         getConfigById: function (id, callback) {
-            var t = setInterval(function(){
+            var t = setInterval(function () {
                 if (confReady) {
                     conf.get(id, callback);
                     clearInterval(t);
                 }
-            })
+            });
 
         }
     };

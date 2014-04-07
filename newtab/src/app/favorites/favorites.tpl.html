@@ -1,14 +1,14 @@
 <section class="favorites-view" ng-controller="favoritesCtrl">
     <div class="favorites">
         <ul class="categories"> <!--ng-repeat="cateory in sites track by category.id"-->
-            <li class="category" ng-repeat="category in localSites track by category.id">
-                <h2 id="{{category.id}}" >
+            <li class="category" ng-repeat="category in currentSites track by category.guid">
+                <h2 id="{{category.id}}">
                     <span class="title">{{category.name}}</span>
-                    <a class="btn edit" ng-click="process.showEditCategory(category.id,category.name)">edit</a>
-                    <a class="btn delete" ng-click="process.showDeleteCategory(category.id,category.name)">delete</a>
-                 </h2>
+                    <a class="btn edit"  ng-if="category.type!='recommend'" ng-click="process.showEditCategory(category)">edit</a>
+                    <a class="btn delete"  ng-if="category.type!='recommend'" ng-click="process.showDeleteCategory(category.id,category.name)">delete</a>
+                </h2>
                 <ul class="sites">
-                    <li class="item-wrap" ng-repeat=" item in category.items track by item.url">
+                    <li class="item-wrap" ng-repeat=" item in category.items track by item.guid">
                         <div class="item">
                             <a class="info" ng-style="{'background-image':item.icon}" ng-href="{{item.url}}"
                                target="_self">
@@ -16,8 +16,15 @@
                                     <img class="img" ng-if="item.icon" ng-src="{{item.icon}}"
                                          src="/resource/icons/s.gif" />
                                     <span class="letter" ng-style="{'color':item.color||'#fff'}" ng-if="!item.icon">{{item.letter | uppercase}}</span>
-                                    <div class="btn edit" ng-click="process.showEditFavorite(category.id,item,$event,$index);">edit</div>
-                                    <div class="btn delete" ng-click="process.deleteFavorite(category.id,item,$event,$index);">delete</div>
+
+                                    <div class="btn edit"
+                                         ng-if="category.type!='recommend'"
+                                         ng-click="process.showEditFavorite(category,item,$event,$index);">edit
+                                    </div>
+                                    <div class="btn delete"
+                                         ng-if="category.type!='recommend'"
+                                         ng-click="process.deleteFavorite(category,item,$event,$index);">delete
+                                    </div>
                                 </div>
                                 <div class="details">
                                     <span class="title" title="{{item.title}}">{{item.title}}<br></span>
@@ -39,8 +46,8 @@
                             </div>
                         </div>
                     </li>
-                    <li class="item-wrap">
-                        <a class="item-cnt" ng-click="process.showEditFavorite(category.id,'',$event)">
+                    <li class="item-wrap" ng-if="category.type!='recommend'">
+                        <a class="item-cnt" ng-click="process.showEditFavorite(category,'',$event)">
                             <div class="item">
                                 <div class="add-icon" style="background-color: rgb(0, 182, 183);"></div>
                                 <div class="add-title" style="color: rgb(0, 182, 183);">Add Item</div>
@@ -53,7 +60,10 @@
     </div>
     <div class="favorites-bar">
         <div class="categories" id="favorite_categories">
-            <a ng-click="process.scrollTo(category.id)" class="item" ng-repeat="category in localSites track by category.id">{{category.name}}</a>
+            <a ng-click="process.goCategory(category)" class="item"
+               ng-repeat="category in recommend track by category.guid">{{category.name}}</a>
+            <a ng-click="process.goCategory(category)" class="item"
+               ng-repeat="category in categories track by category.guid">{{category.name}}</a>
             <a class="insert-category" ng-click="process.showEditCategory()">+</a>
         </div>
         <div class="sys-menu">
@@ -66,17 +76,19 @@
             <li></li>
         </ul>
     </div>
-    <modal-dialog show='modalShownDeleteCategory' dialog-title="delete category">
+    <modal-dialog show='modalShownDeleteCategory' dialog-title="{{dialogTitle}}">
         <p class="desc" ng-bind-html="updateCategoryInfo.deleteMsg"></p>
+
         <div class="btn" ng-click="process.confirmDeleteCategory('yes')">Yes</div>
         <div class="btn" ng-click="process.confirmDeleteCategory('cancel')">cancel</div>
     </modal-dialog>
-    <modal-dialog show='modalShownCategory' width='500px' dialog-title='add new category'>
+    <modal-dialog show='modalShownCategory' width='500px' dialog-title='{{dialogTitle}}'>
         <form ng-submit="process.updateCategory()">
             <div class="form-data">
                 <div class="data-wrap">
                     <div class="ipt-item">
                         <label>Name</label>
+
                         <div class="ipt-wrap">
                             <input class="left designed-input" type="text" ng-model="updateCategoryInfo.name"
                                    placeholder="Name">
@@ -87,7 +99,7 @@
             </div>
         </form>
     </modal-dialog>
-    <modal-dialog show='modalShownFavorite' width='500px' dialog-title='add new favorite'>
+    <modal-dialog show='modalShownFavorite' width='500px' dialog-title='{{dialogTitle}}'>
         <form ng-submit="process.updateFavorite()">
             <div class="circle left"><span class="circle-cell"></span></div>
             <div class="form-data">
@@ -108,10 +120,23 @@
                                    placeholder="Title">
                         </div>
                     </div>
+                    <div class="ipt-item" ng-if="editFavoriteInfo.id">
+                        <label>Title{{editFavoriteInfo.id}}abc</label>
+
+                        <div class="ipt-wrap">
+                            <select ng-model="editFavoriteInfo.parentId">
+                                <option value="{{category.id}}"
+                                        ng-repeat="category in categories track by category.guid">{{category.name}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="ipt-item">
                         <label>Color</label>
+
                         <div class="ipt-wrap">
                             select color
+                            {{editFavoriteInfo.bgColor}}
                         </div>
                     </div>
                 </div>

@@ -8,15 +8,41 @@
         "description": "应用描述"
     },
     "recommend": {
-        "message": "热门推荐",
+        "message": "最常访问",
         "description": "应用描述"
+    },
+    "updateSiteTitle": {
+        "message": "修改网址",
+        "description": "应用描述"
+    },
+    "addSiteTitle": {
+        "message": "添加网址",
+        "description": "应用描述"
+    },
+    "deleteCategoryTitle": {
+        "message": "删除该类别",
+        "description": "应用描述"
+    },
+    "deleteCategoryMessage": {
+        "message": "确认删除 $category$ 类别及该类别下的所有网址",
+        "description": "Delete <em>' + category_name + '</em> will delete all of it`s favorites items,Are you shure?",
+        "placeholders": {
+            "category": {
+                "content": "$1",
+                "example": "书签栏"
+            }
+        }
     },
     "menuBuyTitle": {
         "message": "待购商品",
         "description": "关注商品"
     },
     "menuBlogTitle": {
-        "message": "待读文章",
+        "message": "稍后阅读",
+        "description": "关注文章"
+    },
+    "menuBookmarkTitle": {
+        "message": "收藏网址",
         "description": "关注文章"
     },
     "notifyTip": {

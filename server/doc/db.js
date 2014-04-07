@@ -41,15 +41,20 @@ var user_data = {
     categories: [
         {
             name: 'string',
-            gid: 'string',
-            items: [
-                {
-                    title: 'string',
-                    url: 'string',
-                    logo: 'string',
-                    backgroundColor: 'string'
-                }
-            ]
+            id: 'string与收藏夹中保持一致',
+            guid:'string动态生成的唯一ID'
+        }
+    ],
+    sites:[
+        {
+            "title": "标题",
+            "url": "链接地址",
+            "icon": "",//ICON TODO
+            "parentId": "父ID",
+            "id":"ID与收藏夹保持一至",
+            "guid":"唯一ID",
+            "letter": "图标",
+            "bgColor": "背景颜色"
         }
     ],
     products: [
@@ -71,7 +76,7 @@ var user_data = {
             create_at: 'timestamp'
         }
     ],
-    article: [
+    readyLater: [
         {
             title: 'string',
             url: 'string',

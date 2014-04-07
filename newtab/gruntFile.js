@@ -40,7 +40,7 @@ module.exports = function (grunt) {
             ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %>;\n' +
             ' * Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %>\n */\n',
         src: {
-            js: ['src/**/*.js', '<%= distdir %>/templates/**/*.js'],
+            js: ['src/**/*.js', '<%= distdir %>/templates/**/*.js','!**/content/**','!**/background/**'],
             specs: ['test/**/*.spec.js'],
             scenarios: ['test/**/*.scenario.js'],
             html: ['src/index.html'],
@@ -131,9 +131,23 @@ module.exports = function (grunt) {
                 src: ['<%= src.js %>'],
                 dest: '<%= distdir %>/<%= pkg.name %>.js'
             },
+            contentJS: {
+                src: ['src/content/content.js'],
+                dest: '<%= distdir %>/content/content.js',
+                options: {
+                    process: true
+                }
+            },
+            contentCSS: {
+                src: ['src/content/style.css'],
+                dest: '<%= distdir %>/content/style.css',
+                options: {
+                    process: true
+                }
+            },
             background: {
-                src: ['src/background.js'],
-                dest: '<%= distdir %>/background.js',
+                src: ['src/background/background.js'],
+                dest: '<%= distdir %>/background/background.js',
                 options: {
                     process: true
                 }
@@ -141,6 +155,27 @@ module.exports = function (grunt) {
             manifest: {
                 src: ['src/manifest.json'],
                 dest: '<%= distdir %>/manifest.json',
+                options: {
+                    process: true
+                }
+            },
+            backgroundHtml: {
+                src: ['src/background.html'],
+                dest: '<%= distdir %>/background.html',
+                options: {
+                    process: true
+                }
+            },
+            jquery: {
+                src: ['vendor/jquery/jquery.js'],
+                dest: '<%= distdir %>/jquery.js',
+                options: {
+                    process: true
+                }
+            },
+            idbstore: {
+                src: ['vendor/idbwrapper/idbstore.js'],
+                dest: '<%= distdir %>/lib/idbstore.js',
                 options: {
                     process: true
                 }
@@ -204,11 +239,11 @@ module.exports = function (grunt) {
         },
         watch: {
             all: {
-                files: ['<%= src.js %>', '<%= src.specs %>', '<%= src.lessWatch %>', '<%= src.tpl.app %>', '<%= src.tpl.common %>', '<%= src.tpl.sidebar%>', '<%= src.tpl.plugin %>', '<%= src.html %>', '<%= src.manifest%>', '<%= src.i18n%>', '!**/config/config.js'],
+                files: ['<%= src.js %>', '<%= src.specs %>', '<%= src.lessWatch %>', '<%= src.tpl.app %>', '<%= src.tpl.common %>', '<%= src.tpl.sidebar%>', '<%= src.tpl.plugin %>', '<%= src.html %>', '<%= src.manifest%>', '<%= src.i18n%>', '!**/config/config.js','**/content/**','**/background/**'],
                 tasks: ['default', 'timestamp']
             },
             build: {
-                files: ['<%= src.js %>', '<%= src.specs %>', '<%= src.lessWatch %>', '<%= src.tpl.app %>', '<%= src.tpl.common %>', '<%= src.tpl.sidebar %>', '<%= src.tpl.plugin %>', '<%= src.html %>', '<%= src.manifest%>', '<%= src.i18n%>', '!**/config/config.js'],
+                files: ['<%= src.js %>', '<%= src.specs %>', '<%= src.lessWatch %>', '<%= src.tpl.app %>', '<%= src.tpl.common %>', '<%= src.tpl.sidebar %>', '<%= src.tpl.plugin %>', '<%= src.html %>', '<%= src.manifest%>', '<%= src.i18n%>', '!**/config/config.js','**/content/**','**/background/**'],
                 tasks: ['build', 'timestamp']
             }
         },

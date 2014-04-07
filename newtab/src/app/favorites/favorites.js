@@ -6,7 +6,8 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
     function ($scope, $sce, $timeout, sites, _, $location, $anchorScroll, localDataModule) {
         var helper = null, g = {}, configIcon = null, localSites = [], dataModule, process = {};
         g.params = {
-            addTileToCategoryID: 0
+            addTileToCategory: null,
+            recommendId: '2fcd9d39-77b7-4435-ad6a-82b3d2a12498'//最常访问ID
         };
         g.config = {
             defaultColor: ['#2F09FF', '#E82C2A', '#FFC53B', '#56E82A', '#00C0FF']
@@ -32,7 +33,13 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                 });
             },
             setLocalSites: function (data, callback) {
-                localDataModule.putUserData({id: 'favorites', data: data});
+                localDataModule.putUserData({id: 'favorites', data: data}, callback);
+            },
+            setCategories: function (data, callback) {
+                localDataModule.putUserData({id: 'categories', data: data}, callback);
+            },
+            setSites: function (data, callback) {
+                localDataModule.putUserData({id: 'sites', data: data}, callback);
             }
         };
         $scope.modalShownFavorite = false;
@@ -51,6 +58,7 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
             },
             sendMessage: function (obj) {
                 chrome.runtime.sendMessage(obj);
+                //
             },
             onMessage: function () {
                 chrome.runtime.onMessage.addListener(
@@ -62,64 +70,90 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                     });
 
             },
-            getLocalSites: function (id, callback) {
-                localDataModule.getUserDataById(id, function (data) {
+            getRecommend: function (callback) {
+                localDataModule.getTopSites(function (d) {
+                    var recommended = [], guid = helper.getGUID(), domain, i, j;
+                    d = d || [];
+//                        d.length = (d.length > 19 ? 19 : d.length);
+                    for (i = 0, j = d.length; i < j; i++) {
+                        domain = helper.getDomain(d[i].url);
+                        d[i].letter = domain.substr(0, 2);
+                        d[i].parentId = guid;
+                        d[i].icon = configIcon[domain] && configIcon[domain].icon || '';
+                        d[i].bgColor = configIcon[domain] && configIcon[domain].bgColor || '';
+                        d[i].guid = helper.getGUID();
+                    }
+                    recommended = [
+                        {
+                            "id": g.params.recommendId,
+                            "guid": g.params.recommendId,
+                            "name": chrome.i18n.getMessage('recommend'),
+                            "type": "recommend",
+                            "items": d
+                        }
+                    ];
+                    callback(recommended);
+                });
+            },
+            initFavorites: function (callback) {
+//                            process.sendMessage({action: "updateContextMenu", option: 'insert', title: chrome.i18n.getMessage('recommend'), id: guid});
+                ///这里取服务器数据
+
+
+                process.loadBookmarks(function (categories, sites) {
+//                        var categories = _.union(recommended, cate);
+//                        var sites = _.union(d, site);
+                    helper.setCategories(categories);
+                    helper.setSites(sites);
+                    setTimeout(function () {
+                        callback(categories);
+                    }, 300);
+                });
+
+            },
+            getCategories: function (callback) {
+                localDataModule.getUserDataById('categories', function (data) {
                     data = data && data.data || [];
                     if (!data.length) {//本地木有数据
-                        console.log('本地木有数据');
-                        localDataModule.getTopSites(function (d) {
-                            var localSites = [], guid = helper.getGUID(), domain, i, j;
-                            d = d || [];
-                            d.length = d.length > 10 ? 10 : d.length;
-                            for (i = 0, j = d.length; i < j; i++) {
-                                domain = helper.getDomain(d[i].url);
-                                d[i].letter = domain.substr(0, 2);
-                                d[i].icon = configIcon[domain] && configIcon[domain].icon || '';
-                                d[i].bgColor = configIcon[domain] && configIcon[domain].bgColor || '';
-                            }
-                            localSites = [
-                                {
-                                    "id": guid,
-                                    "name": chrome.i18n.getMessage('recommend'),
-                                    "items": d
-                                }
-                            ];
-                            $scope.localSites = localSites;
-                            //初次加载时添加到右击菜单
-
-                            process.sendMessage({action: "updateContextMenu", option: 'insert', title: chrome.i18n.getMessage('recommend'), id: guid});
-                            ///这里取服务器数据
-                            var tempSites = localSites[0].items;
-                            $scope.localSites = localSites;
-                            process.loadBookmarks(function(data){
-                                var dd = _.union(localSites,data);
-                                console.log('data============'.data);
-                                console.log('dd===========',dd);
-                                callback(dd);
-                            });
+                        process.initFavorites(function (categories) {
+                            callback(categories);
                         });
                     } else {
                         callback(data);
                     }
                 });
             },
+            getSitesByCategoryId: function (cid, callback) {
+                localDataModule.getUserDataById('sites', function (data) {
+                    data = (data && data.data || []);
+                    var sites = [];
+                    for (var i = 0, j = data.length; i < j; i++) {
+                        if (data[i].parentId === cid) {
+                            sites.push(data[i]);
+                        }
+                    }
+                    callback(sites);
+                });
+            },
+            getSites: function (callback) {
+                localDataModule.getUserDataById('sites', function (data) {
+                    data = (data && data.data || []);
+                    callback(data);
+                });
+            },
             loadBookmarks: function (callback) {
-
                 //取本地数据
                 chrome.bookmarks.getTree(function (data) {
-                    var count = 0;
-                    var count1 = 0;
-                    var leaf = [], categorys = [], oo = {};
-
+                    var leaf = [], categories = [], oo = {};
                     function iterate(obj) {
                         if (!obj['url'] && obj.children && obj.children.length) {
                             oo = {
                                 "id": obj.id,
                                 "name": obj.title,
-                                "items": []
+                                "guid": helper.getGUID()
                             };
-                            if(obj.title!=''){
-                                categorys.push(oo);
+                            if (obj.title !== '') {
+                                categories.push(oo);
                             }
                             oo = {};
                         }
@@ -130,12 +164,14 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                                     "title": obj.title,
                                     "url": obj.url,
                                     "icon": "",//ICON TODO
-                                    "letter": obj.title.substr(0, 2),
+                                    "parentId": obj.parentId,
+                                    "id": obj.id,
+                                    "guid": helper.getGUID(),
+                                    "letter": obj.title && obj.title.length > 2 && obj.title.substr(0, 2),
                                     "bgColor": helper.getRandColor()
                                 };
                                 leaf.push(le);
                                 le = {};
-                                count++;
                             }
                             if (typeof elem === "object") {
                                 iterate(elem);
@@ -144,23 +180,49 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                     }
 
                     iterate(data); // start iterating the topmost element (`data`)
-                    for (var i = 0, j = categorys.length; i < j; i++) {
-                        var category = categorys[i];
-                        for (var k = 0, m = leaf.length; k < m; k++) {
-                            var le = leaf[k];
-                            if (category.id === le.parentId) {
-                                category.items.push(le);
-                            }
-                        }
-                    }
-                    callback(categorys);
-                })
+//                    for (var i = 0, j = categories.length; i < j; i++) {
+//                        var category = categories[i];
+//                        for (var k = 0, m = leaf.length; k < m; k++) {
+//                            var le = leaf[k];
+//                            if (category.id === le.parentId && le.title != '' && le.url != '') {
+//                                category.items.push(le);
+////                                count1++
+//                            }
+//                        }
+//                    }
+                    callback(categories, leaf);
+                });
+            },
+            goCategory: function (category) {
+                var currentSites = [];
+                currentSites.push(category);////记录上次点击 TODO
+                if (category.id === g.params.recommendId) {
+                    process.getRecommend(function (data) {
+                        $timeout(function () {
+                            $scope.currentSites = data;
+                        });
+                    });
+                } else {
+                    process.getSitesByCategoryId(currentSites[0].id, function (data) {
+                        currentSites[0].items = data;
+                        $timeout(function () {
+                            $scope.currentSites = currentSites;
+                        });
+                    });
+                }
             },
             resetFavorites: function () {
-                process.getLocalSites('favorites', function (data) {
-                    var localSites = data;
+                //最常访问
+                process.getRecommend(function (data) {
+                    $scope.currentSites = data;
+                    $scope.recommend = data;
+                });
+                process.getCategories(function (data) {
+//                    if (data.length) {
+//                        process.goCategory(data[0]);
+//                    }
                     $timeout(function () {
-                        $scope.localSites = localSites;
+                        $scope.categories = data;
                     });
                 });
             },
@@ -168,133 +230,140 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                 $scope.updateCategoryInfo = {
                     id: category_id || '',
                     name: category_name || '',
-                    deleteMsg: $sce.trustAsHtml('Delete <em>' + category_name + '</em> will delete all of it`s favorites items,Are you shure?')
+                    deleteMsg: $sce.trustAsHtml('')
                 };
+                $scope.dialogTitle = chrome.i18n.getMessage('deleteCategoryTitle');
                 $scope.modalShownDeleteCategory = !$scope.modalShownDeleteCategory;
             },
             confirmDeleteCategory: function (flag) {
                 var categoryID = $scope.updateCategoryInfo.id;
                 if ('yes' === flag) {
-                    process.getLocalSites('favorites', function (data) {
+                    process.getCategories(function (data) {
+                        process.getRecommend(function (data) {
+                            $scope.currentSites = data;
+                            $scope.recommend = data;
+                        });
                         for (var i = 0, j = data.length; i < j; i++) {
                             if (data[i].id === categoryID) {
                                 data.splice(i, 1);
                                 break;
                             }
                         }
-                        process.sendMessage({action: "deleteContextMenu", id: $scope.updateCategoryInfo.id});
-                        helper.setLocalSites(data);
+//                        process.sendMessage({action: "deleteContextMenu", id: $scope.updateCategoryInfo.id});
+                        helper.setCategories(data);
                         $timeout(function () {
-                            $scope.localSites = data;
+                            $scope.categories = data;
+
                         });
+                    });
+                    process.getSites(function (sites) {
+                        for (var i = 0, j = sites.length; i < j; i++) {
+                            if (sites[i].parentId === categoryID) {
+                                sites.splice(i, 1);
+                                break;
+                            }
+                        }
+                        helper.setSites(sites);
                     });
                 }
                 $scope.modalShownDeleteCategory = false;
             },
-            showEditCategory: function (category_id, category_name) {
-                $scope.updateCategoryInfo = {
-                    id: category_id || '',
-                    name: category_name || ''
+            showEditCategory: function (category) {
+                $scope.updateCategoryInfo = category || {
+                    id: ''
                 };
                 $scope.modalShownCategory = !$scope.modalShownCategory;
             },
             updateCategory: function () {
-                process.getLocalSites('favorites', function (data) {
-                    var categoryInfo = {}, optionID = $scope.updateCategoryInfo.id || helper.getGUID(), option = '';
-                    if ($scope.updateCategoryInfo.id) {
-                        option = 'update';
-                        //修改操作
-                        for (var i = 0, j = data.length; i < j; i++) {
-                            if (data[i].id === $scope.updateCategoryInfo.id) {
-                                data[i].name = $scope.updateCategoryInfo.name;
+                process.getCategories(function (categories) {
+                    var i, j, GUID = helper.getGUID(), categoryInfo;
+                    if ($scope.updateCategoryInfo.id) {//修改操作
+                        for (i = 0, j = categories.length; i < j; i++) {
+                            if (categories[i].guid === $scope.updateCategoryInfo.guid) {
+                                categories[i] = $scope.updateCategoryInfo;
                                 break;
                             }
                         }
-                    } else {
-                        option = 'insert';
-                        //添加操作
+                        helper.setCategories(categories);
+                    } else {//添加操作
                         categoryInfo = {
-                            "id": optionID,
+                            "id": GUID,
+                            "guid": GUID,
                             "name": $scope.updateCategoryInfo.name,
                             "items": []
                         };
-                        data.push(categoryInfo);
+                        console.log(categoryInfo);
+                        categories.push(categoryInfo);
                     }
-                    helper.setLocalSites(data);
+                    helper.setCategories(categories);
                     $timeout(function () {
-                        $scope.localSites = data;
-                    });
-                    $scope.modalShownCategory = false;
-                    process.sendMessage({action: "updateContextMenu", option: option, title: $scope.updateCategoryInfo.name, id: optionID});
-                    $timeout(function () {
-                        process.scrollTo(optionID);
+                        $scope.categories = categories;
                     });
                 });
+                $scope.modalShownCategory = false;
 
             },
-            deleteFavorite: function (categoryID, favorite, event, idx) {
+            deleteFavorite: function (category, item, event, idx) {
                 event.preventDefault();
                 event.stopPropagation();
-                process.getLocalSites('favorites', function (data) {
-                    var i, j, items;
+                category.items.splice(idx, 1);
+                $timeout(function () {
+                    $scope.currentSites = category;
+                });
+                process.getSites(function (data) {
+                    var items, i, j;
                     for (i = 0, j = data.length; i < j; i++) {
-                        if (data[i].id === categoryID) {
-                            items = data[i].items;
-                            data[i].items.splice(idx, 1);
+                        if (data[i].guid === item.guid) {
+                            data.splice(i, 1);
+                            break;
                         }
                     }
-                    $timeout(function () {
-                        $scope.localSites = data;
-                        $timeout(function () {
-                            helper.setLocalSites($scope.localSites);
-                        }, 50);
+                    helper.setSites(data, function () {
                     });
                 });
             },
-            showEditFavorite: function (categoryID, favorite, event, idx) {
+            showEditFavorite: function (category, favorite, event, idx) {
                 event.preventDefault();
                 event.stopPropagation();
-                g.params.addTileToCategoryID = categoryID;
+                g.params.addTileToCategory = category;
                 $scope.editFavoriteInfo = favorite || {
                     url: 'http://',
                     title: ''
                 };
+                $scope.dialogTitle = favorite ? chrome.i18n.getMessage('updateSiteTitle') : chrome.i18n.getMessage('addSiteTitle');
                 $scope.editFavoriteInfo.idx = idx ? idx : 0;
                 $scope.modalShownFavorite = !$scope.modalShownFavorite;
             },
             updateFavorite: function () {
+                var guid = helper.getGUID();
                 var favorite = {
+                    "id": $scope.editFavoriteInfo.id || guid,
+                    "guid": $scope.editFavoriteInfo.guid || guid,
                     "title": $scope.editFavoriteInfo.title,
+                    "parentId": g.params.addTileToCategory.id,
                     "url": $scope.editFavoriteInfo.url,
                     "icon": "",//ICON TODO
                     "letter": $scope.editFavoriteInfo.title.substr(0, 2),
                     "bgColor": $scope.editFavoriteInfo.bgColor || helper.getRandColor()
                 };
-                var parentCategoryID = g.params.addTileToCategoryID;
-                process.getLocalSites('favorites', function (data) {
-                    var i, j, items;
-                    if (!$scope.editFavoriteInfo.idx) {
-                        for (i = 0, j = data.length; i < j; i++) {
-                            if (data[i].id === parentCategoryID) {
-                                data[i].items.push(favorite);
+                process.getSites(function (sites) {
+                    var i, j;
+                    if ($scope.editFavoriteInfo.id) {
+                        console.log('update', favorite);
+                        for (i = 0, j = sites.length; i < j; i++) {
+                            if (sites[i].guid === favorite.guid) {
+                                sites[i] = favorite;
+                                break;
                             }
                         }
                     } else {
-                        for (i = 0, j = data.length; i < j; i++) {
-                            if (data[i].id === parentCategoryID) {
-                                items = data[i].items;
-                                data[i].items[$scope.editFavoriteInfo.idx] = favorite;
-                            }
-                        }
+                        console.log('insert', favorite);
+                        sites.push(favorite);
                     }
-                    $timeout(function () {
-                        $scope.localSites = data;
-                        $timeout(function () {
-                            helper.setLocalSites($scope.localSites);
-                        }, 50);
+                    helper.setSites(sites, function () {
+                        process.goCategory(g.params.addTileToCategory);
                     });
                 });
-
                 $scope.modalShownFavorite = false;
                 return false;
             },
