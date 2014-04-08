@@ -42,7 +42,6 @@ angular.module('search', ['config', 'ngSanitize']).controller('searchCtrl', ['$s
             if (keyword !== '') {
                 helper.getLocalBlog(function (data) {
                     for (i = 0, j = data.length; i < j; i++) {
-
                         domain = data[i].url.match(reg);
                         domain = domain && domain[1] || '';
                         if (data[i].title.indexOf(keyword) !== -1 || domain.indexOf(keyword) !== -1) {
@@ -73,25 +72,24 @@ angular.module('search', ['config', 'ngSanitize']).controller('searchCtrl', ['$s
                     $timeout(function () {
                         $scope.searchSuggest = sugList;
                     });
-                });
-                nextSug && helper.getLocalSites(function (data) {
-                    for (i = 0, j = data.length; i < j; i++) {
-                        domain = data[i].url.match(reg);
-                        domain = domain && domain[1] || '';
-                        if (data[i].title.indexOf(keyword) !== -1 || domain.indexOf(keyword) !== -1) {
-                            sugList.push(data[i]);
-                            bookmarkCount++;
-                            if (bookmarkCount >=config.bookmarksCount) {
-                                nextSug = false;
-                                break;
+                    nextSug && helper.getLocalSites(function (data) {
+                        for (i = 0, j = data.length; i < j; i++) {
+                            domain = data[i].url.match(reg);
+                            domain = domain && domain[1] || '';
+                            if (data[i].title.indexOf(keyword) !== -1 || domain.indexOf(keyword) !== -1) {
+                                sugList.push(data[i]);
+                                bookmarkCount++;
+                                if (bookmarkCount >=config.bookmarksCount) {
+                                    nextSug = false;
+                                    break;
+                                }
                             }
                         }
-                    }
-                    $timeout(function () {
-                        $scope.searchSuggest = sugList;
+                        $timeout(function () {
+                            $scope.searchSuggest = sugList;
+                        });
                     });
                 });
-
             } else {
                 $scope.searchSuggest = [];
             }
