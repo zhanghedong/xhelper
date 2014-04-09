@@ -1,15 +1,15 @@
 <header class="header">
     <div class="searchCtrl" ng-controller="searchCtrl">
         <section class="search" id="search">
-            <input class="ipt" type="text" ng-keyup="process.search()" ng-model="keyword" placeholder="{{keywordPlaceholder}}" id="keyword" value="" />
+            <input class="ipt" type="text" ng-keyup="process.search()" ng-model="keyword"
+                   placeholder="{{keywordPlaceholder}}" id="keyword" value="" />
             <a class="btn btn-search">搜索</a>
 
         </section>
         <section class="search-suggest" id="search_suggest">
-
-            <ul>
-                <li ng-repeat="item in searchSuggest">
-                  <a href="{{item.url}}">{{item.title}}</a>
+            <ul ng-if="searchSuggest.length">
+                <li ng-class="{selected:selectedItem == $index}" ng-repeat="item in searchSuggest">
+                    <a href="{{item.url}}">{{item.title}}</a>
                 </li>
             </ul>
         </section>

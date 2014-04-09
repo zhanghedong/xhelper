@@ -3,7 +3,7 @@
  * Copyright 2013 , Inc. All rights reserved.
  */
 
-angular.module('search', ['config', 'ngSanitize']).controller('searchCtrl', ['$scope', '$sce', '$timeout', '_', 'LocalData', function ($scope, $sce, $timeout, _, localDataModule) {
+angular.module('search', ['config', 'ngSanitize']).controller('searchCtrl', ['$scope', '$sce', '$timeout', '_', 'LocalData',  '$http', '$templateCache', function ($scope, $sce, $timeout, _, localDataModule,$http, $templateCache) {
     var process = {}, helper = {}, config = {};
     config = {
         readyCount: 2,
@@ -30,6 +30,8 @@ angular.module('search', ['config', 'ngSanitize']).controller('searchCtrl', ['$s
         },
         init: function () {
             $scope.keywordPlaceholder = 'favorites、google、baidu、bing';
+            $scope.selectedItem = 0;
+            process.watch();
 //            helper.getLocalBlog(function (data) {
 //                var i, j;
 //                for (i = 0, j = data.length; i < j; i++) {
@@ -37,63 +39,110 @@ angular.module('search', ['config', 'ngSanitize']).controller('searchCtrl', ['$s
 //                }
 //            });
         },
-        search: function () {
-            var sugList = [], i, j, keyword = $scope.keyword || '', nextSug = true, reg = /:\/\/(.[^/]+)/, domain,readyCount=0,bookmarkCount=0;
-            if (keyword !== '') {
-                helper.getLocalBlog(function (data) {
-                    for (i = 0, j = data.length; i < j; i++) {
+        watch: function () {
+            $scope.$watch("keyword", function (keyword) {
+                // keyword = $scope.keyword || '';
+                var sugList = [], i, j, nextSug = true, reg = /:\/\/(.[^/]+)/, domain, readyCount = 0, bookmarkCount = 0;
+                if (keyword !== '') {
+                    helper.getLocalBlog(function (data) {
+                        for (i = 0, j = data.length; i < j; i++) {
+                            domain = data[i].url.match(reg);
+                            domain = domain && domain[1] || '';
+                            if (data[i].title.indexOf(keyword) !== -1 || domain.indexOf(keyword) !== -1) {
+                                sugList.push(data[i]);
+                                readyCount++;
+                                if (readyCount >= config.readyCount) {
+                                    break;
+                                }
+                            }
+                        }
+                        $timeout(function () {
+                            $scope.searchSuggest = sugList;
+                        });
+                    });
+                    nextSug && chrome.topSites.get(function (data) {
+                        for (i = 0, j = data.length; i < j; i++) {
+                            domain = data[i].url.match(reg);
+                            domain = domain && domain[1] || '';
+                            if (data[i].title.indexOf(keyword) !== -1 || domain.indexOf(keyword) !== -1) {
+                                sugList.push(data[i]);
+                                bookmarkCount++;
+                                if (bookmarkCount >= config.bookmarksCount) {
+                                    nextSug = false;
+                                    break;
+                                }
+                            }
+                        }
+                        $timeout(function () {
+                            $scope.searchSuggest = sugList;
+                        });
+                    });
+                    nextSug && helper.getLocalSites(function (data) {
+                        for (i = 0, j = data.length; i < j; i++) {
+                            domain = data[i].url.match(reg);
+                            domain = domain && domain[1] || '';
+                            if (data[i].title.indexOf(keyword) !== -1 || domain.indexOf(keyword) !== -1) {
+                                sugList.push(data[i]);
+                                bookmarkCount++;
+                                if (bookmarkCount >= config.bookmarksCount) {
+                                    nextSug = false;
+                                    break;
+                                }
+                            }
+                        }
+                        $timeout(function () {
+                            $scope.searchSuggest = sugList;
+                        });
+                    });
 
-                        domain = data[i].url.match(reg);
-                        domain = domain && domain[1] || '';
-                        if (data[i].title.indexOf(keyword) !== -1 || domain.indexOf(keyword) !== -1) {
-                            sugList.push(data[i]);
-                            readyCount++;
-                            if (readyCount >= config.readyCount) {
-                                break;
-                            }
-                        }
-                    }
-                    $timeout(function () {
-                        $scope.searchSuggest = sugList;
-                    });
-                });
-                nextSug && chrome.topSites.get(function (data) {
-                    for (i = 0, j = data.length; i < j; i++) {
-                        domain = data[i].url.match(reg);
-                        domain = domain && domain[1] || '';
-                        if (data[i].title.indexOf(keyword) !== -1 || domain.indexOf(keyword) !== -1) {
-                            sugList.push(data[i]);
-                            bookmarkCount++;
-                            if (bookmarkCount >=config.bookmarksCount) {
-                                nextSug = false;
-                                break;
-                            }
-                        }
-                    }
-                    $timeout(function () {
-                        $scope.searchSuggest = sugList;
-                    });
-                });
-                nextSug && helper.getLocalSites(function (data) {
-                    for (i = 0, j = data.length; i < j; i++) {
-                        domain = data[i].url.match(reg);
-                        domain = domain && domain[1] || '';
-                        if (data[i].title.indexOf(keyword) !== -1 || domain.indexOf(keyword) !== -1) {
-                            sugList.push(data[i]);
-                            bookmarkCount++;
-                            if (bookmarkCount >=config.bookmarksCount) {
-                                nextSug = false;
-                                break;
-                            }
-                        }
-                    }
-                    $timeout(function () {
-                        $scope.searchSuggest = sugList;
-                    });
-                });
+                    $http({method: 'JSONP', url: 'http://unionsug.baidu.com/su?callback=JSON_CALLBACK&wd=abc&_=1397047412695', cache: $templateCache}).
+                        success(function(data, status) {
+                            $scope.status = status;
+                            $scope.data = data;
 
+                        }).
+                        error(function(data, status) {
+                            $scope.data = data || "Request failed";
+                        });
+
+                } else {
+                    $scope.searchSuggest = [];
+                }
+            })
+        },
+        nextFocusItem: function () {
+            if ($scope.selectedItem >= $scope.searchSuggest.length) {
+                $scope.selectedItem = 0;
             } else {
-                $scope.searchSuggest = [];
+                $scope.selectedItem++;
+            }
+        },
+        prevFocusItem: function () {
+            if ($scope.selectedItem > 0) {
+                $scope.selectedItem--;
+            } else {
+                $scope.selectedItem = $scope.searchSuggest.length;
+            }
+        },
+        searchClick:function(item){
+            console.log(item);
+        },
+        search: function (e) {
+            var g = {DOWN: 40, UP: 38, ENTER: 13, ESC: 27};
+            switch (e.keyCode) {
+                case g.DOWN:
+                    process.nextFocusItem();
+                    break;
+                case g.UP:
+                    process.prevFocusItem();
+//                    e(), a.searchTerm && a.selectRange(b.target, a.searchTerm.length, a.searchTerm.length);
+                    break;
+                case g.ENTER:
+                    process.searchClick($scope.searchSuggest($scope.selectedItem));
+//                    a.searchTerm ? a.results[a.searchTerm].length ? a.enterEventInfo = {spotID: a.results[a.searchTerm][a.selectedCategory].spotID, type: a.results[a.searchTerm][a.selectedCategory].type, selectedItem: a.selectedItem} : a.resultClick({link: a.buildGoogleSearchURL(a.searchTerm)}) : a.enterEventInfo = {spotID: a.defaultResults[0].spotID, type: a.defaultResults[0].type, selectedItem: a.selectedItem};
+                    break;
+                case g.ESC:
+                    $scope.searchSuggest && ($scope.searchSuggest = null, e.stopPropagation());
             }
         }
     };
