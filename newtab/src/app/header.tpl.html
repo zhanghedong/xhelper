@@ -1,7 +1,7 @@
 <header class="header">
     <div class="searchCtrl" ng-controller="searchCtrl">
         <section class="search" id="search">
-            <input class="ipt" type="text" ng-keyup="process.search()" ng-model="keyword"
+            <input class="ipt" type="text" ng-keyup="process.search($event)" ng-model="keyword"
                    placeholder="{{keywordPlaceholder}}" id="keyword" value="" />
             <a class="btn btn-search">搜索</a>
         </section>
@@ -12,7 +12,6 @@
                 </li>
             </ul>
         </section>
-
     </div>
 </header>
 

@@ -99,7 +99,6 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
 //                            process.sendMessage({action: "updateContextMenu", option: 'insert', title: chrome.i18n.getMessage('recommend'), id: guid});
                 ///这里取服务器数据
 
-
                 process.loadBookmarks(function (categories, sites) {
 //                        var categories = _.union(recommended, cate);
 //                        var sites = _.union(d, site);
@@ -213,6 +212,7 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
             },
             resetFavorites: function () {
                 //最常访问
+
                 process.getRecommend(function (data) {
                     $scope.currentSites = data;
                     $scope.recommend = data;

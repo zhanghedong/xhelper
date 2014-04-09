@@ -49,6 +49,7 @@ angular.module('search', ['config', 'ngSanitize']).controller('searchCtrl', ['$s
                             domain = data[i].url.match(reg);
                             domain = domain && domain[1] || '';
                             if (data[i].title.indexOf(keyword) !== -1 || domain.indexOf(keyword) !== -1) {
+                                data[i].itemType = 'blog';
                                 sugList.push(data[i]);
                                 readyCount++;
                                 if (readyCount >= config.readyCount) {
@@ -59,51 +60,45 @@ angular.module('search', ['config', 'ngSanitize']).controller('searchCtrl', ['$s
                         $timeout(function () {
                             $scope.searchSuggest = sugList;
                         });
-                    });
-                    nextSug && chrome.topSites.get(function (data) {
-                        for (i = 0, j = data.length; i < j; i++) {
-                            domain = data[i].url.match(reg);
-                            domain = domain && domain[1] || '';
-                            if (data[i].title.indexOf(keyword) !== -1 || domain.indexOf(keyword) !== -1) {
-                                sugList.push(data[i]);
-                                bookmarkCount++;
-                                if (bookmarkCount >= config.bookmarksCount) {
-                                    nextSug = false;
-                                    break;
+                        nextSug && chrome.topSites.get(function (data) {
+                            for (i = 0, j = data.length; i < j; i++) {
+                                domain = data[i].url.match(reg);
+                                domain = domain && domain[1] || '';
+                                if (data[i].title.indexOf(keyword) !== -1 || domain.indexOf(keyword) !== -1) {
+                                    data[i].itemType = 'topSite';
+                                    sugList.push(data[i]);
+                                    bookmarkCount++;
+                                    if (bookmarkCount >= config.bookmarksCount) {
+                                        nextSug = false;
+                                        break;
+                                    }
                                 }
                             }
-                        }
-                        $timeout(function () {
-                            $scope.searchSuggest = sugList;
+                            $timeout(function () {
+                                $scope.searchSuggest = sugList;
+                            });
                         });
-                    });
-                    nextSug && helper.getLocalSites(function (data) {
-                        for (i = 0, j = data.length; i < j; i++) {
-                            domain = data[i].url.match(reg);
-                            domain = domain && domain[1] || '';
-                            if (data[i].title.indexOf(keyword) !== -1 || domain.indexOf(keyword) !== -1) {
-                                sugList.push(data[i]);
-                                bookmarkCount++;
-                                if (bookmarkCount >= config.bookmarksCount) {
-                                    nextSug = false;
-                                    break;
+                        nextSug && helper.getLocalSites(function (data) {
+                            for (i = 0, j = data.length; i < j; i++) {
+                                domain = data[i].url.match(reg);
+                                domain = domain && domain[1] || '';
+                                if (data[i].title.indexOf(keyword) !== -1 || domain.indexOf(keyword) !== -1) {
+                                    data[i].itemType = 'favorite';
+                                    sugList.push(data[i]);
+                                    bookmarkCount++;
+                                    if (bookmarkCount >= config.bookmarksCount) {
+                                        nextSug = false;
+                                        break;
+                                    }
                                 }
                             }
-                        }
-                        $timeout(function () {
-                            $scope.searchSuggest = sugList;
+                            $timeout(function () {
+                                $scope.searchSuggest = sugList;
+                            });
                         });
+
                     });
 
-                    $http({method: 'JSONP', url: 'http://unionsug.baidu.com/su?callback=JSON_CALLBACK&wd=abc&_=1397047412695', cache: $templateCache}).
-                        success(function(data, status) {
-                            $scope.status = status;
-                            $scope.data = data;
-
-                        }).
-                        error(function(data, status) {
-                            $scope.data = data || "Request failed";
-                        });
 
                 } else {
                     $scope.searchSuggest = [];
@@ -111,7 +106,7 @@ angular.module('search', ['config', 'ngSanitize']).controller('searchCtrl', ['$s
             })
         },
         nextFocusItem: function () {
-            if ($scope.selectedItem >= $scope.searchSuggest.length) {
+            if ($scope.selectedItem >= $scope.searchSuggest.length-1) {
                 $scope.selectedItem = 0;
             } else {
                 $scope.selectedItem++;
@@ -121,7 +116,7 @@ angular.module('search', ['config', 'ngSanitize']).controller('searchCtrl', ['$s
             if ($scope.selectedItem > 0) {
                 $scope.selectedItem--;
             } else {
-                $scope.selectedItem = $scope.searchSuggest.length;
+                $scope.selectedItem = $scope.searchSuggest.length-1;
             }
         },
         searchClick:function(item){
@@ -138,7 +133,7 @@ angular.module('search', ['config', 'ngSanitize']).controller('searchCtrl', ['$s
 //                    e(), a.searchTerm && a.selectRange(b.target, a.searchTerm.length, a.searchTerm.length);
                     break;
                 case g.ENTER:
-                    process.searchClick($scope.searchSuggest($scope.selectedItem));
+                    process.searchClick($scope.searchSuggest[$scope.selectedItem]);
 //                    a.searchTerm ? a.results[a.searchTerm].length ? a.enterEventInfo = {spotID: a.results[a.searchTerm][a.selectedCategory].spotID, type: a.results[a.searchTerm][a.selectedCategory].type, selectedItem: a.selectedItem} : a.resultClick({link: a.buildGoogleSearchURL(a.searchTerm)}) : a.enterEventInfo = {spotID: a.defaultResults[0].spotID, type: a.defaultResults[0].type, selectedItem: a.selectedItem};
                     break;
                 case g.ESC:

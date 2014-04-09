@@ -8,7 +8,8 @@ var backgroundProcess = {};
         rootMenuId: "6375ac11-3e03-49a0-b6ae-9564d10e7ee3"
     };
     g.config = {
-        defaultColor: ['#2F09FF', '#E82C2A', '#FFC53B', '#56E82A', '#00C0FF']
+        defaultColor: ['#2F09FF', '#E82C2A', '#FFC53B', '#56E82A', '#00C0FF'],
+        searchEngine:{baidu:'http://unionsug.baidu.com/su?cb=JSON_CALLBACK&_=1397047412695',google:'http://google.com/complete/search?client=chrome-omni&ie=utf-8&oe=utf-8&hl=en-US&q='}
     };
     localData = {
         getUserData: function (callback) {
@@ -92,13 +93,28 @@ var backgroundProcess = {};
                 process.updateLocalData(info, data);
             }
         },
+        getResultByEngine:function(url){
+//            http://google.com/complete/search?client=chrome-omni&ie=utf-8&oe=utf-8&hl=en-US&q=ab
+                $.ajax({
+                    type: "get",        //使用get方法访问后台
+                    dataType: "text",  //返回json格式的数据
+                    jsonp: "callback",
+                    url: url,   //要访问的后台地址
+                    async: false,
+                    success: function (data) {
+                        //alert(data.total);
+                        //$('#pc_1').html(msg.total);
+                        console.log(data);
+                    }
+                });
+        },
         messageListener: function () {
             chrome.runtime.onMessage.addListener(function (msg, _, sendResponse) {
                 if (msg.action === 'insertFavorite') {
                     var item = msg.item;
                     if (item.url !== '') {
                         localData.getUserData(function (data) {
-                            var sites= [], i, j, noIn = true;
+                            var sites = [], i, j, noIn = true;
                             for (i = 0, j = data.length; i < j; i++) {
                                 if (data[i].id === 'sites') {
                                     sites = data[i].data;
@@ -215,51 +231,6 @@ var backgroundProcess = {};
                                 });
                             });
                         });
-                        /*
-                         //添加到收藏夹
-                         var favorite = {
-                         "title": data.title,
-                         "url": data.url,
-                         "icon": "",//ICON TODO
-                         "letter": data.title.substr(0, 2),
-                         "bgColor": helper.getRandColor()
-                         }, categoryName = '';
-                         localData.getUserData(function (sites) {
-                         var categories = [], i, j, items, category, favorites, noIn = true, option;
-                         for (i = 0, j = sites.length; i < j; i++) {
-                         if (sites[i].id === 'favorites') {
-                         categories = sites[i].data;
-                         }
-                         }
-                         for (i = 0, j = categories.length; i < j; i++) {
-                         if (categories[i].id === info.menuItemId) {
-                         categoryName = categories[i].name;
-                         items = categories[i].items;
-                         //重复添加判断 TODO
-                         for (var m = 0, n = items.length; m < n; m++) {
-                         if (items[m].url === data.url) {
-                         noIn = false;
-                         }
-                         }
-                         if (noIn) {
-                         categories[i].items.push(favorite);
-                         option = {
-                         title: chrome.i18n.getMessage('notifySuccess'),
-                         desc: chrome.i18n.getMessage('notifySuccessDesc', [categoryName])
-                         };
-                         } else {
-                         option = {
-                         title: chrome.i18n.getMessage('notifyTip'),
-                         desc: chrome.i18n.getMessage('notifyExistDesc', [categoryName])
-                         };
-                         }
-                         break;
-                         }
-                         }
-                         localData.setUserData({id: 'favorites', data: categories}, function () {});
-                         helper.notification(option);
-                         process.sendMessage({"action": "updateFavorite"});
-                         });*/
                     }());
                     break;
             }
@@ -270,20 +241,6 @@ var backgroundProcess = {};
             chrome.contextMenus.removeAll(function () {
                 chrome.contextMenus.create({"title": chrome.i18n.getMessage('menuBlogTitle'), "id": "addToReadLater", "contexts": ["all"], "onclick": process.onClick});
                 chrome.contextMenus.create({"title": chrome.i18n.getMessage("menuBookmarkTitle"), "id": "addToBookmark", "contexts": ["all"], "onclick": process.onClick});
-//                var child1 = chrome.contextMenus.create({
-//                    "title": chrome.i18n.getMessage('menuBuyTitle'),
-//                    "id": "addToBuyList",
-//                    "parentId": g.params.rootMenuId,
-//                    "contexts": ["all"],
-//                    "onclick": process.onClick
-//                });
-//                var child2 = chrome.contextMenus.create({
-//                    "title": chrome.i18n.getMessage('menuBlogTitle'),
-//                    "id": "addToReadLater",
-//                    "parentId": g.params.rootMenuId,
-//                    "contexts": ["all"],
-//                    "onclick": process.onClick
-//                });
             });
             //https://crxdoc-zh.appspot.com/extensions/event_pages
             //因为监听器本身只在事件页面的环境中存在，您必须每次在事件页面加载时使用 addListener，仅仅在 runtime.onInstalled 这么做是不够的。
@@ -291,5 +248,24 @@ var backgroundProcess = {};
     };
     process.installed();
     process.messageListener();
+//    function xmlhttpPost(url, func) {
+//        var xmlHttpReq = false;
+//        var self = this;
+//        // Mozilla/Safari
+//        self.xmlHttpReq = new XMLHttpRequest();
+//        self.xmlHttpReq.open('get', url, true);
+//        self.xmlHttpReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+//        self.xmlHttpReq.onreadystatechange = function () {
+//            if (self.xmlHttpReq.readyState == 4) {
+//                console.log(self.xmlHttpReq.responseText);
+//                func(self.xmlHttpReq.responseText);
+//            }
+//        };
+//        self.xmlHttpReq.send(null);
+//    }
+//
+//    xmlhttpPost('http://unionsug.baidu.com/su?cb=JSON_CALLBACK&wd=abc&_=1397047412695', function (data) {
+//        console.log(data);
+//    });
     backgroundProcess = process;
 }());
