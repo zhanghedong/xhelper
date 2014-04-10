@@ -8,7 +8,9 @@ angular.module('search', ['config', 'ngSanitize']).controller('searchCtrl', ['$s
     config = {
         readyCount: 2,
         bookmarksCount: 3,
-        searchCount: 5
+        searchCount: 5,
+        baiduGo: 'http://www.baidu.com/baidu?tn=98012088_3_dg&ch=2&ie=utf-8&word=',
+        googleGo: 'http://www.google.com.hk/search?ix=seb&sourceid=chrome&ie=UTF-8&q='
     };
     helper = {
         getLocalBlog: function (callback) {
@@ -45,7 +47,6 @@ angular.module('search', ['config', 'ngSanitize']).controller('searchCtrl', ['$s
                 var sugList = [], i, j, nextSug = true, reg = /:\/\/(.[^/]+)/, domain, readyCount = 0, bookmarkCount = 0;
                 if (keyword !== '') {
                     helper.getLocalBlog(function (data) {
-
                         for (i = 0, j = data.length; i < j; i++) {
                             domain = data[i].url.match(reg);
                             domain = domain && domain[1] || '';
@@ -134,7 +135,7 @@ angular.module('search', ['config', 'ngSanitize']).controller('searchCtrl', ['$s
             }
         },
         searchClick: function (item) {
-//            console.log(item);
+            console.log(item);
         },
         search: function (e) {
             var g = {DOWN: 40, UP: 38, ENTER: 13, ESC: 27};
