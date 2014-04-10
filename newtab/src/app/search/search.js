@@ -45,7 +45,7 @@ angular.module('search', ['config', 'ngSanitize']).controller('searchCtrl', ['$s
                 var sugList = [], i, j, nextSug = true, reg = /:\/\/(.[^/]+)/, domain, readyCount = 0, bookmarkCount = 0;
                 if (keyword !== '') {
                     helper.getLocalBlog(function (data) {
-                        /*
+
                         for (i = 0, j = data.length; i < j; i++) {
                             domain = data[i].url.match(reg);
                             domain = domain && domain[1] || '';
@@ -96,28 +96,24 @@ angular.module('search', ['config', 'ngSanitize']).controller('searchCtrl', ['$s
                             $timeout(function () {
                                 $scope.searchSuggest = sugList;
                             });
-                        });
-                        */
-                        chrome.runtime.sendMessage({action: 'getSuggestFromEngine', engine: 'baidu', keyword: keyword}, function (response) {
-                            var list = response.resultList, i, j, data = [], item = {};
-                            for (i = 0, j = list.length; i < j; i++) {
-                                item.itemType = 'engineKeyword';
-                                item.title = list[i];
-                                data.push(item);
-                                item = {};
-                            }
-                            console.log('data===',data);
-                            $timeout(function () {
-//                                $scope.searchSuggest = _.union($scope.searchSuggest, data);
-                                $scope.searchSuggest = data;
-                                console.log('search===',$scope.searchSuggest);
-                            });
+                            chrome.runtime.sendMessage({action: 'getSuggestFromEngine', engine: 'baidu', keyword: keyword}, function (response) {
+                                var list = response.resultList, i, j, data = [], item = {};
+                                for (i = 0, j = list.length; i < j; i++) {
+                                    item.itemType = 'engineKeyword';
+                                    item.title = list[i];
+                                    data.push(item);
+                                    item = {};
+                                }
+                                console.log('data1===',data);
+                                $timeout(function () {
+                                $scope.searchSuggest = _.union($scope.searchSuggest, data);
+//                                    $scope.searchSuggest = data;
+                                    console.log('search1===',$scope.searchSuggest);
+                                });
 //                            console.log(response.resultList);
-
+                            });
                         });
                     });
-
-
                 } else {
                     $scope.searchSuggest = [];
                 }
