@@ -9,7 +9,7 @@ var backgroundProcess = {};
     };
     g.config = {
         defaultColor: ['#2F09FF', '#E82C2A', '#FFC53B', '#56E82A', '#00C0FF'],
-        searchEngine:{baidu:'http://unionsug.baidu.com/su?cb=JSON_CALLBACK&_=1397047412695',google:'http://google.com/complete/search?client=chrome-omni&ie=utf-8&oe=utf-8&hl=en-US&q='}
+        searchEngine: {baidu: 'http://unionsug.baidu.com/su?cb=JSON_CALLBACK&_=' + ((new Date()).valueOf()) + '&wd=', google: 'http://google.com/complete/search?client=chrome-omni&ie=utf-8&oe=utf-8&hl=en-US&q='}
     };
     localData = {
         getUserData: function (callback) {
@@ -93,20 +93,16 @@ var backgroundProcess = {};
                 process.updateLocalData(info, data);
             }
         },
-        getResultByEngine:function(url){
-//            http://google.com/complete/search?client=chrome-omni&ie=utf-8&oe=utf-8&hl=en-US&q=ab
-                $.ajax({
-                    type: "get",        //使用get方法访问后台
-                    dataType: "text",  //返回json格式的数据
-                    jsonp: "callback",
-                    url: url,   //要访问的后台地址
-                    async: false,
-                    success: function (data) {
-                        //alert(data.total);
-                        //$('#pc_1').html(msg.total);
-                        console.log(data);
-                    }
-                });
+        getResultByUrl: function (url, callback) {
+            $.ajax({
+                type: "get",        //使用get方法访问后台
+                dataType: "text",  //返回text格式的数据
+                url: url,   //要访问的后台地址
+                async: false,
+                success: function (data) {
+                    callback(data);
+                }
+            });
         },
         messageListener: function () {
             chrome.runtime.onMessage.addListener(function (msg, _, sendResponse) {
@@ -121,36 +117,35 @@ var backgroundProcess = {};
                                     break;
                                 }
                             }
+
                             sites.push(item);
                             localData.setUserData({id: 'sites', data: sites}, function () {
                                 console.log('insert favorite success ');
                             });
                         });
                     }
+                } else if (msg.action === 'getSuggestFromEngine') {
+                    var engine = msg.engine || 'google',
+                        queryUrl = g.config.searchEngine[engine],
+                        list = null;
+                    if (msg.keyword) {
+                        process.getResultByUrl(queryUrl + msg.keyword, function (data) {
+                            if (engine === 'baidu') {
+                                list = data.split(',s:')[1].split('}')[0];
+                                console.log(list);
+                                list = list && JSON.parse(list);
+                                if (list) {
+                                    sendResponse({engine: engine, resultList: list});
+                                }
+                            } else {
+                                list = JSON.parse(data)[1] || [];
+
+                                sendResponse({engine: engine, resultList: list});
+                            }
+                        });
+                    }
                 }
-//                if (msg.action === 'updateContextMenu') {
-//                    if (msg.option === 'update') {
-//                        //修改操作
-//                        chrome.contextMenus.update(msg.id, {
-//                            "title": msg.title
-//                        });
-//                    } else {
-//                        //增加操作
-//                        var menu = {
-//                            "title": msg.title,
-//                            "id": msg.id,
-//                            "parentId": g.params.rootMenuId,
-//                            "contexts": ["all"],
-//                            "onclick": process.onClick
-//                        };
-////                        console.log(menu);
-//                        chrome.contextMenus.create(menu);
-//                    }
-//                } else if (msg.action === 'deleteContextMenu') {
-//                    chrome.contextMenus.remove(msg.id, function () {
-//                    });
-//                }
-//                return true;
+                return true;
             });
         },
         sendMessage: function (msg) {

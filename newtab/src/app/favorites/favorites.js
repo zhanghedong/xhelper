@@ -108,7 +108,6 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                         callback(categories);
                     }, 300);
                 });
-
             },
             getCategories: function (callback) {
                 localDataModule.getUserDataById('categories', function (data) {
