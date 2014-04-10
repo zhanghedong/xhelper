@@ -63,7 +63,6 @@ angular.module('resources.localData').factory('LocalData', ['IDBStore', function
                     clearInterval(t);
                 }
             });
-
         }
     };
 }]);

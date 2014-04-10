@@ -34,6 +34,14 @@ angular.module('search', ['config', 'ngSanitize']).controller('searchCtrl', ['$s
             $scope.keywordPlaceholder = 'favorites、google、baidu、bing';
             $scope.selectedItem = 0;
             process.watch();
+
+            localDataModule.getConfigById('defaultEngine',function(data){
+                 if(!data){
+                     //根据用户所在国家设置默认搜索引擎 TODO
+                     localDataModule.putConfig({id:'custom',data:{defaultEngine:'baidu',target:'_blank'}});
+                 }
+            });
+
 //            helper.getLocalBlog(function (data) {
 //                var i, j;
 //                for (i = 0, j = data.length; i < j; i++) {
@@ -135,7 +143,26 @@ angular.module('search', ['config', 'ngSanitize']).controller('searchCtrl', ['$s
             }
         },
         searchClick: function (item) {
-            console.log(item);
+            var openUrl = function(url){
+                location.href = url; //默认当前面打开 ，通过配置完成 TODO
+            };
+            switch(item.itemType){
+                case 'engineKeyword':
+                    if('baidu'){//根据配置文件确认搜索地址 TODO
+                       var  url=config.baiduGo + item.title;
+                        openUrl(url);
+                    }
+                    break;
+                case 'blog':
+                    openUrl(item.url);
+                    break;
+                case 'topSite':
+                    openUrl(item.url);
+                    break;
+                case 'favorite':
+                    openUrl(item.url);
+                    break
+            }
         },
         search: function (e) {
             var g = {DOWN: 40, UP: 38, ENTER: 13, ESC: 27};

@@ -303,6 +303,7 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
 
             },
             deleteFavorite: function (category, item, event, idx) {
+
                 event.preventDefault();
                 event.stopPropagation();
                 category.items.splice(idx, 1);
