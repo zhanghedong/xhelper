@@ -129,7 +129,7 @@ var backgroundProcess = {};
                         queryUrl = g.config.searchEngine[engine],
                         list = null;
                     if (msg.keyword) {
-                        process.getResultByUrl(queryUrl + msg.keyword, function (data) {
+                        process.getResultByUrl(queryUrl + encodeURIComponent(msg.keyword), function (data) {
                             if (engine === 'baidu') {
                                 list = data.split(',s:')[1].split('}')[0];
                                 console.log(list);

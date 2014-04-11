@@ -149,7 +149,8 @@ angular.module('search', ['config', 'ngSanitize']).controller('searchCtrl', ['$s
             switch(item.itemType){
                 case 'engineKeyword':
                     if('baidu'){//根据配置文件确认搜索地址 TODO
-                       var  url=config.baiduGo + item.title;
+                        console.log(item);
+                       var  url=config.baiduGo + encodeURIComponent(item.title);
                         openUrl(url);
                     }
                     break;
