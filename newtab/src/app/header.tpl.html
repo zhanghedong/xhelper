@@ -9,8 +9,8 @@
             <ul ng-if="searchSuggest.length">
                 <li ng-class="{selected:selectedItem == $index}" ng-repeat="item in searchSuggest">
                     <a ng-click="process.searchClick(item)">{{item.title}}</a>
-
                 </li>
+
             </ul>
         </section>
     </div>

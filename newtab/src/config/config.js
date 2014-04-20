@@ -5,6 +5,5 @@ angular.module("config", [])
 })
 
 .constant("ENV", "development")
-.constant("CUSTOM", {})
 
 ;

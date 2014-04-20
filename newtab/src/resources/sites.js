@@ -1,6 +1,6 @@
-angular.module('resources.baidu', ['ngResource']);
-angular.module('resources.baidu').factory('Baidu', function ($resource) {
-    return $resource('http://unionsug.baidu.com/su?wd=abc&cb=&_=1397047412695', {}, {
+angular.module('resources.sites', ['ngResource']);
+angular.module('resources.sites').factory('Sites', function ($resource) {
+    return $resource('http://d.com/apps/newtab/xhr/sites.php?id=:site_id', {}, {
         query: {method: 'JSON', params: {}, isArray: true},
         get: {method: 'JSON', params: {}, isArray: true},
         save: {method: 'JSON', params: {}, isArray: true},

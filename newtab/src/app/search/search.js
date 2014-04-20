@@ -35,11 +35,11 @@ angular.module('search', ['config', 'ngSanitize']).controller('searchCtrl', ['$s
             $scope.selectedItem = 0;
             process.watch();
 
-            localDataModule.getConfigById('defaultEngine',function(data){
-                 if(!data){
-                     //根据用户所在国家设置默认搜索引擎 TODO
-                     localDataModule.putConfig({id:'custom',data:{defaultEngine:'baidu',target:'_blank'}});
-                 }
+            localDataModule.getConfigById('defaultEngine', function (data) {
+                if (!data) {
+                    //根据用户所在国家设置默认搜索引擎 TODO
+                    localDataModule.putConfig({id: 'custom', data: {defaultEngine: 'baidu', target: '_blank'}});
+                }
             });
 
 //            helper.getLocalBlog(function (data) {
@@ -70,63 +70,67 @@ angular.module('search', ['config', 'ngSanitize']).controller('searchCtrl', ['$s
                         $timeout(function () {
                             $scope.searchSuggest = sugList;
                         });
-                        nextSug && chrome.topSites.get(function (data) {
-                            for (i = 0, j = data.length; i < j; i++) {
-                                domain = data[i].url.match(reg);
-                                domain = domain && domain[1] || '';
-                                if (data[i].title.indexOf(keyword) !== -1 || domain.indexOf(keyword) !== -1) {
-                                    data[i].itemType = 'topSite';
-                                    sugList.push(data[i]);
-                                    bookmarkCount++;
-                                    if (bookmarkCount >= config.bookmarksCount) {
-                                        nextSug = false;
-                                        break;
+                        if (nextSug) {
+                            chrome.topSites.get(function (data) {
+                                for (i = 0, j = data.length; i < j; i++) {
+                                    domain = data[i].url.match(reg);
+                                    domain = domain && domain[1] || '';
+                                    if (data[i].title.indexOf(keyword) !== -1 || domain.indexOf(keyword) !== -1) {
+                                        data[i].itemType = 'topSite';
+                                        sugList.push(data[i]);
+                                        bookmarkCount++;
+                                        if (bookmarkCount >= config.bookmarksCount) {
+                                            nextSug = false;
+                                            break;
+                                        }
                                     }
                                 }
-                            }
-                            $timeout(function () {
-                                $scope.searchSuggest = sugList;
-                            });
-                        });
-                        nextSug && helper.getLocalSites(function (data) {
-                            for (i = 0, j = data.length; i < j; i++) {
-                                domain = data[i].url.match(reg);
-                                domain = domain && domain[1] || '';
-                                if (data[i].title.indexOf(keyword) !== -1 || domain.indexOf(keyword) !== -1) {
-                                    data[i].itemType = 'favorite';
-                                    sugList.push(data[i]);
-                                    bookmarkCount++;
-                                    if (bookmarkCount >= config.bookmarksCount) {
-                                        nextSug = false;
-                                        break;
-                                    }
-                                }
-                            }
-                            $timeout(function () {
-                                $scope.searchSuggest = sugList;
-                            });
-                            chrome.runtime.sendMessage({action: 'getSuggestFromEngine', engine: 'baidu', keyword: keyword}, function (response) {
-                                var list = response.resultList, i, j, data = [], item = {};
-                                for (i = 0, j = list.length; i < j; i++) {
-                                    item.itemType = 'engineKeyword';
-                                    item.title = list[i];
-                                    data.push(item);
-                                    item = {};
-                                }
-                                console.log('data1===',data);
                                 $timeout(function () {
-                                $scope.searchSuggest = _.union($scope.searchSuggest, data);
-//                                    $scope.searchSuggest = data;
-                                    console.log('search1===',$scope.searchSuggest);
+                                    $scope.searchSuggest = sugList;
                                 });
-//                            console.log(response.resultList);
                             });
-                        });
+                        }
+                        if (nextSug) {
+                            helper.getLocalSites(function (data) {
+                                for (i = 0, j = data.length; i < j; i++) {
+                                    domain = data[i].url.match(reg);
+                                    domain = domain && domain[1] || '';
+                                    if (data[i].title.indexOf(keyword) !== -1 || domain.indexOf(keyword) !== -1) {
+                                        data[i].itemType = 'favorite';
+                                        sugList.push(data[i]);
+                                        bookmarkCount++;
+                                        if (bookmarkCount >= config.bookmarksCount) {
+                                            nextSug = false;
+                                            break;
+                                        }
+                                    }
+                                }
+                                $timeout(function () {
+                                    $scope.searchSuggest = sugList;
+                                });
+                                chrome.runtime.sendMessage({action: 'getSuggestFromEngine', engine: 'baidu', keyword: keyword}, function (response) {
+                                    var list = response.resultList, i, j, data = [], item = {};
+                                    for (i = 0, j = list.length; i < j; i++) {
+                                        item.itemType = 'engineKeyword';
+                                        item.title = list[i];
+                                        data.push(item);
+                                        item = {};
+                                    }
+                                    console.log('data1===', data);
+                                    $timeout(function () {
+                                        $scope.searchSuggest = _.union($scope.searchSuggest, data);
+//                                    $scope.searchSuggest = data;
+                                        console.log('search1===', $scope.searchSuggest);
+                                    });
+//                            console.log(response.resultList);
+                                });
+                            });
+                        }
                     });
                 } else {
                     $scope.searchSuggest = [];
                 }
-            })
+            });
         },
         nextFocusItem: function () {
             if ($scope.selectedItem >= $scope.searchSuggest.length - 1) {
@@ -143,14 +147,14 @@ angular.module('search', ['config', 'ngSanitize']).controller('searchCtrl', ['$s
             }
         },
         searchClick: function (item) {
-            var openUrl = function(url){
+            var openUrl = function (url) {
                 location.href = url; //默认当前面打开 ，通过配置完成 TODO
             };
-            switch(item.itemType){
+            switch (item.itemType) {
                 case 'engineKeyword':
-                    if('baidu'){//根据配置文件确认搜索地址 TODO
+                    if ('baidu') {//根据配置文件确认搜索地址 TODO
                         console.log(item);
-                       var  url=config.baiduGo + encodeURIComponent(item.title);
+                        var url = config.baiduGo + encodeURIComponent(item.title);
                         openUrl(url);
                     }
                     break;
@@ -162,7 +166,7 @@ angular.module('search', ['config', 'ngSanitize']).controller('searchCtrl', ['$s
                     break;
                 case 'favorite':
                     openUrl(item.url);
-                    break
+                    break;
             }
         },
         search: function (e) {
@@ -180,7 +184,10 @@ angular.module('search', ['config', 'ngSanitize']).controller('searchCtrl', ['$s
 //                    a.searchTerm ? a.results[a.searchTerm].length ? a.enterEventInfo = {spotID: a.results[a.searchTerm][a.selectedCategory].spotID, type: a.results[a.searchTerm][a.selectedCategory].type, selectedItem: a.selectedItem} : a.resultClick({link: a.buildGoogleSearchURL(a.searchTerm)}) : a.enterEventInfo = {spotID: a.defaultResults[0].spotID, type: a.defaultResults[0].type, selectedItem: a.selectedItem};
                     break;
                 case g.ESC:
-                    $scope.searchSuggest && ($scope.searchSuggest = null, e.stopPropagation());
+                    if ($scope.searchSuggest) {
+                        $scope.searchSuggest = null;
+                        e.stopPropagation();
+                    }
             }
         }
     };

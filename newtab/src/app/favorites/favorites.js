@@ -1,6 +1,6 @@
 /**
- * Created by zhanghd on 13-10-11 下午4:39
- * Copyright 2013 17173, Inc. All rights reserved.
+ * Created by zhanghd on 13-10-11 下午4:35
+ * Copyright 2014 , Inc. All rights reserved.
  */
 angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('favoritesCtrl', ['$scope', '$sce', '$timeout', 'Sites', '_', '$location', '$anchorScroll', 'LocalData',
     function ($scope, $sce, $timeout, sites, _, $location, $anchorScroll, localDataModule) {
@@ -16,7 +16,6 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
             "www.google.com": {"icon": "/resource/logo/google.svg", "bgColor": "#3369E8"},
             "microsoft.com": { "bgColor": "#7CBB00"}
         };
-
         helper = {
             getRandColor: function () {
                 var idx = Math.floor(Math.random() * 5);
@@ -143,6 +142,7 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                 //取本地数据
                 chrome.bookmarks.getTree(function (data) {
                     var leaf = [], categories = [], oo = {};
+
                     function iterate(obj) {
                         if (!obj['url'] && obj.children && obj.children.length) {
                             oo = {

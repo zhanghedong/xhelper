@@ -5,7 +5,6 @@
  *
  */
 (function () {
-
     var port = chrome.runtime.connect();
     var helper = {}, process = {}, htmlLayout = {}, params = {};
     params = {
@@ -71,6 +70,7 @@
                 function (request, sender, sendResponse) {
 //                        sendResponse({farewell: "再见"});
                     if (request.action === 'addToFavorite') {
+                        alert('build');
                         process.buildPanel(request.categories, request.colors);
 //                        params.timer = setTimeout(function(){
 //                            params.countdown--;
@@ -100,6 +100,7 @@
             });
             process.panelClose();
         },
+
         panelShow: function () {
             var panel = $('#czmin_favorite_panel_1396849815874');
             panel.show();
@@ -129,8 +130,9 @@
                     }
                     return false;
                 }
-            })
+            });
         }
     };
     process.init();
+
 }());

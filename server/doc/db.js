@@ -116,6 +116,10 @@ var config = {
         toolScrollTop: 'string',//最后工具滚动高度
         sliderWidth: 'string'//记录左侧栏最后宽度
     },
+    custom:{
+        searchEngine:['baidu','google'],
+        searchSuggest:['baidu']
+    },
     version:'v1.0.0.0'
 };
 var notification = {

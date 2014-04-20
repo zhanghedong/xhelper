@@ -41,6 +41,9 @@ module.exports = function (grunt) {
             ' * Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %>\n */\n',
         src: {
             js: ['src/**/*.js', '<%= distdir %>/templates/**/*.js','!**/content/**','!**/background/**'],
+            appJs: ['src/common/**/*.js','src/resources/**/*.js','src/app/**/*.js'],
+            contentJs: ['src/content/**/*.js'],
+            backgroundJs: ['src/common/**/*.js','src/resources/**/*.js','src/background/**/*.js'],
             specs: ['test/**/*.spec.js'],
             scenarios: ['test/**/*.scenario.js'],
             html: ['src/index.html'],
@@ -128,11 +131,11 @@ module.exports = function (grunt) {
                 options: {
                     banner: "<%= banner %>"
                 },
-                src: ['<%= src.js %>'],
+                src: ['<%= src.js%>'],
                 dest: '<%= distdir %>/<%= pkg.name %>.js'
             },
             contentJS: {
-                src: ['src/content/content.js'],
+                src:['<%= src.contentJs%>'],
                 dest: '<%= distdir %>/content/content.js',
                 options: {
                     process: true
@@ -146,7 +149,7 @@ module.exports = function (grunt) {
                 }
             },
             background: {
-                src: ['src/background/background.js'],
+                src: ['<%= src.backgroundJs%>'],
                 dest: '<%= distdir %>/background/background.js',
                 options: {
                     process: true
@@ -168,7 +171,7 @@ module.exports = function (grunt) {
             },
             jquery: {
                 src: ['vendor/jquery/jquery.js'],
-                dest: '<%= distdir %>/jquery.js',
+                dest: '<%= distdir %>/lib/jquery.js',
                 options: {
                     process: true
                 }
@@ -208,7 +211,7 @@ module.exports = function (grunt) {
                 options: {
                     banner: "<%= banner %>"
                 },
-                src: ['<%= src.js %>'],
+                src: ['<%= src.js%>'],
                 dest: '<%= distdir %>/<%= pkg.name %>.js'
             },
             angular: {
@@ -217,7 +220,7 @@ module.exports = function (grunt) {
             },
             jquery: {
                 src: ['vendor/jquery/*.js'],
-                dest: '<%= distdir %>/jquery.js'
+                dest: '<%= distdir %>/lib/jquery.js'
             }
         },
         recess: {
@@ -239,16 +242,17 @@ module.exports = function (grunt) {
         },
         watch: {
             all: {
-                files: ['<%= src.js %>', '<%= src.specs %>', '<%= src.lessWatch %>', '<%= src.tpl.app %>', '<%= src.tpl.common %>', '<%= src.tpl.sidebar%>', '<%= src.tpl.plugin %>', '<%= src.html %>', '<%= src.manifest%>', '<%= src.i18n%>', '!**/config/config.js','**/content/**','**/background/**'],
+//                files: ['<%= src.js%>', '<%= src.contentJs %>', '<%= src.backgroundJs %>', '<%= src.specs %>', '<%= src.lessWatch %>', '<%= src.tpl.app %>', '<%= src.tpl.common %>', '<%= src.tpl.sidebar%>', '<%= src.tpl.plugin %>', '<%= src.html %>', '<%= src.manifest%>', '<%= src.i18n%>', '!**/config/config.js','**/content/**/*.js','**/background/**/*.js'],
+                files: ['src/**/*.js','src/**/*.html','src/**/*.less','!**/config/config.js'],
                 tasks: ['default', 'timestamp']
             },
             build: {
-                files: ['<%= src.js %>', '<%= src.specs %>', '<%= src.lessWatch %>', '<%= src.tpl.app %>', '<%= src.tpl.common %>', '<%= src.tpl.sidebar %>', '<%= src.tpl.plugin %>', '<%= src.html %>', '<%= src.manifest%>', '<%= src.i18n%>', '!**/config/config.js','**/content/**','**/background/**'],
+                files: ['<%= src.js%>', '<%= src.contentJs %>', '<%= src.backgroundJs %>','<%= src.specs %>', '<%= src.lessWatch %>', '<%= src.tpl.app %>', '<%= src.tpl.common %>', '<%= src.tpl.sidebar %>', '<%= src.tpl.plugin %>', '<%= src.html %>', '<%= src.manifest%>', '<%= src.i18n%>', '!**/config/config.js','**/content/**','**/background/**'],
                 tasks: ['build', 'timestamp']
             }
         },
         jshint: {
-            files: ['gruntFile.js', '<%= src.js %>', '<%= src.specs %>', '<%= src.scenarios %>'],
+            files: ['gruntFile.js','<%= src.js%>', '<%= src.contentJs %>', '<%= src.backgroundJs %>','<%= src.specs %>', '<%= src.scenarios %>'],
             options: {
                 curly: true,
                 eqeqeq: true,
