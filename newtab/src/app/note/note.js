@@ -4,26 +4,29 @@
  */
 
 angular.module('note', ['config', 'ngSanitize']).controller('noteCtrl', ['$scope', '$sce', '$timeout', 'LocalData', function ($scope, $sce, $timeout, localDataModule) {
-    var process = {}, helper = {};
+    var process = {}, helper = {},localData={};
     helper = {
-        getLocalNote: function (callback) {
-            localDataModule.getUserDataById('note', function (data) {
-                data = data && data.data || [];
-                callback(data);
+        setMessage: function (msg, callback) {
+            chrome.runtime.sendMessage(msg, function (response) {
+                callback(response);
             });
-        },
-        setLocalNote: function (data) {
-            localDataModule.putUserData({id: 'note', data: data});
         }
-
+    };
+    localData = {
+        getLocalNote: function (callback) {
+            helper.sendMessage({action: 'getUserDataById', data: {id: 'note'}}, callback);
+        },
+        setLocalNote: function (data,callback) {
+            helper.sendMessage({action: 'putUserData', data: {id: 'note', data: data}}, callback);
+        }
     };
     process = {
         saveNote: function ($event) {
             var note = $event.target.innerHTML;
-            helper.setLocalNote(note);
+            localData.setLocalNote(note);
         },
         getNote: function (callback) {
-            helper.getLocalNote(function (data) {
+            localData.getLocalNote(function (data) {
                 callback(data);
             });
         }

@@ -1,4 +1,4 @@
-var ntp = {};
+var NTP = window.NTP || {};
 angular.module('app', [
     'underscore',
     'ngRoute',

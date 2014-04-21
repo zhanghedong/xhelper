@@ -1,9 +1,7 @@
 //chrome.app.runtime.onLaunched.addListener(function (launchData) {
 //});
-var backgroundProcess = {};
 (function () {
     var process, helper, localData, g = {}, userData;
-
     g.params = {
         rootMenuId: "6375ac11-3e03-49a0-b6ae-9564d10e7ee3"
     };
@@ -11,6 +9,7 @@ var backgroundProcess = {};
         defaultColor: ['#2F09FF', '#E82C2A', '#FFC53B', '#56E82A', '#00C0FF'],
         searchEngine: {baidu: 'http://unionsug.baidu.com/su?cb=JSON_CALLBACK&_=' + ((new Date()).valueOf()) + '&wd=', google: 'http://google.com/complete/search?client=chrome-omni&ie=utf-8&oe=utf-8&hl=en-US&q='}
     };
+
     localData = {
         getUserData: function (callback) {
             if (userData) {
@@ -106,43 +105,63 @@ var backgroundProcess = {};
         },
         messageListener: function () {
             chrome.runtime.onMessage.addListener(function (msg, _, sendResponse) {
-                if (msg.action === 'insertFavorite') {
-                    var item = msg.item;
-                    if (item.url !== '') {
-                        localData.getUserData(function (data) {
-                            var sites = [], i, j, noIn = true;
-                            for (i = 0, j = data.length; i < j; i++) {
-                                if (data[i].id === 'sites') {
-                                    sites = data[i].data;
-                                    break;
-                                }
-                            }
+                if (msg.action) {
+                    switch (msg.action) {
+                        case 'insertFavorite':
+                            var item = msg.item;
+                            if (item.url !== '') {
+                                localData.getUserData(function (data) {
+                                    var sites = [], i, j, noIn = true;
+                                    for (i = 0, j = data.length; i < j; i++) {
+                                        if (data[i].id === 'sites') {
+                                            sites = data[i].data;
+                                            break;
+                                        }
+                                    }
 
-                            sites.push(item);
-                            localData.setUserData({id: 'sites', data: sites}, function () {
-                                console.log('insert favorite success ');
+                                    sites.push(item);
+                                    localData.setUserData({id: 'sites', data: sites}, function () {
+                                        console.log('insert favorite success ');
+                                    });
+                                });
+                            }
+                            break;
+                        case 'getSuggestFromEngine' :
+                            var engine = msg.engine || 'google',
+                                queryUrl = g.config.searchEngine[engine],
+                                list = null;
+                            if (msg.keyword) {
+                                process.getResultByUrl(queryUrl + encodeURIComponent(msg.keyword), function (data) {
+                                    if (engine === 'baidu') {
+                                        list = data.split(',s:')[1].split('}')[0];
+                                        console.log(list);
+                                        list = list && JSON.parse(list);
+                                        if (list) {
+                                            sendResponse({engine: engine, resultList: list});
+                                        }
+                                    } else {
+                                        list = JSON.parse(data)[1] || [];
+
+                                        sendResponse({engine: engine, resultList: list});
+                                    }
+                                });
+                            }
+                            break;
+                        case 'putUserData':
+                             NTP.IDB.putUserData(msg.data,function(data){
+                                sendResponse(data);
                             });
-                        });
-                    }
-                } else if (msg.action === 'getSuggestFromEngine') {
-                    var engine = msg.engine || 'google',
-                        queryUrl = g.config.searchEngine[engine],
-                        list = null;
-                    if (msg.keyword) {
-                        process.getResultByUrl(queryUrl + encodeURIComponent(msg.keyword), function (data) {
-                            if (engine === 'baidu') {
-                                list = data.split(',s:')[1].split('}')[0];
-                                console.log(list);
-                                list = list && JSON.parse(list);
-                                if (list) {
-                                    sendResponse({engine: engine, resultList: list});
-                                }
-                            } else {
-                                list = JSON.parse(data)[1] || [];
-
-                                sendResponse({engine: engine, resultList: list});
-                            }
-                        });
+                            break;
+                        case 'getTopSites':
+                            NTP.IDB.getTopSites(function(data){
+                                sendResponse(data);
+                            });
+                            break;
+                        case 'getUserDataById':
+                            NTP.IDB.getUserDataById(msg.data.id,function(data){
+                                sendResponse(data);
+                            });
+                            break;
                     }
                 }
                 return true;
@@ -262,5 +281,4 @@ var backgroundProcess = {};
 //    xmlhttpPost('http://unionsug.baidu.com/su?cb=JSON_CALLBACK&wd=abc&_=1397047412695', function (data) {
 //        console.log(data);
 //    });
-    backgroundProcess = process;
 }());

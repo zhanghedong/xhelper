@@ -4,24 +4,23 @@
  */
 
 angular.module('blog', ['config', 'ngSanitize']).controller('blogCtrl', ['$scope', '$sce', '$timeout', '_', 'LocalData', function ($scope, $sce, $timeout, _, localDataModule) {
-    var process = {}, helper = {};
+    var process = {}, helper = {}, localData = {};
+//    helper = {
+//        getLocalBlog: function (callback) {
+//            localDataModule.getUserDataById('blog', function (data) {
+//                data = data && data.data || [];
+//                callback(data);
+//            });
+//        },
+//        setLocalBlog:function(data){
+//            localDataModule.putUserData({id: 'blog', data: data});
+//        }
+//    };
     helper = {
-        getLocalBlog: function (callback) {
-            localDataModule.getUserDataById('blog', function (data) {
-                data = data && data.data || [];
-                callback(data);
+        setMessage: function (msg, callback) {
+            chrome.runtime.sendMessage(msg, function (response) {
+                callback(response);
             });
-        },
-        setLocalBlog:function(data){
-            localDataModule.putUserData({id: 'blog', data: data});
-        }
-    };
-    process = {
-        onClick: function () {
-        },
-        init: function () {
-            process.resetBlog();
-            process.onMessage();
         },
         onMessage: function () {
             chrome.runtime.onMessage.addListener(
@@ -32,9 +31,25 @@ angular.module('blog', ['config', 'ngSanitize']).controller('blogCtrl', ['$scope
                     return true;
                 });
 
+        }
+    };
+    localData = {
+        getLocalBlog: function (callback) {
+            helper.sendMessage({action: 'getUserDataById', data: {id: 'note'}}, callback);
+        },
+        setLocalBlog: function (data, callback) {
+            helper.sendMessage({action: 'putUserData', data: {id: 'note', data: data}}, callback);
+        }
+    };
+    process = {
+        onClick: function () {
+        },
+        init: function () {
+            process.resetBlog();
+            helper.onMessage();
         },
         resetBlog: function () {
-            helper.getLocalBlog(function (data) {
+            localData.getLocalBlog(function (data) {
                 $timeout(function () {
                     if (data.length) {
                         $scope.blogs = data;
@@ -43,7 +58,7 @@ angular.module('blog', ['config', 'ngSanitize']).controller('blogCtrl', ['$scope
             });
         },
         deleteBlog: function (url) {
-            helper.getLocalBlog(function (data) {
+            localData.getLocalBlog(function (data) {
                 for (var i = 0, j = data.length; i < j; i++) {
                     if (data[i].url === url) {
                         data.splice(i, 1);
@@ -52,7 +67,7 @@ angular.module('blog', ['config', 'ngSanitize']).controller('blogCtrl', ['$scope
                 }
                 $timeout(function () {
                     $scope.blogs = data;
-                    helper.setLocalBlog(data);
+                    localData.setLocalBlog(data);
                 });
             });
         }

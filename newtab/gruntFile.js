@@ -12,7 +12,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-html2js');
 
     // Default task.
-    grunt.registerTask('default', ['ngconstant:development', 'jshint', 'build']);//,'karma:unit'
+    grunt.registerTask('default', ['ngconstant:development', 'build']);//,'karma:unit','jshint',
     grunt.registerTask('build', ['clean', 'html2js', 'concat', 'recess:build', 'copy:assets', 'copy:i18n']);
     grunt.registerTask('release', ['clean', 'html2js', 'uglify', 'jshint', 'concat:index', 'recess:min', 'copy:assets']);//'karma:unit',
 //    grunt.registerTask('test-watch', ['karma:watch']);
@@ -41,9 +41,9 @@ module.exports = function (grunt) {
             ' * Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %>\n */\n',
         src: {
             js: ['src/**/*.js', '<%= distdir %>/templates/**/*.js','!**/content/**','!**/background/**'],
-            appJs: ['src/common/**/*.js','src/resources/**/*.js','src/app/**/*.js'],
+//            appJs: ['src/common/**/*.js','src/resources/**/*.js','src/app/**/*.js'],
             contentJs: ['src/content/**/*.js'],
-            backgroundJs: ['src/common/**/*.js','src/resources/**/*.js','src/background/**/*.js'],
+            backgroundJs: ['src/resources/idb.js','src/background/**/*.js'],
             specs: ['test/**/*.spec.js'],
             scenarios: ['test/**/*.scenario.js'],
             html: ['src/index.html'],

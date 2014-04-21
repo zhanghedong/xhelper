@@ -1,10 +1,11 @@
 /**
  * Created by zhanghd on 13-10-11 下午4:35
  * Copyright 2014 , Inc. All rights reserved.
+ *
  */
-angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('favoritesCtrl', ['$scope', '$sce', '$timeout', 'Sites', '_', '$location', '$anchorScroll', 'LocalData',
-    function ($scope, $sce, $timeout, sites, _, $location, $anchorScroll, localDataModule) {
-        var helper = null, g = {}, configIcon = null, localSites = [], dataModule, process = {};
+angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('favoritesCtrl', ['$scope', '$sce', '$timeout', 'Sites', '_', '$location', '$anchorScroll',
+    function ($scope, $sce, $timeout, sites, _, $location, $anchorScroll) {
+        var helper = null, g = {}, configIcon = null, localData = null,  process = {}, message = {};
         g.params = {
             addTileToCategory: null,
             recommendId: '2fcd9d39-77b7-4435-ad6a-82b3d2a12498'//最常访问ID
@@ -31,16 +32,46 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                     return v.toString(16);
                 });
             },
-            setLocalSites: function (data, callback) {
-                localDataModule.putUserData({id: 'favorites', data: data}, callback);
+//            setLocalSites: function (data, callback) {
+//                localDataModule.putUserData({id: 'favorites', data: data}, callback);
+//
+//            },
+
+            sendMessage: function (msg, callback) {
+                chrome.runtime.sendMessage(msg, function (response) {
+                    callback(response);
+                });
             },
-            setCategories: function (data, callback) {
-                localDataModule.putUserData({id: 'categories', data: data}, callback);
-            },
-            setSites: function (data, callback) {
-                localDataModule.putUserData({id: 'sites', data: data}, callback);
+            onMessage: function () {
+                chrome.runtime.onMessage.addListener(
+                    function (request, sender, sendResponse) {
+                        if (request.action === 'updateFavorite') {
+                            process.resetFavorites();
+                        }
+                        return true;
+                    });
+
             }
         };
+        localData = {
+            //分类
+            setCategories: function (data, callback) {
+                helper.sendMessage({action: 'putUserData', data: {id: 'categories', data: data}}, callback);
+            },
+            //网址
+            setSites: function (data, callback) {
+                helper.sendMessage({action: 'putUserData', data: {id: 'sites', data: data}}, callback);
+            },
+            //最常访问
+            getTopSites: function (callback) {
+                helper.sendMessage({action: 'getTopSites'}, callback);
+            },
+            //用户数据
+            getUserDataById: function (id, callback) {
+                helper.sendMessage({action: 'getUserDataById', data: {id: id}}, callback);
+            }
+        };
+
         $scope.modalShownFavorite = false;
         $scope.modalShownCategory = false;
         $scope.modalShownDeleteCategory = false;
@@ -53,24 +84,15 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
             init: function () {
                 //获取数据
                 process.resetFavorites();
-                process.onMessage();
+                helper.onMessage();
             },
             sendMessage: function (obj) {
                 chrome.runtime.sendMessage(obj);
                 //
             },
-            onMessage: function () {
-                chrome.runtime.onMessage.addListener(
-                    function (request, sender, sendResponse) {
-                        if (request.action === 'updateFavorite') {
-                            process.resetFavorites();
-                        }
-                        return true;
-                    });
 
-            },
             getRecommend: function (callback) {
-                localDataModule.getTopSites(function (d) {
+                localData.getTopSites(function (d) {
                     var recommended = [], guid = helper.getGUID(), domain, i, j;
                     d = d || [];
 //                        d.length = (d.length > 19 ? 19 : d.length);
@@ -101,15 +123,15 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                 process.loadBookmarks(function (categories, sites) {
 //                        var categories = _.union(recommended, cate);
 //                        var sites = _.union(d, site);
-                    helper.setCategories(categories);
-                    helper.setSites(sites);
+                    localData.setCategories(categories);
+                    localData.setSites(sites);
                     setTimeout(function () {
                         callback(categories);
                     }, 300);
                 });
             },
             getCategories: function (callback) {
-                localDataModule.getUserDataById('categories', function (data) {
+                localData.getUserDataById('categories', function (data) {
                     data = data && data.data || [];
                     if (!data.length) {//本地木有数据
                         process.initFavorites(function (categories) {
@@ -121,7 +143,7 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                 });
             },
             getSitesByCategoryId: function (cid, callback) {
-                localDataModule.getUserDataById('sites', function (data) {
+                localData.getUserDataById('sites', function (data) {
                     data = (data && data.data || []);
                     var sites = [];
                     for (var i = 0, j = data.length; i < j; i++) {
@@ -133,7 +155,7 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                 });
             },
             getSites: function (callback) {
-                localDataModule.getUserDataById('sites', function (data) {
+                localData.getUserDataById('sites', function (data) {
                     data = (data && data.data || []);
                     callback(data);
                 });
@@ -249,7 +271,7 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                             }
                         }
 //                        process.sendMessage({action: "deleteContextMenu", id: $scope.updateCategoryInfo.id});
-                        helper.setCategories(data);
+                        localData.setCategories(data);
                         $timeout(function () {
                             $scope.categories = data;
 
@@ -262,7 +284,7 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                                 break;
                             }
                         }
-                        helper.setSites(sites);
+                        localData.setSites(sites);
                     });
                 }
                 $scope.modalShownDeleteCategory = false;
@@ -283,7 +305,7 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                                 break;
                             }
                         }
-                        helper.setCategories(categories);
+                        localData.setCategories(categories);
                     } else {//添加操作
                         categoryInfo = {
                             "id": GUID,
@@ -294,7 +316,7 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                         console.log(categoryInfo);
                         categories.push(categoryInfo);
                     }
-                    helper.setCategories(categories);
+                    localData.setCategories(categories);
                     $timeout(function () {
                         $scope.categories = categories;
                     });
@@ -318,7 +340,7 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                             break;
                         }
                     }
-                    helper.setSites(data, function () {
+                    localData.setSites(data, function () {
                     });
                 });
             },
@@ -360,7 +382,7 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                         console.log('insert', favorite);
                         sites.push(favorite);
                     }
-                    helper.setSites(sites, function () {
+                    localData.setSites(sites, function () {
                         process.goCategory(g.params.addTileToCategory);
                     });
                 });
