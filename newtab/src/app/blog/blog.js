@@ -17,9 +17,9 @@ angular.module('blog', ['config', 'ngSanitize']).controller('blogCtrl', ['$scope
 //        }
 //    };
     helper = {
-        setMessage: function (msg, callback) {
+        sendMessage: function (msg, callback) {
             chrome.runtime.sendMessage(msg, function (response) {
-                callback(response);
+                callback(response.data);
             });
         },
         onMessage: function () {
@@ -35,10 +35,10 @@ angular.module('blog', ['config', 'ngSanitize']).controller('blogCtrl', ['$scope
     };
     localData = {
         getLocalBlog: function (callback) {
-            helper.sendMessage({action: 'getUserDataById', data: {id: 'note'}}, callback);
+            helper.sendMessage({action: 'getUserDataById', data: {id: 'blog'}}, callback);
         },
         setLocalBlog: function (data, callback) {
-            helper.sendMessage({action: 'putUserData', data: {id: 'note', data: data}}, callback);
+            helper.sendMessage({action: 'putUserData', data: {id: 'blog', data: data}}, callback);
         }
     };
     process = {

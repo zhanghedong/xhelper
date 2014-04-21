@@ -6,11 +6,12 @@
 angular.module('note', ['config', 'ngSanitize']).controller('noteCtrl', ['$scope', '$sce', '$timeout', 'LocalData', function ($scope, $sce, $timeout, localDataModule) {
     var process = {}, helper = {},localData={};
     helper = {
-        setMessage: function (msg, callback) {
+        sendMessage: function (msg, callback) {
             chrome.runtime.sendMessage(msg, function (response) {
-                callback(response);
+                callback(response.data);
             });
         }
+
     };
     localData = {
         getLocalNote: function (callback) {
@@ -33,7 +34,7 @@ angular.module('note', ['config', 'ngSanitize']).controller('noteCtrl', ['$scope
     };
     process.getNote(function (data) {
         $timeout(function () {
-            $scope.noteContent = data || '!';
+            $scope.noteContent = data|| '!';
         });
     });
     $scope.process = process;

@@ -9,30 +9,35 @@
         defaultColor: ['#2F09FF', '#E82C2A', '#FFC53B', '#56E82A', '#00C0FF'],
         searchEngine: {baidu: 'http://unionsug.baidu.com/su?cb=JSON_CALLBACK&_=' + ((new Date()).valueOf()) + '&wd=', google: 'http://google.com/complete/search?client=chrome-omni&ie=utf-8&oe=utf-8&hl=en-US&q='}
     };
-
     localData = {
         getUserData: function (callback) {
-            if (userData) {
-                userData.getAll(function (data) {
-                    callback(data);
-                });
-            } else {
-                userData = new IDBStore({
-                    dbVersion: 1,
-                    storeName: 'userData',
-                    keyPath: 'id',
-                    autoIncrement: false,
-                    onStoreReady: function () {
-                        userData.getAll(function (data) {
-                            callback(data);
-                        });
-                        console.log('user data store ready!');
-                    }
-                });
-            }
+            NTP.IDB.getUserData(function(data){
+                callback(data);
+            });
+//            if (userData) {
+//                userData.getAll(function (data) {
+//                    callback(data);
+//                });
+//            } else {
+//                userData = new IDBStore({
+//                    dbVersion: 1,
+//                    storeName: 'userData',
+//                    keyPath: 'id',
+//                    autoIncrement: false,
+//                    onStoreReady: function () {
+//                        userData.getAll(function (data) {
+//                            callback(data);
+//                        });
+//                        console.log('user data store ready!');
+//                    }
+//                });
+//            }
         },
         setUserData: function (data, callback) {
-            userData.put(data);
+//            userData.put(data);
+            NTP.IDB.putUserData(data,function(data){
+                callback(data)
+            })
         }
     };
     helper = {
