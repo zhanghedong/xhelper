@@ -251,7 +251,7 @@
             })
         },
         tempUnit: function () {
-//            console.log('_.once', _.once);
+
             var location = NTP.PREF.get('location');
             var code = location.countryCode || 'US';
             if (["US", "JM", "PR", "GU", "VI", "KY", "PW", "BS", "BZ"].indexOf(code) != -1) {

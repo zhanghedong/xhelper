@@ -5,6 +5,6 @@
 
 angular.module('weather', ['ngSanitize']).controller('weatherCtrl', ['$scope', '$sce', '$timeout', '_', 'LocalData', '$http', '$templateCache', function ($scope, $sce, $timeout, _, localDataModule, $http, $templateCache) {
    var process = {};
-    process.init();
-    $scope.process = process;
+//    process.init();
+//    $scope.process = process;
 }]);
