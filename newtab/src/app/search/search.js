@@ -3,7 +3,7 @@
  * Copyright 2013 , Inc. All rights reserved.
  */
 
-angular.module('search', ['config', 'ngSanitize']).controller('searchCtrl', ['$scope', '$sce', '$timeout', '_', 'LocalData', '$http', '$templateCache', function ($scope, $sce, $timeout, _, localDataModule, $http, $templateCache) {
+angular.module('search', ['ngSanitize']).controller('searchCtrl', ['$scope', '$sce', '$timeout', '_', 'LocalData', '$http', '$templateCache', function ($scope, $sce, $timeout, _, localDataModule, $http, $templateCache) {
     var process = {}, helper = {}, config = {};
     config = {
         readyCount: 2,

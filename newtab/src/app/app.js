@@ -14,8 +14,6 @@ angular.module('app', [
     'weather',
     'apps'
 ]);
-
-
 var process = {
     onClick: function () {
     }

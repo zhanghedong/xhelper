@@ -3,7 +3,7 @@
  * Copyright 2013 , Inc. All rights reserved.
  */
 
-angular.module('blog', ['config', 'ngSanitize']).controller('blogCtrl', ['$scope', '$sce', '$timeout', '_', 'LocalData', function ($scope, $sce, $timeout, _, localDataModule) {
+angular.module('blog', [ 'ngSanitize']).controller('blogCtrl', ['$scope', '$sce', '$timeout', '_', 'LocalData', function ($scope, $sce, $timeout, _, localDataModule) {
     var process = {}, helper = {}, localData = {};
 //    helper = {
 //        getLocalBlog: function (callback) {

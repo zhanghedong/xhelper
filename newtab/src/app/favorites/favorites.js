@@ -3,7 +3,7 @@
  * Copyright 2014 , Inc. All rights reserved.
  *
  */
-angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('favoritesCtrl', ['$scope', '$sce', '$timeout', 'Sites', '_', '$location', '$anchorScroll',
+angular.module('favorites', ['ngModal', 'ngSanitize']).controller('favoritesCtrl', ['$scope', '$sce', '$timeout', 'Sites', '_', '$location', '$anchorScroll',
     function ($scope, $sce, $timeout, sites, _, $location, $anchorScroll) {
         var helper = null, g = {}, configIcon = null, localData = null,  process = {}, message = {};
         g.params = {

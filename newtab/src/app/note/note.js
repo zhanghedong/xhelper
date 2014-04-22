@@ -3,7 +3,7 @@
  * Copyright 2013 ND, Inc. All rights reserved.
  */
 
-angular.module('note', ['config', 'ngSanitize']).controller('noteCtrl', ['$scope', '$sce', '$timeout', 'LocalData', function ($scope, $sce, $timeout, localDataModule) {
+angular.module('note', ['ngSanitize']).controller('noteCtrl', ['$scope', '$sce', '$timeout', 'LocalData', function ($scope, $sce, $timeout, localDataModule) {
     var process = {}, helper = {},localData={};
     helper = {
         sendMessage: function (msg, callback) {
