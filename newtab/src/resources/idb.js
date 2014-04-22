@@ -56,10 +56,24 @@ var NTP = window.NTP || {};
         putConfig: function (data, callback) {
             conf.put(data, process.onSuccess, process.onError);
         },
+        removeConfig: function (id, callback) {
+            conf.remove(id);
+        },
+        clearConfig:function(){
+            conf.clear();
+        },
         getConfigById: function (id, callback) {
             var t = setInterval(function () {
                 if (confReady) {
                     conf.get(id, callback);
+                    clearInterval(t);
+                }
+            });
+        },
+        getConfig: function (callback) {
+            var t = setInterval(function () {
+                if (confReady) {
+                    conf.getAll(callback);
                     clearInterval(t);
                 }
             });

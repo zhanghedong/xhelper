@@ -1,5 +1,3 @@
-//chrome.app.runtime.onLaunched.addListener(function (launchData) {
-//});
 (function () {
     var process, helper, localData, g = {}, userData;
     g.params = {
@@ -11,31 +9,12 @@
     };
     localData = {
         getUserData: function (callback) {
-            NTP.IDB.getUserData(function(data){
+            NTP.IDB.getUserData(function (data) {
                 callback(data);
             });
-//            if (userData) {
-//                userData.getAll(function (data) {
-//                    callback(data);
-//                });
-//            } else {
-//                userData = new IDBStore({
-//                    dbVersion: 1,
-//                    storeName: 'userData',
-//                    keyPath: 'id',
-//                    autoIncrement: false,
-//                    onStoreReady: function () {
-//                        userData.getAll(function (data) {
-//                            callback(data);
-//                        });
-//                        console.log('user data store ready!');
-//                    }
-//                });
-//            }
         },
         setUserData: function (data, callback) {
-//            userData.put(data);
-            NTP.IDB.putUserData(data,function(data){
+            NTP.IDB.putUserData(data, function (data) {
                 callback(data)
             })
         }
@@ -153,17 +132,17 @@
                             }
                             break;
                         case 'putUserData':
-                             NTP.IDB.putUserData(msg.data,function(data){
+                            NTP.IDB.putUserData(msg.data, function (data) {
                                 sendResponse(data);
                             });
                             break;
                         case 'getTopSites':
-                            NTP.IDB.getTopSites(function(data){
+                            NTP.IDB.getTopSites(function (data) {
                                 sendResponse(data);
                             });
                             break;
                         case 'getUserDataById':
-                            NTP.IDB.getUserDataById(msg.data.id,function(data){
+                            NTP.IDB.getUserDataById(msg.data.id, function (data) {
                                 sendResponse(data);
                             });
                             break;
@@ -255,35 +234,65 @@
             }
         },
         installed: function () {
-
-            // chrome.runtime.onInstalled.addListener(function () {
             chrome.contextMenus.removeAll(function () {
                 chrome.contextMenus.create({"title": chrome.i18n.getMessage('menuBlogTitle'), "id": "addToReadLater", "contexts": ["all"], "onclick": process.onClick});
                 chrome.contextMenus.create({"title": chrome.i18n.getMessage("menuBookmarkTitle"), "id": "addToBookmark", "contexts": ["all"], "onclick": process.onClick});
             });
-            //https://crxdoc-zh.appspot.com/extensions/event_pages
             //因为监听器本身只在事件页面的环境中存在，您必须每次在事件页面加载时使用 addListener，仅仅在 runtime.onInstalled 这么做是不够的。
+
+            //记录 geolocation
+            NTP.PREF.get('location') || process.setGeolocation();
+        },
+        setGeolocation: function () {
+            $.get(NTP.PREF.get('geolocationServiceUrl'), function (data) {
+                NTP.PREF.set('location', data);
+                process.setWeather(data);
+                process.setForecastWeather(data);
+            })
+        },
+        tempUnit: function () {
+//            console.log('_.once', _.once);
+            var location = NTP.PREF.get('location');
+            var code = location.countryCode || 'US';
+            if (["US", "JM", "PR", "GU", "VI", "KY", "PW", "BS", "BZ"].indexOf(code) != -1) {
+                return  "imperial";
+            } else {
+                return "metric";
+            }
+        },
+        tempSymbol:function(){
+            var location = NTP.PREF.get('location');
+            if(process.tempUnit() === "imperial"){
+                return '°F';
+            }else{
+                return '℃';
+            }
+        },
+        setWeather: function (location) {
+            var params = {
+                lat: location.lat,
+                lon: location.lon,
+                units: process.tempUnit(),
+                lang: NTP.PREF.get('lang').replace('-', '_')
+            };
+            $.get(NTP.PREF.get('weatherAPI'), params, function (data) {
+                NTP.PREF.set('weather', data);
+            });
+        },
+        setForecastWeather: function (location) {
+            var params = {
+                lat: location.lat,
+                lon: location.lon,
+                units: process.tempUnit(location),
+                lang: NTP.PREF.get('lang').replace('-', '_'),
+                mode: 'json',
+                cnt: 5
+            };
+            $.get(NTP.PREF.get('weatherForecastAPI'), params, function (data) {
+                NTP.PREF.set('weatherForecast', data);
+            });
         }
     };
     process.installed();
     process.messageListener();
-//    function xmlhttpPost(url, func) {
-//        var xmlHttpReq = false;
-//        var self = this;
-//        // Mozilla/Safari
-//        self.xmlHttpReq = new XMLHttpRequest();
-//        self.xmlHttpReq.open('get', url, true);
-//        self.xmlHttpReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-//        self.xmlHttpReq.onreadystatechange = function () {
-//            if (self.xmlHttpReq.readyState == 4) {
-//                console.log(self.xmlHttpReq.responseText);
-//                func(self.xmlHttpReq.responseText);
-//            }
-//        };
-//        self.xmlHttpReq.send(null);
-//    }
-//
-//    xmlhttpPost('http://unionsug.baidu.com/su?cb=JSON_CALLBACK&wd=abc&_=1397047412695', function (data) {
-//        console.log(data);
-//    });
 }());

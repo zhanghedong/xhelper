@@ -149,7 +149,7 @@ module.exports = function (grunt) {
                 }
             },
             background: {
-                src: ['<%= src.backgroundJs%>'],
+                src: ['src/config/pref.js','<%= src.backgroundJs%>'],
                 dest: '<%= distdir %>/background/background.js',
                 options: {
                     process: true

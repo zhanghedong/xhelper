@@ -11,6 +11,7 @@ angular.module('app', [
     'buy',
     'blog',
     'search',
+    'weather',
     'apps'
 ]);
 
