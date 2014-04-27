@@ -1,18 +1,20 @@
 <header class="header">
     <div class="weather" ng-controller="weatherCtrl">
         <div class="current">
-            <div class="weather-icon"></div>
-            <div class="weather-temp">15</div>
+            <div class="weather-icon weather-icon-{{weather.id}}"></div>
+            <div class="weather-temp">{{weather.temp}}</div>
+            <div class="weather-desc">{{weather.desc}}</div>
         </div>
+
         <div class="forecast-weather">
             <div class="tomorrow-panel">
-                <div class="weather-icon"></div>
-                <div class="weather-temp">15℃~19℃</div>
+                <div class="weather-icon weather-icon-{{tomorrow.id}}"></div>
+                <div class="weather-temp">{{tomorrow.min}}~{{tomorrow.max}}</div>
             </div>
 
             <div class="tomorrow-panel">
-                <div class="weather-icon"></div>
-                <div class="weather-temp">25°F~39°F</div>
+                <div class="weather-icon weather-icon-{{afterTomorrow.id}}"></div>
+                <div class="weather-temp">{{afterTomorrow.min}}~{{afterTomorrow.max}}</div>
             </div>
         </div>
 

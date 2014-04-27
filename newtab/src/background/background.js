@@ -125,7 +125,6 @@
                                         }
                                     } else {
                                         list = JSON.parse(data)[1] || [];
-
                                         sendResponse({engine: engine, resultList: list});
                                     }
                                 });
@@ -143,6 +142,16 @@
                             break;
                         case 'getUserDataById':
                             NTP.IDB.getUserDataById(msg.data.id, function (data) {
+                                sendResponse(data);
+                            });
+                            break;
+                        case 'getWeather':
+                            process.getWeather(function (data) {
+                                sendResponse(data);
+                            });
+                            break;
+                        case 'getForecastWeather':
+                            process.getForecastWeather(function (data) {
                                 sendResponse(data);
                             });
                             break;
@@ -243,11 +252,10 @@
             //记录 geolocation
             NTP.PREF.get('location') || process.setGeolocation();
         },
-        setGeolocation: function () {
+        setGeolocation: function (callback) {
             $.get(NTP.PREF.get('geolocationServiceUrl'), function (data) {
                 NTP.PREF.set('location', data);
-                process.setWeather(data);
-                process.setForecastWeather(data);
+                callback && callback(data);
             })
         },
         tempUnit: function () {
@@ -259,37 +267,57 @@
                 return "metric";
             }
         },
-        tempSymbol:function(){
+        tempSymbol: function () {
             var location = NTP.PREF.get('location');
-            if(process.tempUnit() === "imperial"){
+            if (process.tempUnit() === "imperial") {
                 return '°F';
-            }else{
+            } else {
                 return '℃';
             }
         },
-        setWeather: function (location) {
-            var params = {
-                lat: location.lat,
-                lon: location.lon,
-                units: process.tempUnit(),
-                lang: NTP.PREF.get('lang').replace('-', '_')
+        getWeather: function (callback) {
+            var location = NTP.PREF.get('location');
+            var weather = function () {
+                var params = {
+                    lat: location.lat,
+                    lon: location.lon,
+                    units: process.tempUnit(),
+                    lang: NTP.PREF.get('lang').replace('-', '_')
+                };
+                $.get(NTP.PREF.get('weatherAPI'), params, function (data) {
+                    data.tempUnit = process.tempUnit();
+                    NTP.PREF.set('weather', data);
+                    callback(data);
+                });
             };
-            $.get(NTP.PREF.get('weatherAPI'), params, function (data) {
-                NTP.PREF.set('weather', data);
-            });
+            if (!location) {
+                process.setGeolocation(weather);
+            } else {
+                weather();
+            }
         },
-        setForecastWeather: function (location) {
-            var params = {
-                lat: location.lat,
-                lon: location.lon,
-                units: process.tempUnit(location),
-                lang: NTP.PREF.get('lang').replace('-', '_'),
-                mode: 'json',
-                cnt: 5
+        getForecastWeather: function (callback) {
+            var location = NTP.PREF.get('location');
+            var forecastWeather = function () {
+                var params = {
+                    lat: location.lat,
+                    lon: location.lon,
+                    units: process.tempUnit(location),
+                    lang: NTP.PREF.get('lang').replace('-', '_'),
+                    mode: 'json',
+                    cnt: 5
+                };
+                $.get(NTP.PREF.get('weatherForecastAPI'), params, function (data) {
+                    data.tempUnit = process.tempUnit();
+                    NTP.PREF.set('weatherForecast', data);
+                    callback(data);
+                });
             };
-            $.get(NTP.PREF.get('weatherForecastAPI'), params, function (data) {
-                NTP.PREF.set('weatherForecast', data);
-            });
+            if (!location) {
+                process.setGeolocation(forecastWeather);
+            } else {
+                forecastWeather();
+            }
         }
     };
     process.installed();

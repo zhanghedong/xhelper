@@ -1,3 +1,57 @@
+.weather{
+    position: absolute;
+    left:0;
+    top:0;
+    height:80px;
+    .current{
+        position: absolute;
+        left:0;
+        top:0;
+        height: 80px;
+        .weather-icon{
+
+        }
+        .weather-temp{
+            position: absolute;
+            top:10px;
+            left:110px;
+            font-size: 24px;
+            font-weight: 700;
+            color:#fff;
+        }
+        .weather-desc{
+            position: absolute;
+            top:45px;
+            left:110px;
+            font-size: 14px;
+            width:80px;
+            color:#fff;
+        }
+
+    }
+    .forecast-weather{
+        width:100px;
+        height: 80px;
+        position: absolute;
+        left:160px;
+        top:0;
+        .weather-icon{
+            width:30px;
+            height: 22px;
+            background-size: 25px;
+        }
+        .tomorrow-panel{
+            position: relative;
+        }
+        .weather-temp{
+            position: absolute;
+            left:40px;
+            top:0;
+            color:#fff;
+        }
+    }
+}
+
 .weather-icon {
     background-image: url(/resource/icons/weather.svg);
     background-repeat: no-repeat;
