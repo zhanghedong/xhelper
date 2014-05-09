@@ -102,10 +102,9 @@
                                             break;
                                         }
                                     }
-
                                     sites.push(item);
                                     localData.setUserData({id: 'sites', data: sites}, function () {
-                                        console.log('insert favorite success ');
+                                        process.sendMessage({"action": "updateFavorite"});
                                     });
                                 });
                             }
@@ -220,23 +219,26 @@
                 default:
                     (function () {
                         chrome.tabs.getSelected(null, function (tab) {
-                            chrome.tabs.insertCSS(tab.id, {file: 'content/style.css'}, function () {
-                                chrome.tabs.executeScript(tab.id, {file: "lib/jquery.js"}, function () {
-                                    chrome.tabs.executeScript(tab.id, {file: "content/content.js"}, function () {
-                                        localData.getUserData(function (data) {
-                                            var categories = [], i, j, noIn = true;
-                                            for (i = 0, j = data.length; i < j; i++) {
-                                                if (data[i].id === 'categories') {
-                                                    categories = data[i].data;
+                            if (tab.url.indexOf("chrome-devtools://") == -1) {
+                                chrome.tabs.insertCSS(tab.id, {file: 'content/style.css'}, function () {
+                                    chrome.tabs.executeScript(tab.id, {file: "lib/jquery.js"}, function () {
+                                       chrome.tabs.executeScript(tab.id, {file: "content/content.js"}, function () {
+                                          localData.getUserData(function (data) {
+                                                var categories = [], i, j, noIn = true;
+                                                for (i = 0, j = data.length; i < j; i++) {
+                                                    if (data[i].id === 'categories') {
+                                                        categories = data[i].data;
+                                                    }
                                                 }
-                                            }
-                                            chrome.tabs.sendMessage(tab.id, {action: 'addToFavorite', categories: categories, colors: g.config.defaultColor}, function (response) {
-                                                console.log(response);
+                                                chrome.tabs.sendMessage(tab.id, {action: 'addToFavorite', categories: categories, colors: g.config.defaultColor}, function (response) {
+                                                    console.log(response);
+                                                });
+
                                             });
                                         });
                                     });
                                 });
-                            });
+                            }
                         });
                     }());
                     break;

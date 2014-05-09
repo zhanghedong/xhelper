@@ -35,7 +35,28 @@ indexDB: http://www.recursiverobot.com/post/53767548784/angularjs-with-indexeddb
     http://api.openweathermap.org/data/2.5/weather?lat=26.0614&lon=119.3061
     {"coord":{"lon":119.31,"lat":26.06},"sys":{"message":0.0982,"country":"CN","sunrise":1392331121,"sunset":1392371707},"weather":[{"id":803,"main":"Clouds","description":"broken clouds","icon":"04d"}],"base":"cmc stations","main":{"temp":282.15,"pressure":1023,"humidity":61,"temp_min":282.15,"temp_max":282.15},"wind":{"speed":6,"deg":70},"clouds":{"all":75},"dt":1392368400,"id":1810821,"name":"Fuzhou","cod":200}
 
+                 http://api.openweathermap.org  1625 / 21 zhanghedong@gmail.com
 
+
+
+
+
+PM2.5 接口
+
+http://www.pm25.in/api_doc
+
+公共测试AppKey:5j1znBVAsnSf5xQyNQyq
+
+http://www.pm25.in/api/querys/pm2_5.json?city=福州&token=5j1znBVAsnSf5xQyNQyq
+                        国家气象局提供的天气预报接口
+                        接口地址：
+                        http://www.weather.com.cn/data/sk/101010100.html
+                        http://www.weather.com.cn/data/cityinfo/101010100.html
+                        http://m.weather.com.cn/data/101010100.html
+       http://www.hujuntao.com/api/weather-api-collected.html
+
+
+       wiki:  http://bugs.openweathermap.org/projects/api/wiki/
 
     应用描述：
 

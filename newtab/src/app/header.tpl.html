@@ -25,12 +25,15 @@
                    placeholder="{{keywordPlaceholder}}" id="keyword" value="" />
             <a class="btn btn-search">搜索</a>
         </section>
-        <section class="search-suggest" id="search_suggest">
-            <ul ng-if="searchSuggest.length">
+        <section class="search-suggest" id="search_suggest" ng-if="searchSuggest.length">
+            <ul>
                 <li ng-class="{selected:selectedItem == $index}" ng-repeat="item in searchSuggest">
                     <a ng-click="process.searchClick(item)">{{item.title}}</a>
                 </li>
             </ul>
+            <div class="engineSelect">
+                <a class="baidu item" ng-class="{'active':activeBaidu}" ng-click="process.setDefaultEngine('baidu')" href="#">baidu</a><a class="google item" ng-click="process.setDefaultEngine('google')"  ng-class="{'active':activeGoogle}" href="#">google</a>
+            </div>
         </section>
     </div>
 </header>

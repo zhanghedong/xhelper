@@ -53,6 +53,14 @@ var NTP = window.NTP || {};
             });
 
         },
+        getUserData: function (callback) {
+            var t = setInterval(function () {
+                if (userDataReady) {
+                    userData.getAll(callback);
+                    clearInterval(t);
+                }
+            });
+        },
         putConfig: function (data, callback) {
             conf.put(data, process.onSuccess, process.onError);
         },

@@ -68,14 +68,8 @@
         onMessage: function () {
             chrome.runtime.onMessage.addListener(
                 function (request, sender, sendResponse) {
-//                        sendResponse({farewell: "再见"});
                     if (request.action === 'addToFavorite') {
-                        alert('build');
                         process.buildPanel(request.categories, request.colors);
-//                        params.timer = setTimeout(function(){
-//                            params.countdown--;
-//
-//                        },1000);
                     }
                 });
 
@@ -96,8 +90,7 @@
                 "letter": title && title.length > 2 && title.substr(0, 2),
                 "bgColor": color
             };
-            chrome.runtime.sendMessage({action: 'insertFavorite', item: obj}, function (response) {
-            });
+            chrome.runtime.sendMessage({action: 'insertFavorite', item: obj}, function (response) {});
             process.panelClose();
         },
 

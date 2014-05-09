@@ -34,20 +34,34 @@ angular.module('search', ['ngSanitize']).controller('searchCtrl', ['$scope', '$s
             $scope.keywordPlaceholder = 'favorites、google、baidu、bing';
             $scope.selectedItem = 0;
             process.watch();
-
-            localDataModule.getConfigById('defaultEngine', function (data) {
+            localDataModule.getConfigById('custom', function (data) {
                 if (!data) {
                     //根据用户所在国家设置默认搜索引擎 TODO
-                    localDataModule.putConfig({id: 'custom', data: {defaultEngine: 'baidu', target: '_blank'}});
+                    localDataModule.getConfigById('location', function (data) {
+                        if (data.data.countryCode.toLocaleString() == 'cn') {
+                            localDataModule.putConfig({id: 'custom', data: {defaultEngine: ['baidu'], target: '_blank'}});
+                        } else {
+                            localDataModule.putConfig({id: 'custom', data: {defaultEngine: ['google'], target: '_blank'}});
+                        }
+                    });
+                } else {
+                    angular.forEach(data.data.defaultEngine, function (item) {
+                        if (item === 'baidu') {
+                            $scope.activeBaidu = true;
+                        } else if (item == 'google') {
+                            $scope.activeGoogle = true;
+                        }
+                    });
                 }
             });
-
-//            helper.getLocalBlog(function (data) {
-//                var i, j;
-//                for (i = 0, j = data.length; i < j; i++) {
-//
-//                }
-//            });
+        },
+        setDefaultEngine: function (engine) {
+            if (engine === 'baidu') {
+                $scope.activeBaidu = !$scope.activeBaidu;
+            } else if (engine == 'google') {
+                $scope.activeGoogle = !$scope.activeGoogle;
+            }
+            //保存数据到本地 TODO
         },
         watch: function () {
             $scope.$watch("keyword", function (keyword) {
@@ -116,13 +130,9 @@ angular.module('search', ['ngSanitize']).controller('searchCtrl', ['$scope', '$s
                                         data.push(item);
                                         item = {};
                                     }
-                                    console.log('data1===', data);
                                     $timeout(function () {
                                         $scope.searchSuggest = _.union($scope.searchSuggest, data);
-//                                    $scope.searchSuggest = data;
-                                        console.log('search1===', $scope.searchSuggest);
                                     });
-//                            console.log(response.resultList);
                                 });
                             });
                         }
