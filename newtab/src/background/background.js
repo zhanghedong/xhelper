@@ -39,7 +39,7 @@
                     var havePermission = window.webkitNotifications.checkPermission();
                     if (havePermission === 0) {
                         var notification = window.webkitNotifications.createNotification(
-                            'http://i.stack.imgur.com/dmHl0.png',
+                            '',
                             option.title,
                             option.desc
                         );
@@ -57,7 +57,7 @@
 //                var tt = {
 //                    type : "basic",
 //                    title: "Basic Notification",
-//                    iconUrl:'http://i.stack.imgur.com/dmHl0.png',
+//                    iconUrl:'',
 //                    message:'创建成功'
 //                };
 //                chrome.notifications.create("abced", tt, function(id){
@@ -254,12 +254,20 @@
             //记录 geolocation
             NTP.PREF.get('location') || process.setGeolocation();
         },
+        /**
+         * 取当前地址
+         * @param callback
+         */
         setGeolocation: function (callback) {
             $.get(NTP.PREF.get('geolocationServiceUrl'), function (data) {
                 NTP.PREF.set('location', data);
                 callback && callback(data);
             })
         },
+        /**
+         * 天气单位
+         * @returns {string}
+         */
         tempUnit: function () {
             var location = NTP.PREF.get('location');
             var code = location.countryCode || 'US';
@@ -269,6 +277,10 @@
                 return "metric";
             }
         },
+        /**
+         * 天气单位符号
+         * @returns {string}
+         */
         tempSymbol: function () {
             var location = NTP.PREF.get('location');
             if (process.tempUnit() === "imperial") {
@@ -277,6 +289,11 @@
                 return '℃';
             }
         },
+
+        /**
+         * 获取当前天气
+         * @param callback
+         */
         getWeather: function (callback) {
             var location = NTP.PREF.get('location');
             var weather = function () {
@@ -298,6 +315,10 @@
                 weather();
             }
         },
+        /**
+         * 获取一周天气
+         * @param callback
+         */
         getForecastWeather: function (callback) {
             var location = NTP.PREF.get('location');
             var forecastWeather = function () {

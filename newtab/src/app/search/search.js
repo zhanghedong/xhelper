@@ -32,7 +32,7 @@ angular.module('search', ['ngSanitize']).controller('searchCtrl', ['$scope', '$s
         },
         init: function () {
             $scope.keywordPlaceholder = 'favorites、google、baidu、bing';
-            $scope.selectedItem = 0;
+            $scope.selectedItem = -1;
             process.watch();
             localDataModule.getConfigById('custom', function (data) {
                 if (!data) {
@@ -55,13 +55,23 @@ angular.module('search', ['ngSanitize']).controller('searchCtrl', ['$scope', '$s
                 }
             });
         },
+
         setDefaultEngine: function (engine) {
             if (engine === 'baidu') {
                 $scope.activeBaidu = !$scope.activeBaidu;
             } else if (engine == 'google') {
                 $scope.activeGoogle = !$scope.activeGoogle;
             }
-            //保存数据到本地 TODO
+            localDataModule.getConfigById('custom', function (data) {
+                var idx = data.data.defaultEngine.indexOf(engine);
+                if (idx != -1) {
+                    data.data.defaultEngine.splice(idx, 1);
+                } else {
+                    data.data.defaultEngine.push(engine);
+                }
+                localDataModule.putConfig({id: 'custom', data: {defaultEngine: data.data.defaultEngine, target: '_blank'}});
+            });
+
         },
         watch: function () {
             $scope.$watch("keyword", function (keyword) {
@@ -157,41 +167,61 @@ angular.module('search', ['ngSanitize']).controller('searchCtrl', ['$scope', '$s
             }
         },
         searchClick: function (item) {
-            var openUrl = function (url) {
-                location.href = url; //默认当前面打开 ，通过配置完成 TODO
+            var openUrl = function (url, target) {
+                if (target === '_self') {
+                    location.href = url; //默认当前面打开 ，通过配置完成 TODO
+                } else {
+                    window.open(url);
+                }
             };
             switch (item.itemType) {
                 case 'engineKeyword':
-                    if ('baidu') {//根据配置文件确认搜索地址 TODO
-                        console.log(item);
-                        var url = config.baiduGo + encodeURIComponent(item.title);
-                        openUrl(url);
-                    }
+                    localDataModule.getConfigById('custom', function (data) {
+                        if (data.data.defaultEngine.length) {
+                            angular.forEach(data.data.defaultEngine, function (engine, idx) {
+                                var url = '';
+                                if (engine === 'baidu') {
+                                    url = config.baiduGo + encodeURIComponent(item.title);
+                                } else if (engine == 'google') {
+                                    url = config.googleGo + encodeURIComponent(item.title);
+                                }
+                                if (idx === data.data.defaultEngine.length - 1) {
+                                    openUrl(url, '_blank');
+                                } else {
+                                    openUrl(url, '_self');
+                                }
+                            })
+                        }
+                    });
                     break;
                 case 'blog':
-                    openUrl(item.url);
+                    openUrl(item.url, '_self');
                     break;
                 case 'topSite':
-                    openUrl(item.url);
+                    openUrl(item.url, '_self');
                     break;
                 case 'favorite':
-                    openUrl(item.url);
+                    openUrl(item.url, '_self');
                     break;
             }
         },
         search: function (e) {
-            var g = {DOWN: 40, UP: 38, ENTER: 13, ESC: 27};
+            var g = {DOWN: 40, UP: 38, ENTER: 13, ESC: 27},item = {} ;
             switch (e.keyCode) {
                 case g.DOWN:
                     process.nextFocusItem();
                     break;
                 case g.UP:
                     process.prevFocusItem();
-//                    e(), a.searchTerm && a.selectRange(b.target, a.searchTerm.length, a.searchTerm.length);
                     break;
                 case g.ENTER:
-                    process.searchClick($scope.searchSuggest[$scope.selectedItem]);
-//                    a.searchTerm ? a.results[a.searchTerm].length ? a.enterEventInfo = {spotID: a.results[a.searchTerm][a.selectedCategory].spotID, type: a.results[a.searchTerm][a.selectedCategory].type, selectedItem: a.selectedItem} : a.resultClick({link: a.buildGoogleSearchURL(a.searchTerm)}) : a.enterEventInfo = {spotID: a.defaultResults[0].spotID, type: a.defaultResults[0].type, selectedItem: a.selectedItem};
+                    if($scope.selectedItem != -1){
+                        process.searchClick($scope.searchSuggest[$scope.selectedItem]);
+                    }else{
+                        item.itemType = 'engineKeyword';
+                        item.title = e.target.value;
+                        process.searchClick(item);
+                    }
                     break;
                 case g.ESC:
                     if ($scope.searchSuggest) {

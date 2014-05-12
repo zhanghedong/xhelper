@@ -1,5 +1,5 @@
 <header class="header">
-    <div class="weather" ng-controller="weatherCtrl">
+    <div class="weather" ng-controller="weatherCtrl" style="display: none">
         <div class="current">
             <div class="weather-icon weather-icon-{{weather.id}}"></div>
             <div class="weather-temp">{{weather.temp}}</div>
@@ -17,13 +17,12 @@
                 <div class="weather-temp">{{afterTomorrow.min}}~{{afterTomorrow.max}}</div>
             </div>
         </div>
-
     </div>
     <div class="searchCtrl" ng-controller="searchCtrl">
         <section class="search" id="search">
             <input class="ipt" type="text" autocomplete="off" ng-keyup="process.search($event)" ng-model="keyword"
                    placeholder="{{keywordPlaceholder}}" id="keyword" value="" />
-            <a class="btn btn-search">搜索</a>
+            <a class="btn btn-search" ng-click="process.search($event)">搜索</a>
         </section>
         <section class="search-suggest" id="search_suggest" ng-if="searchSuggest.length">
             <ul>
