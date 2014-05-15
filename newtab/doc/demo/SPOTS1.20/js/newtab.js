@@ -441,7 +441,19 @@ app.config(["$routeProvider", function (a) {
             }
         })
     }, a.sendMessage = function () {
-        _gaq.push(["_trackEvent", "Phone-Nav-Bar", "Send-Message", "Click"]), a.threadData.data.push({id: (new Date).getTime(), number: a.selectedThread, text: a.smsText, timestamp: (new Date).getTime().toString(), type: 3}), g.sendNotification(h.spotID("sms"), 1, {number: a.selectedThread, text: a.smsText}, function () {
+        _gaq.push(["_trackEvent", "Phone-Nav-Bar", "Send-Message", "Click"]),
+            a.threadData.data.push({
+                id: (new Date).getTime(),
+                number: a.selectedThread,
+                text: a.smsText,
+                timestamp: (new Date).getTime().toString(),
+                type: 3}
+            ),
+            g.sendNotification(
+                h.spotID("sms"),
+                1,
+                {number: a.selectedThread, text: a.smsText},
+                function () {
         }), a.smsText = "", a.$$phase || (a.$apply("smsText"), a.$apply("threadData")), f(function () {
             var a = document.getElementById("thread-data");
             a.scrollTop = a.scrollHeight, $("#send-sms-block").focus()

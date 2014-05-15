@@ -129,21 +129,27 @@ angular.module('search', ['ngSanitize']).controller('searchCtrl', ['$scope', '$s
                                         }
                                     }
                                 }
+
                                 $timeout(function () {
                                     $scope.searchSuggest = sugList;
                                 });
-                                chrome.runtime.sendMessage({action: 'getSuggestFromEngine', engine: 'baidu', keyword: keyword}, function (response) {
-                                    var list = response.resultList, i, j, data = [], item = {};
-                                    for (i = 0, j = list.length; i < j; i++) {
-                                        item.itemType = 'engineKeyword';
-                                        item.title = list[i];
-                                        data.push(item);
-                                        item = {};
-                                    }
-                                    $timeout(function () {
-                                        $scope.searchSuggest = _.union($scope.searchSuggest, data);
+                                localDataModule.getConfigById('location', function (location) {
+                                    var engine = location.data.countryCode == 'CN' ? 'baidu' : 'google';
+                                    chrome.runtime.sendMessage({action: 'getSuggestFromEngine', engine: engine, keyword: keyword}, function (response) {
+                                        var list = response.resultList, i, j, data = [], item = {};
+                                        for (i = 0, j = list.length && j < config.searchCount; i < j; i++) {
+                                            item.itemType = 'engineKeyword';
+                                            item.title = list[i];
+                                            data.push(item);
+                                            item = {};
+                                        }
+                                        $timeout(function () {
+                                            $scope.searchSuggest = _.union($scope.searchSuggest, data);
+                                        });
                                     });
                                 });
+
+
                             });
                         }
                     });
@@ -206,7 +212,7 @@ angular.module('search', ['ngSanitize']).controller('searchCtrl', ['$scope', '$s
             }
         },
         search: function (e) {
-            var g = {DOWN: 40, UP: 38, ENTER: 13, ESC: 27},item = {} ;
+            var g = {DOWN: 40, UP: 38, ENTER: 13, ESC: 27}, item = {};
             switch (e.keyCode) {
                 case g.DOWN:
                     process.nextFocusItem();
@@ -215,9 +221,9 @@ angular.module('search', ['ngSanitize']).controller('searchCtrl', ['$scope', '$s
                     process.prevFocusItem();
                     break;
                 case g.ENTER:
-                    if($scope.selectedItem != -1){
+                    if ($scope.selectedItem != -1) {
                         process.searchClick($scope.searchSuggest[$scope.selectedItem]);
-                    }else{
+                    } else {
                         item.itemType = 'engineKeyword';
                         item.title = e.target.value;
                         process.searchClick(item);
