@@ -129,7 +129,6 @@ angular.module('search', ['ngSanitize']).controller('searchCtrl', ['$scope', '$s
                                         }
                                     }
                                 }
-
                                 $timeout(function () {
                                     $scope.searchSuggest = sugList;
                                 });
@@ -148,8 +147,6 @@ angular.module('search', ['ngSanitize']).controller('searchCtrl', ['$scope', '$s
                                         });
                                     });
                                 });
-
-
                             });
                         }
                     });
