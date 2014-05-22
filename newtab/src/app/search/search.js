@@ -136,7 +136,7 @@ angular.module('search', ['ngSanitize']).controller('searchCtrl', ['$scope', '$s
                                     var engine = location.data.countryCode == 'CN' ? 'baidu' : 'google';
                                     chrome.runtime.sendMessage({action: 'getSuggestFromEngine', engine: engine, keyword: keyword}, function (response) {
                                         var list = response.resultList, i, j, data = [], item = {};
-                                        for (i = 0, j = list.length && j < config.searchCount; i < j; i++) {
+                                        for (i = 0, j = list.length; i < config.searchCount && i < j; i++) {
                                             item.itemType = 'engineKeyword';
                                             item.title = list[i];
                                             data.push(item);
@@ -228,7 +228,7 @@ angular.module('search', ['ngSanitize']).controller('searchCtrl', ['$scope', '$s
                     break;
                 case g.ESC:
                     if ($scope.searchSuggest) {
-                        $scope.searchSuggest = null;
+                        $scope.searchSuggest = [];
                         e.stopPropagation();
                     }
             }
