@@ -23,7 +23,6 @@ angular.module('search', ['ngSanitize']).controller('searchCtrl', ['$scope', '$s
             localDataModule.getUserDataById('sites', function (data) {
                 data = data && data.data || [];
                 callback(data);
-
             });
         }
     };
@@ -31,7 +30,7 @@ angular.module('search', ['ngSanitize']).controller('searchCtrl', ['$scope', '$s
         onClick: function () {
         },
         init: function () {
-            $scope.keywordPlaceholder = 'favorites、google、baidu、bing';
+            $scope.keywordPlaceholder = 'Bookmarks、Google、Baidu';
             $scope.selectedItem = -1;
             process.watch();
             localDataModule.getConfigById('custom', function (data) {
@@ -75,9 +74,16 @@ angular.module('search', ['ngSanitize']).controller('searchCtrl', ['$scope', '$s
         },
         watch: function () {
             $scope.$watch("keyword", function (keyword) {
-                // keyword = $scope.keyword || '';
                 var sugList = [], i, j, nextSug = true, reg = /:\/\/(.[^/]+)/, domain, readyCount = 0, bookmarkCount = 0;
                 if (keyword !== '') {
+                    if ($scope.searchSuggest) {
+                        for (i = 0, j = $scope.searchSuggest.length; i < j; i++) {
+                            var item = $scope.searchSuggest[i];
+                            if (item.title == keyword) {
+                                return false;
+                            }
+                        }
+                    }
                     helper.getLocalBlog(function (data) {
                         for (i = 0, j = data.length; i < j; i++) {
                             domain = data[i].url.match(reg);
@@ -161,6 +167,7 @@ angular.module('search', ['ngSanitize']).controller('searchCtrl', ['$scope', '$s
             } else {
                 $scope.selectedItem++;
             }
+            $scope.keyword = $scope.searchSuggest[$scope.selectedItem].title;
         },
         prevFocusItem: function () {
             if ($scope.selectedItem > 0) {
@@ -168,6 +175,7 @@ angular.module('search', ['ngSanitize']).controller('searchCtrl', ['$scope', '$s
             } else {
                 $scope.selectedItem = $scope.searchSuggest.length - 1;
             }
+            $scope.keyword = $scope.searchSuggest[$scope.selectedItem].title;
         },
         searchClick: function (item) {
             var openUrl = function (url, target) {
@@ -180,20 +188,24 @@ angular.module('search', ['ngSanitize']).controller('searchCtrl', ['$scope', '$s
             switch (item.itemType) {
                 case 'engineKeyword':
                     localDataModule.getConfigById('custom', function (data) {
+                        var queryStr = [];
                         if (data.data.defaultEngine.length) {
                             angular.forEach(data.data.defaultEngine, function (engine, idx) {
-                                var url = '';
                                 if (engine === 'baidu') {
-                                    url = config.baiduGo + encodeURIComponent(item.title);
+                                    queryStr.push(config.baiduGo + encodeURIComponent(item.title));
                                 } else if (engine == 'google') {
-                                    url = config.googleGo + encodeURIComponent(item.title);
+                                    queryStr.push(config.googleGo + encodeURIComponent(item.title));
                                 }
-                                if (idx === data.data.defaultEngine.length - 1) {
-                                    openUrl(url, '_blank');
-                                } else {
-                                    openUrl(url, '_self');
-                                }
-                            })
+                            });
+                            if (queryStr.length) {
+                                angular.forEach(queryStr, function (url, idx) {
+                                    if (idx === queryStr.length - 1) {
+                                        openUrl(url, '_self');
+                                    } else {
+                                        openUrl(url, '_blank');
+                                    }
+                                });
+                            }
                         }
                     });
                     break;
