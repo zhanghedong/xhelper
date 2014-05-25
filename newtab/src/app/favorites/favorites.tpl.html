@@ -68,25 +68,18 @@
                ng-repeat="category in categories track by category.guid">{{category.name}}</a>
             <a class="insert-category" ng-click="process.showEditCategory()">+</a>
         </div>
-        <div class="sys-menu">
-            <a ng-click="process.chromeMenu()">Chrome</a>
-            <a ng-click="process.recentlyClosed()">最近关闭</a>
-        </div>
+        <!--<div class="sys-menu">-->
+            <!--<a ng-click="process.chromeMenu()">Chrome</a>-->
+            <!--<a ng-click="process.recentlyClosed()">最近关闭</a>-->
+        <!--</div>-->
     </div>
-    <div class="chrome_menu" ng-show="showChromeMenu">
-        <ul>
-            <li ng-click="process.chromeMenuClick(item)" class="item" ng-repeat=" item in chromeMenu">
-                <span>{{item.text}}</span>
-            </li>
-        </ul>
-    </div>
-    <div class="chrome_menu recently-closed" ng-show="showChromeRecentlyClosed">
-        <ul>
-            <li ng-click="process.chromeMenuClick(item)" class="item" ng-repeat=" item in chromeRecentlyClosed">
-                <span>{{item.text}}</span>
-            </li>
-        </ul>
-    </div>
+    <!--<div class="chrome_menu recently-closed" ng-show="showChromeRecentlyClosed">-->
+        <!--<ul>-->
+            <!--<li ng-click="process.chromeMenuClick(item)" class="item" ng-repeat=" item in chromeRecentlyClosed">-->
+                <!--<span>{{item.text}}</span>-->
+            <!--</li>-->
+        <!--</ul>-->
+    <!--</div>-->
 
     <modal-dialog show='modalShownDeleteCategory' dialog-title="{{dialogTitle}}">
         <div class="category-delete-wrap">

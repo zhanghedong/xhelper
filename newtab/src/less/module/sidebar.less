@@ -26,6 +26,9 @@
             &.ready{
                 background: url(../resource/icons/ready.png) no-repeat;
             }
+            &.chrome{
+                background: url(../resource/icons/chrome.png) no-repeat;
+            }
             &:hover{
                 opacity: 1;
             }
@@ -39,6 +42,7 @@
     .plugin-content {
         padding-left: 36px;
         height: 100%;
+        overflow: auto;
         ng-view {
             height: 100%;
             width: 100%;

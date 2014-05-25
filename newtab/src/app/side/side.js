@@ -29,6 +29,12 @@ angular.module('side', ['ngSanitize']).controller('sideCtrl', ['$scope', '$sce',
                         text: 'apps',
                         cls:'apps',
                         title: 'chrome apps'
+                    },
+                    {
+                        href:'#/chrome',
+                        text:'chrome',
+                        cls:'chrome',
+                        title:'chrome menu'
                     }
                 ];
                 $scope.sides = items;

@@ -399,6 +399,7 @@ angular.module('favorites', ['ngModal', 'ngSanitize']).controller('favoritesCtrl
             chromeMenuClick: function (item) {
                 $scope.showChromeMenu = !$scope.showChromeMenu;
                 helper.sendMessage({action: 'goChromeUrl', data: {url: item.href }}, function () {});
+
             },
             bodyClick:function(){
 //                $scope.showChromeMenu = false;
@@ -407,40 +408,40 @@ angular.module('favorites', ['ngModal', 'ngSanitize']).controller('favoritesCtrl
             /**
              * 显示系统快速导航
              */
-            chromeMenu: function () {
-                $scope.showChromeRecentlyClosed = false;
-                $scope.showChromeMenu = !$scope.showChromeMenu;
-                var menu = [
-                    {
-                        href: 'chrome://bookmarks',
-                        text: chrome.i18n.getMessage('bookmarks')
-                    },
-                    {
-                        href: 'chrome://downloads',
-                        text: chrome.i18n.getMessage('downloads')
-                    },
-                    {
-                        href: 'chrome://history',
-                        text: chrome.i18n.getMessage('history')
-                    },
-                    {
-                        href: 'chrome://extensions',
-                        text: chrome.i18n.getMessage('extensions')
-                    },
-                    {
-                        href: 'chrome://settings',
-                        text: chrome.i18n.getMessage('settings')
-                    },
-                    {
-                        href: 'chrome://settings/clearBrowserData',
-                        text: chrome.i18n.getMessage('clearHistory')
-                    }
+//            chromeMenu: function () {
+//                $scope.showChromeRecentlyClosed = false;
+//                $scope.showChromeMenu = !$scope.showChromeMenu;
+//                var menu = [
+//                    {
+//                        href: 'chrome://bookmarks',
+//                        text: chrome.i18n.getMessage('bookmarks')
+//                    },
+//                    {
+//                        href: 'chrome://downloads',
+//                        text: chrome.i18n.getMessage('downloads')
+//                    },
+//                    {
+//                        href: 'chrome://history',
+//                        text: chrome.i18n.getMessage('history')
+//                    },
+//                    {
+//                        href: 'chrome://extensions',
+//                        text: chrome.i18n.getMessage('extensions')
+//                    },
+//                    {
+//                        href: 'chrome://settings',
+//                        text: chrome.i18n.getMessage('settings')
+//                    },
+//                    {
+//                        href: 'chrome://settings/clearBrowserData',
+//                        text: chrome.i18n.getMessage('clearHistory')
+//                    }
+//
+//                ];
+//                console.log(menu);
+//                $scope.chromeMenu = menu;
 
-                ];
-                console.log(menu);
-                $scope.chromeMenu = menu;
-
-            },
+//            },
             /**
              * 显示最近关闭
              */

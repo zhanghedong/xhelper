@@ -18,7 +18,7 @@
                 <div class="sidebar" ng-controller="sideCtrl">
                     <div id="plugin_btn" class="plugin-btn">
                         <ul>
-                            <li  ng-class="{active:selectedItem == $index}"  ng-click="process.onClick($index)" ng-repeat="item in sides"><a ng-href="{{item.href}}" class="{{item.cls}}">{{item.text}}</a></li>
+                            <li  ng-class="{active:selectedItem == $index}"  ng-click="process.onClick($index)" ng-repeat="item in sides"><a ng-href="{{item.href}}" title="{{item.title}}" class="{{item.cls}}">{{item.text}}</a></li>
                         </ul>
                     </div>
                     <div id="plugin_content" class="plugin-content">

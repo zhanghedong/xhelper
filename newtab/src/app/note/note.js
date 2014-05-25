@@ -8,7 +8,7 @@ angular.module('note', ['ngSanitize']).controller('noteCtrl', ['$scope', '$sce',
     helper = {
         sendMessage: function (msg, callback) {
             chrome.runtime.sendMessage(msg, function (response) {
-                callback(response.data);
+                callback(response && response.data);
             });
         }
 

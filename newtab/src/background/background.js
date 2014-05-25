@@ -117,7 +117,7 @@
                                 process.getResultByUrl(queryUrl + encodeURIComponent(msg.keyword), function (data) {
                                     if (engine === 'baidu') {
                                         list = data.split(',s:')[1].split('}')[0];
-                                        console.log(list);
+//                                        console.log(list);
                                         list = list && JSON.parse(list);
                                         if (list) {
                                             sendResponse({engine: engine, resultList: list});
@@ -155,17 +155,16 @@
                             });
                             break;
                         case 'goRecentlyClosed':
-                            chrome.sessions.getRecentlyClosed(function (data) {
-                                data.length = data.length > 10 ? 10 : data.length;
-                                sendResponse(data);
-                            });
+                            //去掉最近关闭
+//                            chrome.sessions.getRecentlyClosed(function (data) {
+//                                data.length = data.length > 10 ? 10 : data.length;
+                                sendResponse([]);
+//                            });
                             break;
                         case 'goChromeUrl':
                             var url = msg.data.url,
                                 tabId = _.tab.id;
-                            console.log(msg, _, sendResponse);
                             chrome.tabs.update(tabId, {url: url});
-//                            msg.href;
                             break;
                     }
                 }
@@ -244,7 +243,7 @@
                                                     }
                                                 }
                                                 chrome.tabs.sendMessage(tab.id, {action: 'addToFavorite', categories: categories, colors: g.config.defaultColor}, function (response) {
-                                                    console.log(response);
+//                                                    console.log(response);
                                                 });
 
                                             });
@@ -272,7 +271,9 @@
          * @param callback
          */
         setGeolocation: function (callback) {
+            console.log('get location');
             $.get(NTP.PREF.get('geolocationServiceUrl'), function (data) {
+                console.log('location=====',data);
                 NTP.PREF.set('location', data);
                 callback && callback(data);
             })

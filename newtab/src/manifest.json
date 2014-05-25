@@ -24,7 +24,6 @@
         "notifications",
         "bookmarks",
         "tabs",
-        "sessions",
         "<all_urls>"
     ],
     "background": {
