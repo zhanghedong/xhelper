@@ -154,6 +154,19 @@
                                 sendResponse(data);
                             });
                             break;
+                        case 'goRecentlyClosed':
+                            chrome.sessions.getRecentlyClosed(function (data) {
+                                data.length = data.length > 10 ? 10 : data.length;
+                                sendResponse(data);
+                            });
+                            break;
+                        case 'goChromeUrl':
+                            var url = msg.data.url,
+                                tabId = _.tab.id;
+                            console.log(msg, _, sendResponse);
+                            chrome.tabs.update(tabId, {url: url});
+//                            msg.href;
+                            break;
                     }
                 }
                 return true;
@@ -222,8 +235,8 @@
                             if (tab.url.indexOf("chrome-devtools://") == -1) {
                                 chrome.tabs.insertCSS(tab.id, {file: 'content/style.css'}, function () {
                                     chrome.tabs.executeScript(tab.id, {file: "lib/jquery.js"}, function () {
-                                       chrome.tabs.executeScript(tab.id, {file: "content/content.js"}, function () {
-                                          localData.getUserData(function (data) {
+                                        chrome.tabs.executeScript(tab.id, {file: "content/content.js"}, function () {
+                                            localData.getUserData(function (data) {
                                                 var categories = [], i, j, noIn = true;
                                                 for (i = 0, j = data.length; i < j; i++) {
                                                     if (data[i].id === 'categories') {

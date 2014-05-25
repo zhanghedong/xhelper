@@ -30,7 +30,7 @@ angular.module('search', ['ngSanitize']).controller('searchCtrl', ['$scope', '$s
         onClick: function () {
         },
         init: function () {
-            $scope.keywordPlaceholder = 'Bookmarks、Google、Baidu';
+            $scope.keywordPlaceholder =chrome.i18n.getMessage('searchPlaceholder');
             $scope.selectedItem = -1;
             process.watch();
             localDataModule.getConfigById('custom', function (data) {
@@ -75,6 +75,7 @@ angular.module('search', ['ngSanitize']).controller('searchCtrl', ['$scope', '$s
         watch: function () {
             $scope.$watch("keyword", function (keyword) {
                 var sugList = [], i, j, nextSug = true, reg = /:\/\/(.[^/]+)/, domain, readyCount = 0, bookmarkCount = 0;
+//                $scope.selectedItem = -1;
                 if (keyword !== '') {
                     if ($scope.searchSuggest) {
                         for (i = 0, j = $scope.searchSuggest.length; i < j; i++) {
@@ -138,20 +139,24 @@ angular.module('search', ['ngSanitize']).controller('searchCtrl', ['$scope', '$s
                                 $timeout(function () {
                                     $scope.searchSuggest = sugList;
                                 });
-                                localDataModule.getConfigById('location', function (location) {
-                                    var engine = location.data.countryCode == 'CN' ? 'baidu' : 'google';
-                                    chrome.runtime.sendMessage({action: 'getSuggestFromEngine', engine: engine, keyword: keyword}, function (response) {
-                                        var list = response.resultList, i, j, data = [], item = {};
-                                        for (i = 0, j = list.length; i < config.searchCount && i < j; i++) {
-                                            item.itemType = 'engineKeyword';
-                                            item.title = list[i];
-                                            data.push(item);
-                                            item = {};
-                                        }
-                                        $timeout(function () {
-                                            $scope.searchSuggest = _.union($scope.searchSuggest, data);
+                                localDataModule.getConfigById('custom', function (data) {//
+                                    if (data.data.defaultEngine.length) {
+                                        localDataModule.getConfigById('location', function (location) {
+                                            var engine = location.data.countryCode == 'CN' ? 'baidu' : 'google';
+                                            chrome.runtime.sendMessage({action: 'getSuggestFromEngine', engine: engine, keyword: keyword}, function (response) {
+                                                var list = response.resultList, i, j, data = [], item = {};
+                                                for (i = 0, j = list.length; i < config.searchCount && i < j; i++) {
+                                                    item.itemType = 'engineKeyword';
+                                                    item.title = list[i];
+                                                    data.push(item);
+                                                    item = {};
+                                                }
+                                                $timeout(function () {
+                                                    $scope.searchSuggest = _.union($scope.searchSuggest, data);
+                                                });
+                                            });
                                         });
-                                    });
+                                    }
                                 });
                             });
                         }
@@ -243,6 +248,9 @@ angular.module('search', ['ngSanitize']).controller('searchCtrl', ['$scope', '$s
                         $scope.searchSuggest = [];
                         e.stopPropagation();
                     }
+                    break;
+                default:
+                    $scope.selectedItem = -1;
             }
         }
     };

@@ -6,6 +6,7 @@ angular.module('app', [
     'resources.sites',
     'bgDirectives',
     'resources.localData',
+    'side',
     'favorites',
     'note',
     'buy',

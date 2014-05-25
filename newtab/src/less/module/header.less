@@ -20,6 +20,7 @@
             font-size: 1rem;
             outline: none;
             padding-left: 5px;
+            text-indent: 7px;
             display: inline-block;
             vertical-align: middle;
             width:400px;
@@ -28,19 +29,21 @@
         }
     }
     .search-suggest{
-        width:500px;
+        width:484px;
         position: absolute;
         z-index: 100000;
-        top:60px;
+        top:53px;
         left:50%;
-        margin-left:-250px ;
-        border:1px solid #888;
+        margin-left:-242px ;
+        border:1px solid #ddd;
         background-color: #fff;
         li{
-            line-height: 24px;
+            line-height: 28px;
+            text-indent: 12px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            cursor: pointer;
             position: relative;
             &:hover{
                 background-color: #eee;
@@ -51,6 +54,11 @@
         }
     }
     .engineSelect{
+        padding:5px 0 10px 0;
+        text-align: center;
+        a{
+            margin-right: 20px;
+        }
         .active{
             color:#f60
         }

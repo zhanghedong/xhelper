@@ -6,13 +6,13 @@
 <body>
 <div class="plugin-apps">
     <ul>
-        <li ng-repeat="item in apps">
+        <li ng-click="process.launchApp(item.id)" ng-repeat="item in apps">
             <div class="app-img-container">
                 <!--{{item.icons}}-->
                 <img ng-if="item.enabled === true" ng-src="{{item.icon}}" alt="" />
                 <img ng-if="item.enabled === false" ng-src="{{item.icon}}+'?grayscale=true'" alt="" />
             </div>
-            <span ng-click="process.launchApp(item.id)">{{item.name}}</span>
+            <span>{{item.name}}</span>
         </li>
     </ul>
 </div>

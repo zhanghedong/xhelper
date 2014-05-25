@@ -2,12 +2,21 @@
    ul {
        font-size: 0;
        li{
+           cursor: pointer;
+           float:left;
+           margin:20px 0 0 20px;
            font-size: 14px;
-           display: inline-block;
-           width:64px;
+           width:84px;
+           img{
+               width:64px;
+               height: 64px;
+           }
        }
        span{
-           display: block;
+           display: inline-block;
+           width:100%;
+           text-overflow: ellipsis;
+           white-space: nowrap;
            overflow: hidden;
        }
    }

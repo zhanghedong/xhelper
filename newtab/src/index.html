@@ -14,14 +14,11 @@
     <div ng-include="'header.tpl.html'"></div>
     <div class="main-view">
         <bg-splitter orientation="horizontal">
-            <bg-pane min-size="100">
-                <div class="sidebar">
+            <bg-pane min-size="150">
+                <div class="sidebar" ng-controller="sideCtrl">
                     <div id="plugin_btn" class="plugin-btn">
                         <ul>
-                            <li><a ng-href="#/note" class="note">note</a></li>
-                            <!--<li><a ng-href="#/buy">buy</a></li>-->
-                            <li><a ng-href="#/blog" class="ready">ready</a></li>
-                            <li><a ng-href="#/apps" class="apps">apps</a></li>
+                            <li  ng-class="{active:selectedItem == $index}"  ng-click="process.onClick($index)" ng-repeat="item in sides"><a ng-href="{{item.href}}" class="{{item.cls}}">{{item.text}}</a></li>
                         </ul>
                     </div>
                     <div id="plugin_content" class="plugin-content">

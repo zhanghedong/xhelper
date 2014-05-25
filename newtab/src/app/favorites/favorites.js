@@ -5,7 +5,7 @@
  */
 angular.module('favorites', ['ngModal', 'ngSanitize']).controller('favoritesCtrl', ['$scope', '$sce', '$timeout', 'Sites', '_', '$location', '$anchorScroll',
     function ($scope, $sce, $timeout, sites, _, $location, $anchorScroll) {
-        var helper = null, g = {}, configIcon = null, localData = null,  process = {}, message = {};
+        var helper = null, g = {}, configIcon = null, localData = null, process = {}, message = {};
         g.params = {
             addTileToCategory: null,
             recommendId: '2fcd9d39-77b7-4435-ad6a-82b3d2a12498'//最常访问ID
@@ -85,6 +85,10 @@ angular.module('favorites', ['ngModal', 'ngSanitize']).controller('favoritesCtrl
                 //获取数据
                 process.resetFavorites();
                 helper.onMessage();
+                $scope.defaultColors = g.config.defaultColor;
+                $scope.colorSelectIdx = 0;
+                $scope.showChromeMenu = false;
+                $scope.showChromeRecentlyClosed = false;
             },
             sendMessage: function (obj) {
                 chrome.runtime.sendMessage(obj);
@@ -233,15 +237,11 @@ angular.module('favorites', ['ngModal', 'ngSanitize']).controller('favoritesCtrl
             },
             resetFavorites: function () {
                 //最常访问
-
                 process.getRecommend(function (data) {
                     $scope.currentSites = data;
                     $scope.recommend = data;
                 });
                 process.getCategories(function (data) {
-//                    if (data.length) {
-//                        process.goCategory(data[0]);
-//                    }
                     $timeout(function () {
                         $scope.categories = data;
                     });
@@ -251,7 +251,7 @@ angular.module('favorites', ['ngModal', 'ngSanitize']).controller('favoritesCtrl
                 $scope.updateCategoryInfo = {
                     id: category_id || '',
                     name: category_name || '',
-                    deleteMsg: $sce.trustAsHtml('')
+                    deleteMsg: $sce.trustAsHtml(chrome.i18n.getMessage('deleteCategoryMessage', [category_name]))
                 };
                 $scope.dialogTitle = chrome.i18n.getMessage('deleteCategoryTitle');
                 $scope.modalShownDeleteCategory = !$scope.modalShownDeleteCategory;
@@ -270,11 +270,8 @@ angular.module('favorites', ['ngModal', 'ngSanitize']).controller('favoritesCtrl
                                 break;
                             }
                         }
-//                        process.sendMessage({action: "deleteContextMenu", id: $scope.updateCategoryInfo.id});
-                        localData.setCategories(data);
-                        $timeout(function () {
-                            $scope.categories = data;
-
+                        localData.setCategories(data, function () {
+                            process.resetFavorites();
                         });
                     });
                     process.getSites(function (sites) {
@@ -293,6 +290,7 @@ angular.module('favorites', ['ngModal', 'ngSanitize']).controller('favoritesCtrl
                 $scope.updateCategoryInfo = category || {
                     id: ''
                 };
+                $scope.dialogTitle = category ? chrome.i18n.getMessage('updateCategoryTitle') : chrome.i18n.getMessage('addCategoryTitle');
                 $scope.modalShownCategory = !$scope.modalShownCategory;
             },
             updateCategory: function () {
@@ -394,17 +392,73 @@ angular.module('favorites', ['ngModal', 'ngSanitize']).controller('favoritesCtrl
                 $anchorScroll();
 
             },
+            colorClick: function (idx) {
+//               $scope.colorSelectIdx = g.config.defaultColor.indexOf(idx);
+                $scope.colorSelectIdx = idx;
+            },
+            chromeMenuClick: function (item) {
+                $scope.showChromeMenu = !$scope.showChromeMenu;
+                helper.sendMessage({action: 'goChromeUrl', data: {url: item.href }}, function () {});
+            },
+            bodyClick:function(){
+//                $scope.showChromeMenu = false;
+//                $scope.showChromeRecentlyClosed = false;
+            },
             /**
              * 显示系统快速导航
              */
             chromeMenu: function () {
+                $scope.showChromeRecentlyClosed = false;
+                $scope.showChromeMenu = !$scope.showChromeMenu;
+                var menu = [
+                    {
+                        href: 'chrome://bookmarks',
+                        text: chrome.i18n.getMessage('bookmarks')
+                    },
+                    {
+                        href: 'chrome://downloads',
+                        text: chrome.i18n.getMessage('downloads')
+                    },
+                    {
+                        href: 'chrome://history',
+                        text: chrome.i18n.getMessage('history')
+                    },
+                    {
+                        href: 'chrome://extensions',
+                        text: chrome.i18n.getMessage('extensions')
+                    },
+                    {
+                        href: 'chrome://settings',
+                        text: chrome.i18n.getMessage('settings')
+                    },
+                    {
+                        href: 'chrome://settings/clearBrowserData',
+                        text: chrome.i18n.getMessage('clearHistory')
+                    }
+
+                ];
+                console.log(menu);
+                $scope.chromeMenu = menu;
 
             },
             /**
              * 显示最近关闭
              */
             recentlyClosed: function () {
-
+                $scope.showChromeMenu = false;
+                $scope.showChromeRecentlyClosed = !$scope.showChromeRecentlyClosed;
+                helper.sendMessage({action: 'goRecentlyClosed', data: {}}, function (data) {
+                    var i, j,site = {}, sites = [];
+                    for (i = 0, j = data.length; i < j; i++) {
+                        site = {};
+                        site.href = data[i].tab.url;
+                        site.text = data[i].tab.title.substr(0,16);
+                        sites.push(site);
+                    }
+                    $timeout(function () {
+                        $scope.chromeRecentlyClosed = sites;
+                    });
+                });
             }
         };
         $scope.process = process;

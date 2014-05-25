@@ -2,6 +2,7 @@
     height: 100%;
     box-sizing: border-box;
     overflow-y: scroll;
+    background-color: #efefef;
 }
 
 .favorites-bar {
@@ -12,7 +13,7 @@
     line-height: 28px;
     margin-left: -20px;
     width: 100%;
-    background-color: #eee;
+    background-color: #367CA1;
     .categories {
         margin-right: 200px;
         padding-left: 8px;
@@ -20,13 +21,26 @@
         a {
             display: inline-block;
             cursor: pointer;
-            margin-right: 8px;
+            margin-right: 12px;
+            color:#fff;
+            &:hover{
+                color: #eee;
+            }
         }
     }
     .sys-menu {
         position: absolute;
-        right: 0;
+        right: 30px;
+        line-height: 32px;
         bottom: 0;
+        a {
+            cursor: pointer;
+            margin: 0 10px;
+            color:#fff;
+            &:hover{
+                color:#eee;
+            }
+        }
     }
 }
 
@@ -46,8 +60,12 @@
             height: 60px;
             text-indent: 10px;
             line-height: 60px;
+            .title {
+                margin-right: 20px;
+            }
             .edit, .delete {
                 visibility: hidden;
+                margin: 18px 0 0 15px;
             }
             &:hover {
                 .edit, .delete {
@@ -96,9 +114,10 @@
                     .edit, .delete {
                         position: absolute;
                         visibility: hidden;
+                        top: 5px
                     }
                     .edit {
-                        right: 60px;
+                        right: 44px;
                     }
                     .delete {
                         right: 10px;
@@ -137,6 +156,88 @@
                     }
                 }
             }
+            .add-item-wrap {
+                .item {
+                    text-align: center;
+                    background: transparent;
+                    .add-title {
+                        text-indent: -9999px;
+                    }
+                    .add-icon {
+                        display: inline-block;
+                        width: 48px;
+                        height: 48px;
+                        margin-top: 25px;
+                        vertical-align: middle;
+                        background: url(../resource/icons/add.png) no-repeat;
+                        opacity: .3;
+                    }
+                }
+                &:hover {
+                    .item {
+                        background: #f7f7f7;
+                    }
+                    .add-icon {
+                        opacity: 1;
+                    }
+                }
+            }
         }
     }
+}
+
+.select-color {
+    font-size: 0px;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+    vertical-align: middle;
+    background-color: rgb(255, 102, 0);
+    cursor: pointer;
+    -webkit-transition: all 0.2s;
+    transition: all 0.2s;
+    &.active {
+        -webkit-transform: scale(1.3);
+        &:hover {
+            -webkit-transform: scale(1.3);
+        }
+    }
+    &:hover {
+        -webkit-transform: scale(1.2);
+    }
+}
+
+.category-delete-wrap {
+    padding: 10px;
+    .desc {
+        line-height: 24px;
+    }
+    .opt {
+        padding: 10px 0;
+    }
+}
+
+.chrome_menu {
+    position: absolute;
+    z-index: 10000000;
+    bottom: 28px;
+    right: 58px;
+    padding: 10px;
+    background-color: #367CA1;
+    li {
+        line-height: 32px;
+        text-indent: 24px;
+        cursor: pointer;
+        padding-right: 20px;
+        span {
+            color: #fff;
+            &:hover {
+                color: #eee;
+            }
+        }
+    }
+}
+.recently-closed{
+    right:0;
 }
