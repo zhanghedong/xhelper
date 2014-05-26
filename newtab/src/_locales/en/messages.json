@@ -1,0 +1,116 @@
+{
+    "title": {
+        "message": "c Nav",
+        "description": "导航名称"
+    },
+    "desc": {
+        "message": "快捷工具导航",
+        "description": "快捷工具导航"
+    },
+    "recommend": {
+        "message": "Most visited",
+        "description": "最常访问"
+    },
+    "searchPlaceholder": {
+        "message": "Bookmarks、Google、Baidu",
+        "description": "搜索栏提示"
+    },
+    "updateSiteTitle": {
+        "message": "Modify",
+        "description": "修改网址"
+    },
+    "addSiteTitle": {
+        "message": "Add site",
+        "description": "添加网址"
+    },
+    "updateCategoryTitle": {
+        "message": "Modify Tag",
+        "description": "修改类别"
+    },
+    "addCategoryTitle": {
+        "message": "Add Tag",
+        "description": "添加类别"
+    },
+    "deleteCategoryTitle": {
+        "message": "删除该类别",
+        "description": "删除该类别"
+    },
+    "deleteCategoryMessage": {
+        "message": "Delete \"<em> $category_name$ </em>\" will delete all of it`s favorites items,Are you shure?",
+        "description": "Delete  will delete all of it`s favorites items,Are you shure?",
+        "placeholders": {
+            "category": {
+                "content": "$1",
+                "example": "书签栏"
+            }
+        }
+    },
+    "menuBuyTitle": {
+        "message": "待购商品",
+        "description": "待购商品"
+    },
+    "menuBlogTitle": {
+        "message": "Read Later",
+        "description": "稍后阅读"
+    },
+    "menuBookmarkTitle": {
+        "message": "Bookmarks",
+        "description": "收藏网址"
+    },
+    "notifyTip": {
+        "message": "Message",
+        "description": "操作提示"
+    },
+    "notifyExistDesc": {
+        "message": "The site already exists under $category$ ! ",
+        "description": "添加收藏后提示",
+        "placeholders": {
+            "category": {
+                "content": "$1",
+                "example": "Recommended"
+            }
+        }
+    },
+    "notifySuccess": {
+        "message": "Success!",
+        "description": "操作成功"
+    },
+    "notifySuccessDesc": {
+        "message": "Added to $category$ ",
+        "description": "添加收藏后提示",
+        "placeholders": {
+            "category": {
+                "content": "$1",
+                "example": "Recommended"
+            }
+        }
+    },
+    "notifyBlogDesc": {
+        "message": "Has been added to the read later!",
+        "description": "已添加到待读文章"
+    },
+    "bookmarks": {
+        "message": "Bookmarks",
+        "description": "书签管理"
+    },
+    "downloads":{
+        "message": "Downloads",
+        "description": "下载管理"
+    },
+    "history":{
+        "message": "History",
+        "description": "历史记录管理"
+    },
+    "extensions":{
+        "message": "Extensions",
+        "description": "扩展管理"
+    },
+    "settings":{
+        "message": "Settings",
+        "description": "设置"
+    },
+    "clearHistory":{
+        "message": "Clear browsing data",
+        "description": "清楚历史记录"
+    }
+}

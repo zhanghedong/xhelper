@@ -138,8 +138,8 @@
                     </div>
                     <div class="ipt-item select-color-wrap">
                         <div class="ipt-wrap">
-                            <span class="select-color" ng-class="{active:colorSelectIdx == $index}"
-                                  ng-repeat="color in defaultColors" ng-click="process.colorClick($index)"
+                            <span class="select-color" ng-click="process.setBackgroundColor(color,$index);" ng-class="{active:colorSelectIdx == $index}"
+                                  ng-repeat="color in defaultColors"
                                   ng-style="{'background-color':color}">{{colorSelectIdx}}{{color}}</span>
                         </div>
                     </div>

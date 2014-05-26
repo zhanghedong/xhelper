@@ -36,7 +36,6 @@ angular.module('favorites', ['ngModal', 'ngSanitize']).controller('favoritesCtrl
 //                localDataModule.putUserData({id: 'favorites', data: data}, callback);
 //
 //            },
-
             sendMessage: function (msg, callback) {
                 chrome.runtime.sendMessage(msg, function (response) {
                     callback(response);
@@ -311,7 +310,6 @@ angular.module('favorites', ['ngModal', 'ngSanitize']).controller('favoritesCtrl
                             "name": $scope.updateCategoryInfo.name,
                             "items": []
                         };
-                        console.log(categoryInfo);
                         categories.push(categoryInfo);
                     }
                     localData.setCategories(categories);
@@ -323,7 +321,6 @@ angular.module('favorites', ['ngModal', 'ngSanitize']).controller('favoritesCtrl
 
             },
             deleteFavorite: function (category, item, event, idx) {
-
                 event.preventDefault();
                 event.stopPropagation();
                 category.items.splice(idx, 1);
@@ -346,6 +343,7 @@ angular.module('favorites', ['ngModal', 'ngSanitize']).controller('favoritesCtrl
                 event.preventDefault();
                 event.stopPropagation();
                 g.params.addTileToCategory = category;
+                $scope.addSiteToCategory = category;
                 $scope.editFavoriteInfo = favorite || {
                     url: 'http://',
                     title: ''
@@ -354,22 +352,25 @@ angular.module('favorites', ['ngModal', 'ngSanitize']).controller('favoritesCtrl
                 $scope.editFavoriteInfo.idx = idx ? idx : 0;
                 $scope.modalShownFavorite = !$scope.modalShownFavorite;
             },
+            setBackgroundColor:function(color,idx){
+                $scope.editFavoriteInfo.bgColor = color;
+                $scope.colorSelectIdx = idx;
+            },
             updateFavorite: function () {
                 var guid = helper.getGUID();
                 var favorite = {
                     "id": $scope.editFavoriteInfo.id || guid,
                     "guid": $scope.editFavoriteInfo.guid || guid,
                     "title": $scope.editFavoriteInfo.title,
-                    "parentId": g.params.addTileToCategory.id,
+                    "parentId": $scope.editFavoriteInfo.parentId ||  $scope.addSiteToCategory.id,//添加是
                     "url": $scope.editFavoriteInfo.url,
                     "icon": "",//ICON TODO
                     "letter": $scope.editFavoriteInfo.title.substr(0, 2),
-                    "bgColor": $scope.editFavoriteInfo.bgColor || helper.getRandColor()
+                    "bgColor": $scope.editFavoriteInfo.bgColor || g.config.defaultColor[0]
                 };
                 process.getSites(function (sites) {
                     var i, j;
                     if ($scope.editFavoriteInfo.id) {
-                        console.log('update', favorite);
                         for (i = 0, j = sites.length; i < j; i++) {
                             if (sites[i].guid === favorite.guid) {
                                 sites[i] = favorite;
@@ -377,9 +378,9 @@ angular.module('favorites', ['ngModal', 'ngSanitize']).controller('favoritesCtrl
                             }
                         }
                     } else {
-                        console.log('insert', favorite);
                         sites.push(favorite);
                     }
+
                     localData.setSites(sites, function () {
                         process.goCategory(g.params.addTileToCategory);
                     });
@@ -391,10 +392,6 @@ angular.module('favorites', ['ngModal', 'ngSanitize']).controller('favoritesCtrl
                 $location.hash(anchor);
                 $anchorScroll();
 
-            },
-            colorClick: function (idx) {
-//               $scope.colorSelectIdx = g.config.defaultColor.indexOf(idx);
-                $scope.colorSelectIdx = idx;
             },
             chromeMenuClick: function (item) {
                 $scope.showChromeMenu = !$scope.showChromeMenu;

@@ -5,17 +5,6 @@
 
 angular.module('blog', [ 'ngSanitize']).controller('blogCtrl', ['$scope', '$sce', '$timeout', '_', 'LocalData', function ($scope, $sce, $timeout, _, localDataModule) {
     var process = {}, helper = {}, localData = {};
-//    helper = {
-//        getLocalBlog: function (callback) {
-//            localDataModule.getUserDataById('blog', function (data) {
-//                data = data && data.data || [];
-//                callback(data);
-//            });
-//        },
-//        setLocalBlog:function(data){
-//            localDataModule.putUserData({id: 'blog', data: data});
-//        }
-//    };
     helper = {
         sendMessage: function (msg, callback) {
             chrome.runtime.sendMessage(msg, function (response) {
