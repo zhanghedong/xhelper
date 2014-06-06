@@ -297,6 +297,7 @@ angular.module('favorites', ['ngModal', 'ngSanitize']).controller('favoritesCtrl
                     var i, j, GUID = helper.getGUID(), categoryInfo;
                     if ($scope.updateCategoryInfo.id) {//修改操作
                         for (i = 0, j = categories.length; i < j; i++) {
+
                             if (categories[i].guid === $scope.updateCategoryInfo.guid) {
                                 categories[i] = $scope.updateCategoryInfo;
                                 break;

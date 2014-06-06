@@ -36,7 +36,7 @@
         "description": "删除该类别"
     },
     "deleteCategoryMessage": {
-        "message": "Delete \"<em> $category_name$ </em>\" will delete all of it`s favorites items,Are you shure?",
+        "message": "Delete \"<em> $category$ </em>\" will delete all of it`s favorites items,Are you shure?",
         "description": "Delete  will delete all of it`s favorites items,Are you shure?",
         "placeholders": {
             "category": {

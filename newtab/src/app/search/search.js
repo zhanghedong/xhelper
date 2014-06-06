@@ -226,6 +226,12 @@ angular.module('search', ['ngSanitize']).controller('searchCtrl', ['$scope', '$s
                     break;
             }
         },
+        btnClick:function(){
+            var item = {};
+            item.itemType = 'engineKeyword';
+            item.title = $scope.keyword;
+            process.searchClick(item);
+        },
         search: function (e) {
             var g = {DOWN: 40, UP: 38, ENTER: 13, ESC: 27}, item = {};
             switch (e.keyCode) {

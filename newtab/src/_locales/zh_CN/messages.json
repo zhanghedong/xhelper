@@ -37,7 +37,7 @@
     },
     "deleteCategoryMessage": {
         "message": "确认删除\" $category$ \"类别及该类别下的所有网址",
-        "description": "Delete <em>' + category_name + '</em> will delete all of it`s favorites items,Are you shure?",
+        "description": "Delete <em>' + $category$e + '</em> will delete all of it`s favorites items,Are you shure?",
         "placeholders": {
             "category": {
                 "content": "$1",

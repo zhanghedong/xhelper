@@ -22,7 +22,7 @@
         <section class="search" id="search">
             <input class="ipt" type="text" autocomplete="off" ng-keyup="process.search($event)" ng-model="keyword"
                    placeholder="{{keywordPlaceholder}}" id="keyword" value="" />
-            <a class="btn btn-search" ng-click="process.search($event)">搜索</a>
+            <a class="btn btn-search" ng-click="process.btnClick($event)">搜索</a>
         </section>
         <section class="search-suggest" id="search_suggest" ng-if="searchSuggest.length">
             <ul>
