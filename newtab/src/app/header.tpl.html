@@ -20,8 +20,8 @@
     </div>
     <div class="searchCtrl" ng-controller="searchCtrl">
         <section class="search" id="search">
-            <input class="ipt" type="text" autocomplete="off" ng-keyup="process.search($event)" ng-model="keyword"
-                   placeholder="{{keywordPlaceholder}}" id="keyword" value="" />
+            <input class="ipt" type="text" autocomplete="off"  autofocus="autofocus" ng-keyup="process.search($event)" ng-model="keyword"
+                   placeholder="{{keywordPlaceholder}}"  focus-me="true" value="" />
             <a class="btn btn-search" ng-click="process.btnClick($event)">搜索</a>
         </section>
         <section class="search-suggest" id="search_suggest" ng-if="searchSuggest.length">
@@ -36,4 +36,5 @@
         </section>
     </div>
 </header>
+
 

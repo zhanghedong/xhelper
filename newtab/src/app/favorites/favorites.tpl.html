@@ -2,6 +2,7 @@
     <div class="favorites">
         <ul class="categories"> <!--ng-repeat="cateory in sites track by category.id"-->
             <li class="category" ng-repeat="category in currentSites track by category.guid">
+
                 <h2 id="{{category.id}}">
                     <span class="title">{{category.name}}</span>
                     <a class="btn edit" ng-if="category.type!='recommend'"
@@ -9,7 +10,7 @@
                     <a class="btn delete" ng-if="category.type!='recommend'"
                        ng-click="process.showDeleteCategory(category.id,category.name)">delete</a>
                 </h2>
-                <ul class="sites">
+                <ul class="sites"  ui-sortable="sortableOptions" ng-model="category.items">
                     <li class="item-wrap" ng-repeat=" item in category.items track by item.guid">
                         <div class="item">
                             <a class="info" ng-style="{'background-image':item.icon}" ng-href="{{item.url}}"
@@ -40,6 +41,7 @@
                                         无背景提示
                                     </div>
                                 </a>
+
                                 <div class="actions">
                                     <div class="btn edit"></div>
                                     <div class="btn delete"></div>

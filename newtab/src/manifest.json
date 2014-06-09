@@ -5,7 +5,7 @@
     "version": "0.21",
     "manifest_version": 2,
     "minimum_chrome_version": "23",
-    "default_locale":"zh_CN",
+    "default_locale":"en",
     "icons": {
         "16": "resource/icons/texteditor_16.png",
         "24": "resource/icons/texteditor_24.png",
@@ -37,6 +37,6 @@
     "web_accessible_resources":[
         "index.html"
     ],
-    "content_security_policy": "script-src 'self' https://d.com; object-src 'self'"
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
 }
 

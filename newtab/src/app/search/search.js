@@ -141,7 +141,6 @@ angular.module('search', ['ngSanitize']).controller('searchCtrl', ['$scope', '$s
                                 });
                                 localDataModule.getConfigById('custom', function (data) {//
                                     if (data.data.defaultEngine.length) {
-                                        console.log('abcdef');
                                         localDataModule.getConfigById('location', function (location) {
                                             var engine = location.data.countryCode == 'CN' ? 'baidu' : 'google';
                                             chrome.runtime.sendMessage({action: 'getSuggestFromEngine', engine: engine, keyword: keyword}, function (response) {

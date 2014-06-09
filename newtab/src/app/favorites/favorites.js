@@ -3,7 +3,7 @@
  * Copyright 2014 , Inc. All rights reserved.
  *
  */
-angular.module('favorites', ['ngModal', 'ngSanitize']).controller('favoritesCtrl', ['$scope', '$sce', '$timeout', 'Sites', '_', '$location', '$anchorScroll',
+angular.module('favorites', ['ngModal', 'ngSanitize', 'ui.sortable']).controller('favoritesCtrl', ['$scope', '$sce', '$timeout', 'Sites', '_', '$location', '$anchorScroll',
     function ($scope, $sce, $timeout, sites, _, $location, $anchorScroll) {
         var helper = null, g = {}, configIcon = null, localData = null, process = {}, message = {};
         g.params = {
@@ -78,6 +78,68 @@ angular.module('favorites', ['ngModal', 'ngSanitize']).controller('favoritesCtrl
             url: 'http://',
             title: '',
             bgColor: '#222'
+        };
+        $scope.sortableOptions = {
+            // called after a node is dropped
+            update: function (e, ui) {
+//                console.log('update----',ui.item.scope().item);
+//                var logEntry = $scope.currentSites[0].items.map(function(i){
+//                    return i.guid;
+//                }).join(', ');
+//              console.log('Update: ' + logEntry);
+            },
+            stop: function (e, ui) {
+                // this callback has the changed model
+//                console.log('stop---',);
+//                console.log('stop eee====',e);
+//                console.log('stop ui====',ui);
+
+                var sortItem = ui.item.scope().item;
+                var sortedItems = $scope.currentSites[0].items, insertGuid = '', dirt = 'after', isRemove = false, isInsert = false;
+                if (sortedItems.length > 1) {
+                    localData.getUserDataById('sites', function (data) {
+                        data = (data && data.data || []);
+                        for (var n = 0, m = sortedItems.length; n < m; n++) {
+                            if (sortedItems[n].guid === sortItem.guid) {
+                                console.log('xxxxx');
+                                if (n === m - 1) {
+                                    insertGuid = sortedItems[n - 1].guid;
+                                    dirt = 'after';
+                                } else {
+                                    insertGuid = sortedItems[n + 1].guid;
+                                    dirt = 'before';
+                                }
+                                break;
+                            }
+                        }
+                        var len = data.length;
+                        for (var i = 0; i <= len; i++) {
+                            if (data[i]) {
+                                if (data[i].guid === sortItem.guid && !isRemove) {
+                                    data.splice(i, 1);
+                                    isRemove = true;
+                                }
+                                if (data[i].guid === insertGuid && !isInsert) {
+                                    if (dirt === 'after') {
+                                        if (i === data.length - 1) {
+                                            data.push(sortItem);
+                                        } else {
+                                            data.splice(i + 1, 0, sortItem);
+                                        }
+                                        console.log('insert1');
+                                        isInsert = true;
+                                    } else {
+                                        data.splice(i, 0, sortItem);
+                                        isInsert = true;
+                                        console.log('insert2');
+                                    }
+                                }
+                            }
+                        }
+                        localData.setSites(data);
+                    })
+                }
+            }
         };
         process = {
             init: function () {
@@ -394,9 +456,14 @@ angular.module('favorites', ['ngModal', 'ngSanitize']).controller('favoritesCtrl
                 $anchorScroll();
 
             },
+            colorClick: function (idx) {
+//               $scope.colorSelectIdx = g.config.defaultColor.indexOf(idx);
+                $scope.colorSelectIdx = idx;
+            },
             chromeMenuClick: function (item) {
                 $scope.showChromeMenu = !$scope.showChromeMenu;
-                helper.sendMessage({action: 'goChromeUrl', data: {url: item.href }}, function () {});
+                helper.sendMessage({action: 'goChromeUrl', data: {url: item.href }}, function () {
+		});
 
             },
             bodyClick:function(){
