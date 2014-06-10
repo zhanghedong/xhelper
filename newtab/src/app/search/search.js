@@ -37,7 +37,7 @@ angular.module('search', ['ngSanitize']).controller('searchCtrl', ['$scope', '$s
                 if (!data) {
                     //根据用户所在国家设置默认搜索引擎 TODO
                     localDataModule.getConfigById('location', function (data) {
-                        if (data.data.countryCode.toLocaleString() == 'cn') {
+                        if (data && data.data && data.data.countryCode.toLocaleString() == 'cn') {
                             localDataModule.putConfig({id: 'custom', data: {defaultEngine: ['baidu'], target: '_blank'}});
                         } else {
                             localDataModule.putConfig({id: 'custom', data: {defaultEngine: ['google'], target: '_blank'}});
@@ -142,7 +142,7 @@ angular.module('search', ['ngSanitize']).controller('searchCtrl', ['$scope', '$s
                                 localDataModule.getConfigById('custom', function (data) {//
                                     if (data.data.defaultEngine.length) {
                                         localDataModule.getConfigById('location', function (location) {
-                                            var engine = location.data.countryCode == 'CN' ? 'baidu' : 'google';
+                                            var engine = (location && location.data && location.data.countryCode == 'CN' )? 'baidu' : 'google';
                                             chrome.runtime.sendMessage({action: 'getSuggestFromEngine', engine: engine, keyword: keyword}, function (response) {
                                                 var list = response.resultList, i, j, data = [], item = {};
                                                 for (i = 0, j = list.length; i < config.searchCount && i < j; i++) {

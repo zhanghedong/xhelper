@@ -1,10 +1,10 @@
 {
     "title": {
-        "message": "c Nav",
+        "message": "xHelper(Bookmarks、Note、Ready Later)",
         "description": "导航名称"
     },
     "desc": {
-        "message": "快捷工具导航",
+        "message": "xHelper Help you quickly use Bookmarks, Note, Read later,Chrome App , Browser Settings and other auxiliary tools in new tab.",
         "description": "快捷工具导航"
     },
     "recommend": {
@@ -32,7 +32,7 @@
         "description": "添加类别"
     },
     "deleteCategoryTitle": {
-        "message": "删除该类别",
+        "message": "Delete Category",
         "description": "删除该类别"
     },
     "deleteCategoryMessage": {

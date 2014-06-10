@@ -4,9 +4,10 @@
         rootMenuId: "6375ac11-3e03-49a0-b6ae-9564d10e7ee3"
     };
     g.config = {
-        defaultColor: ['#2F09FF', '#E82C2A', '#FFC53B', '#56E82A', '#00C0FF'],
+        defaultColor: ['#75B08A', '#FF9D84', '#A73E5C', '#334D5C', '#74495F','#EB4A33','#5F6F8C','#021B27','#3A2D4A','#F0D853','#023859'],
         searchEngine: {baidu: 'http://unionsug.baidu.com/su?cb=JSON_CALLBACK&_=' + ((new Date()).valueOf()) + '&wd=', google: 'http://google.com/complete/search?client=chrome-omni&ie=utf-8&oe=utf-8&hl=en-US&q='}
     };
+
     localData = {
         getUserData: function (callback) {
             NTP.IDB.getUserData(function (data) {
@@ -271,9 +272,7 @@
          * @param callback
          */
         setGeolocation: function (callback) {
-            console.log('get location');
             $.get(NTP.PREF.get('geolocationServiceUrl'), function (data) {
-                console.log('location=====',data);
                 NTP.PREF.set('location', data);
                 callback && callback(data);
             })
@@ -357,6 +356,7 @@
             }
         }
     };
+
     process.installed();
     process.messageListener();
 }());

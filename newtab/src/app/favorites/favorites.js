@@ -11,7 +11,7 @@ angular.module('favorites', ['ngModal', 'ngSanitize', 'ui.sortable']).controller
             recommendId: '2fcd9d39-77b7-4435-ad6a-82b3d2a12498'//最常访问ID
         };
         g.config = {
-            defaultColor: ['#2F09FF', '#E82C2A', '#FFC53B', '#56E82A', '#00C0FF']
+            defaultColor: ['#75B08A', '#FF9D84', '#A73E5C', '#334D5C', '#74495F','#EB4A33','#5F6F8C','#021B27','#3A2D4A','#F0D853','#023859'],
         };
         configIcon = {
             "www.google.com": {"icon": "/resource/logo/google.svg", "bgColor": "#3369E8"},
@@ -34,8 +34,8 @@ angular.module('favorites', ['ngModal', 'ngSanitize', 'ui.sortable']).controller
             },
 //            setLocalSites: function (data, callback) {
 //                localDataModule.putUserData({id: 'favorites', data: data}, callback);
-//
 //            },
+
             sendMessage: function (msg, callback) {
                 chrome.runtime.sendMessage(msg, function (response) {
                     callback(response);
@@ -89,10 +89,6 @@ angular.module('favorites', ['ngModal', 'ngSanitize', 'ui.sortable']).controller
 //              console.log('Update: ' + logEntry);
             },
             stop: function (e, ui) {
-                // this callback has the changed model
-//                console.log('stop---',);
-//                console.log('stop eee====',e);
-//                console.log('stop ui====',ui);
 
                 var sortItem = ui.item.scope().item;
                 var sortedItems = $scope.currentSites[0].items, insertGuid = '', dirt = 'after', isRemove = false, isInsert = false;
@@ -101,7 +97,6 @@ angular.module('favorites', ['ngModal', 'ngSanitize', 'ui.sortable']).controller
                         data = (data && data.data || []);
                         for (var n = 0, m = sortedItems.length; n < m; n++) {
                             if (sortedItems[n].guid === sortItem.guid) {
-                                console.log('xxxxx');
                                 if (n === m - 1) {
                                     insertGuid = sortedItems[n - 1].guid;
                                     dirt = 'after';
@@ -151,11 +146,13 @@ angular.module('favorites', ['ngModal', 'ngSanitize', 'ui.sortable']).controller
                 $scope.showChromeMenu = false;
                 $scope.showChromeRecentlyClosed = false;
             },
+            analytics:function(){
+
+            },
             sendMessage: function (obj) {
                 chrome.runtime.sendMessage(obj);
                 //
             },
-
             getRecommend: function (callback) {
                 localData.getTopSites(function (d) {
                     var recommended = [], guid = helper.getGUID(), domain, i, j;

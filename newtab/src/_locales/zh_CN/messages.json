@@ -1,10 +1,10 @@
 {
     "title": {
-        "message": "C导航",
-        "description": "导航名称"
+        "message": "xHelper(标签管理、记事本、简捷阅读)",
+        "description": "插件名称"
     },
     "desc": {
-        "message": "快捷工具导航",
+        "message": "xHelper 帮助你在新标签页中快速的使用收藏标签、记事、稍后阅读、应用管理、浏览器设置等辅助工具。",
         "description": "快捷工具导航"
     },
     "recommend": {
