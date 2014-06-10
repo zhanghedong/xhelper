@@ -170,7 +170,7 @@ module.exports = function (grunt) {
                 }
             },
             jquery: {
-                src: ['vendor/jquery/jquery.js'],
+                src: ['vendor/jquery/jquery.js','vendor/jquery/jquery-ui.min.js'],
                 dest: '<%= distdir %>/lib/jquery.js',
                 options: {
                     process: true
@@ -195,7 +195,7 @@ module.exports = function (grunt) {
                 dest: '<%= distdir %>/angular.js'
             },
             plugin: {
-                src: ['vendor/underscore/underscore-min.js', 'vendor/ng_modal/ng-modal.js','vendor/idbwrapper/idbstore.js'],
+                src: ['vendor/underscore/underscore-min.js', 'vendor/ng_modal/ng-modal.js','vendor/idbwrapper/idbstore.js','vendor/ui-sortable/src/sortable.js'],
                 dest: '<%= distdir %>/plugin.js'
             }
 //            jquery: {

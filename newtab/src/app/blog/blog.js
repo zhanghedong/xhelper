@@ -8,7 +8,7 @@ angular.module('blog', [ 'ngSanitize']).controller('blogCtrl', ['$scope', '$sce'
     helper = {
         sendMessage: function (msg, callback) {
             chrome.runtime.sendMessage(msg, function (response) {
-                callback(response.data);
+                callback(response && response.data);
             });
         },
         onMessage: function () {
