@@ -1,4 +1,4 @@
-angular.module("config", [])
+/*angular.module("config", [])
 
 .constant("API", {
   "HOST": "http://ihome.com/api/"
@@ -6,4 +6,4 @@ angular.module("config", [])
 
 .constant("ENV", "development")
 
-;
+;*/

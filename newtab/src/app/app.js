@@ -52,7 +52,6 @@ angular.module('app').config(['$routeProvider', '$locationProvider', '$httpProvi
 })
     .controller('AppCtrl', function ($scope, $location, $window) {
         $scope.title = chrome.i18n.getMessage('title');
-        console.log(chrome.i18n.getMessage('title'));
     });
 
 var _gaq = _gaq || [];

@@ -47,10 +47,9 @@ angular.module('weather', ['ngSanitize']).controller('weatherCtrl', ['$scope', '
                     $scope.afterTomorrow.desc = data.list[1].weather[0].description;
                     $scope.afterTomorrow.id= data.list[1].weather[0].id;
                 });
-                console.log(data);
             });
         }
     };
-    process.init();
+    // process.init();//暂时关闭天气 TODO
 //    $scope.process = process;
 }]);

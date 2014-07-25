@@ -30,6 +30,23 @@
                 return v.toString(16);
             });
         },
+        getDomain: function (url) {
+                var r = /:\/\/(.[^/]+)/;
+                var ma = url.match(r);
+
+                var domain = (ma && ma.length && ma.length >=1) ? ma[1]:'';
+                if(domain){
+                    domain = domain.split('.');
+                    if(domain.length>=2){
+                        return domain[domain.length-2];
+                    }else{
+                        return '';
+                    }
+                }else{
+                    return '';
+                }
+        },
+
         getRandColor: function () {
             var idx = Math.floor(Math.random() * 5);
             return g.config.defaultColor[idx];
@@ -95,6 +112,11 @@
                         case 'insertFavorite':
                             var item = msg.item;
                             if (item.url !== '') {
+                                if(!item.icon){
+                                    var logo = NTP.PREF.get('logo');
+                                    var domain = helper.getDomain(item.url);
+                                    item.icon = domain && logo[domain] && logo[domain].logo || '';
+                                }
                                 localData.getUserData(function (data) {
                                     var sites = [], i, j, noIn = true;
                                     for (i = 0, j = data.length; i < j; i++) {
@@ -146,9 +168,10 @@
                             });
                             break;
                         case 'getWeather':
-                            process.getWeather(function (data) {
-                                sendResponse(data);
-                            });
+                            //TODO 暂时关闭天气
+                            // process.getWeather(function (data) {
+                            //     sendResponse(data);
+                            // });
                             break;
                         case 'getForecastWeather':
                             process.getForecastWeather(function (data) {
@@ -265,7 +288,7 @@
             //因为监听器本身只在事件页面的环境中存在，您必须每次在事件页面加载时使用 addListener，仅仅在 runtime.onInstalled 这么做是不够的。
 
             //记录 geolocation
-            NTP.PREF.get('location') || process.setGeolocation();
+            // NTP.PREF.get('location') || process.setGeolocation(); //暂时关闭地理位置与天气服务
         },
         /**
          * 取当前地址

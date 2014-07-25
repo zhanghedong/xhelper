@@ -2,7 +2,7 @@
     "update_url":"http://clients2.google.com/service/update2/crx",
     "name":"__MSG_title__",
     "description": "__MSG_desc__",
-    "version": "0.0.2",
+    "version": "0.0.1",
     "manifest_version": 2,
     "minimum_chrome_version": "23",
     "default_locale":"en",
@@ -28,6 +28,11 @@
     ],
     "background": {
         "page": "background.html"
+    },
+    "app": {
+        "launch": {
+            "local_path": "index.html#launch"
+        }
     },
     "web_accessible_resources":[
         "index.html"

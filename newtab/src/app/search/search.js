@@ -28,6 +28,7 @@ angular.module('search', ['ngSanitize']).controller('searchCtrl', ['$scope', '$s
     };
     process = {
         onClick: function () {
+
         },
         init: function () {
             $scope.keywordPlaceholder =chrome.i18n.getMessage('searchPlaceholder');
@@ -76,7 +77,7 @@ angular.module('search', ['ngSanitize']).controller('searchCtrl', ['$scope', '$s
             $scope.$watch("keyword", function (keyword) {
                 var sugList = [], i, j, nextSug = true, reg = /:\/\/(.[^/]+)/, domain, readyCount = 0, bookmarkCount = 0;
 //                $scope.selectedItem = -1;
-                if (keyword !== '') {
+                if (keyword && keyword !== '') {
                     if ($scope.searchSuggest) {
                         for (i = 0, j = $scope.searchSuggest.length; i < j; i++) {
                             var item = $scope.searchSuggest[i];

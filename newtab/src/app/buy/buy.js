@@ -10,7 +10,6 @@ angular.module('buy', ['ngSanitize']).controller('buyCtrl', ['$scope', '$sce', '
         },
         init: function () {
 // Create a parent item and two children.
-            console.log('contextMenus');
         }
     };
     process.init();

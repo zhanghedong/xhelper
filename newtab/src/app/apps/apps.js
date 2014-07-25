@@ -11,7 +11,6 @@ angular.module('apps', ['ngSanitize']).controller('appsCtrl', ['$scope', '$sce',
             chrome.management.getAll(function(data){
                 $timeout(function(){
                     var i,j,item,items=[];
-                    console.log(data);
                     if(data){
                         for(i = 0,j = data.length;i<j;i++){
                             item = data[i];

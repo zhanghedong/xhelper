@@ -8,7 +8,7 @@ angular.module('resources.localData').factory('LocalData', ['IDBStore', function
         autoIncrement: false,
         onStoreReady: function () {
             userDataReady = true;
-            console.log('user data store ready!');
+            //console.log('user data store ready!');
         }
     });
     conf = new IDBStore({
@@ -18,7 +18,7 @@ angular.module('resources.localData').factory('LocalData', ['IDBStore', function
         autoIncrement: false,
         onStoreReady: function () {
             confReady = true;
-            console.log('config store ready!');
+            //console.log('config store ready!');
         }
     });
     process = {
@@ -28,7 +28,7 @@ angular.module('resources.localData').factory('LocalData', ['IDBStore', function
             });
         },
         onSuccess: function (id) {
-            console.log('Yeah, dude inserted! insertId is: ' + id);
+           // console.log('Yeah, dude inserted! insertId is: ' + id);
         },
         onError: function (error) {
             console.log('Oh noes, sth went wrong!', error);

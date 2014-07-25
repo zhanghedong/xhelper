@@ -23,7 +23,9 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
             },
             getDomain: function (url) {
                 var r = /:\/\/(.[^/]+)/;
-                return url.match(r)[1];
+                var domain = url.math(r)[1];
+                return domain.split('.').slice(-2).join('.');
+                //return url.match(r)[1];
             },
             getGUID: function () {
                 return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -35,7 +37,6 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                 localDataModule.getUserDataById(id,function (data) {
                     data = data && data.data || [];
                     if (!data.length) {//本地木有数据
-                        console.log('本地木有数据');
                         ntp.localData.getTopSites(function (d) {
                             var localSites = [], guid = helper.getGUID(), domain, i, j;
                             d = d || [];
@@ -45,6 +46,7 @@ angular.module('favorites', ['config', 'ngModal', 'ngSanitize']).controller('fav
                                 d[i].letter = domain.substr(0, 2);
                                 d[i].icon = configIcon[domain] && configIcon[domain].icon || '';
                                 d[i].bgColor = configIcon[domain] && configIcon[domain].bgColor || '';
+
                             }
                             localSites = [
                                 {

@@ -127,7 +127,7 @@ https://github.com/andreareginato/simple-oauth2
 
 
     QQ登录认证：http://wiki.open.qq.com/wiki/%E3%80%90QQ%E7%99%BB%E5%BD%95%E3%80%91Qzone_OAuth%E8%AE%A4%E8%AF%81%E7%AE%80%E4%BB%8B
-    登录认证： http://openapi.qzone.qq.com/oauth/show?which=Login&client_id=1101237121&redirect_uri=http://quickdial.czmin.com/&scope=get_user_info
+    登录空间认证： http://openapi.qzone.qq.com/oauth/show?which=Login&client_id=1101237121&redirect_uri=http://quickdial.czmin.com/&scope=get_user_info
 
 
     开发在址：http://quickdial.czmin.com:3010/

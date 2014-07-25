@@ -32,7 +32,10 @@
       },
       "default_title": ""
    },
-   "permissions": [ "notifications", "storage", "unlimitedStorage", "contextMenus", "webNavigation", "history", "bookmarks", "tabs", "management", "topSites", "cookies", "webRequest", "webRequestBlocking", "chrome://favicon/", "http://*/*", "https://*/*" ],
+   "permissions": [ "notifications", "storage", "unlimitedStorage", "contextMenus", 
+   "webNavigation", "history", "bookmarks", "tabs", "management",
+    "topSites", "cookies", "webRequest", 
+    "webRequestBlocking", "chrome://favicon/", "http://*/*", "https://*/*" ],
    "sandbox": {
       "pages": [  ]
    },
